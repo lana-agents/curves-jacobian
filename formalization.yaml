@@ -21,8 +21,16 @@ sources:
     location: "Section 10.157 (Tags 031O-031T)"
     note: "Serre's criterion for normality."
 
+related_formalizations:
+  - id: "https://github.com/lana-agents/belyi"
+    relationship: "builds-on"
+    note: "Pinned 1d84db9: IsCurveOver, stalks of curves are valuation rings, Algebra k K(X)."
+  - id: "https://github.com/lana-agents/weil-curves"
+    relationship: "builds-on"
+    note: "Pinned 0340edf: places, divisors, Riemann-Roch for function fields over perfect fields."
+
 status:
-  scope: "Serre criterion for normality of Noetherian domains (R1 + S2, in associated-primes and depth-two forms); A = intersection of height-one localisations"
+  scope: "Serre criterion for normality of Noetherian domains (R1 + S2, in associated-primes and depth-two forms); A = intersection of height-one localisations; regular domains are normal; depth and (S_k); points of proper integral schemes with valuation-ring stalks = valuation subrings of K(X); points of a curve = places of K(X)/k"
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -34,7 +42,15 @@ automation:
       framework: "Claude Code"
 
 review:
-  status: "agent-reviewed"
+  related_formalizations:
+  - id: "https://github.com/lana-agents/belyi"
+    relationship: "builds-on"
+    note: "Pinned 1d84db9: IsCurveOver, stalks of curves are valuation rings, Algebra k K(X)."
+  - id: "https://github.com/lana-agents/weil-curves"
+    relationship: "builds-on"
+    note: "Pinned 0340edf: places, divisors, Riemann-Roch for function fields over perfect fields."
+
+status: "agent-reviewed"
   reviewers: ["Claude (Anthropic)"]
 
 acknowledgements: "Built on Mathlib (Apache-2.0)."

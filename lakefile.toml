@@ -16,3 +16,15 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "CurvesJacobian"
+
+# `IsCurveOver` (smooth proper geometrically integral curves), stalks of curves, `Algebra k K(X)`.
+[[require]]
+name = "belyi"
+git = "https://github.com/lana-agents/belyi"
+rev = "1d84db91ffaaa64a869993507194b1b51263af07"
+
+# Function fields over perfect fields: places, divisors, Riemann–Roch, genus (W1–W4).
+[[require]]
+name = "weil-curves"
+git = "https://github.com/lana-agents/weil-curves"
+rev = "0340edf0c72fb664e28a31a4f600ad33347f6a6f"

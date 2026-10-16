@@ -57,6 +57,16 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `stalkValuationSubring_injective` (`X` separated; valuative criterion, Stacks 01KZ);
 * `exists_stalkValuationSubring_eq` (`π : X ⟶ Y` universally closed; Stacks 01KF + domination);
 * `pointEquivValuationSubring : X ≃ {O // ExtendsOver π O}`.
+
+### CJ3b (done) — `CurvesJacobian/Scheme/CurvePlaces.lean` (depends on belyi, weil-curves)
+
+* `extendsOver_iff`: over `Spec k`, `ExtendsOver ↔ k ⊆ O` (belyi's `Algebra k K(X)`).
+* `pointEquivValuationSubringOver`: `X ≃ {O : ValuationSubring K(X) // k ⊆ O}`.
+* `stalkValuationSubring_eq_top_iff`: `𝒪_{X,x} = K(X) ↔ x` generic.
+* `curvePlaceEquiv`: for `IsCurveOver k X`, `k` perfect: non-generic points of `X` ≃
+  `WeilCurves.FunctionField.Place k K(X)`, `x ↦ 𝒪_{X,x}`.
+* Open: `IsFunctionField k K(X)` for curves (from belyi's finite map to ℙ¹), so that weil-curves'
+  divisors, `ℓ(D)`, genus apply to `K(X)` (CJ4).
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |
 | CJ5 | canonical embedding, hyperelliptic curves, Hurwitz bound, Bertini | planned |
 | CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | planned |

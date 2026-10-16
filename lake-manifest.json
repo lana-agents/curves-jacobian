@@ -3,6 +3,30 @@
  "packagesDir": ".lake/packages",
  "packages": [
   {
+   "url": "https://github.com/lana-agents/belyi",
+   "type": "git",
+   "subDir": null,
+   "scope": "",
+   "rev": "1d84db91ffaaa64a869993507194b1b51263af07",
+   "name": "belyi",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "1d84db91ffaaa64a869993507194b1b51263af07",
+   "inherited": false,
+   "configFile": "lakefile.toml"
+  },
+  {
+   "url": "https://github.com/lana-agents/weil-curves",
+   "type": "git",
+   "subDir": null,
+   "scope": "",
+   "rev": "0340edf0c72fb664e28a31a4f600ad33347f6a6f",
+   "name": "\u00abweil-curves\u00bb",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "0340edf0c72fb664e28a31a4f600ad33347f6a6f",
+   "inherited": false,
+   "configFile": "lakefile.toml"
+  },
+  {
    "url": "https://github.com/leanprover-community/mathlib4",
    "type": "git",
    "subDir": null,
@@ -13,6 +37,18 @@
    "inputRev": "v4.32.0",
    "inherited": false,
    "configFile": "lakefile.lean"
+  },
+  {
+   "url": "https://github.com/lana-agents/oka.git",
+   "type": "git",
+   "subDir": null,
+   "scope": "",
+   "rev": "da228a2cf9671aaba08ddc96274d75e098b28f67",
+   "name": "oka",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "da228a2cf9671aaba08ddc96274d75e098b28f67",
+   "inherited": true,
+   "configFile": "lakefile.toml"
   },
   {
    "url": "https://github.com/leanprover-community/plausible",
@@ -111,7 +147,7 @@
    "configFile": "lakefile.toml"
   }
  ],
- "name": "«curves-jacobian»",
+ "name": "\u00abcurves-jacobian\u00bb",
  "lakeDir": ".lake",
  "fixedToolchain": false
 }
