@@ -7,6 +7,7 @@ import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
 import CurvesJacobian.Etale.KummerCover
+import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField

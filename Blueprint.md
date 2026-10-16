@@ -122,7 +122,15 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `Scheme/PointDegree.lean`: `pointDegree_eq_finrank` — `deg x = [κ(x) : k]` for the scheme residue
   field (`stalkRingEquiv`: stalk ≅ valuation ring of the place, compatibly with `k`).
 * Not done: invertible sheaves / `H¹(X_et, 𝔾ₘ)` comparison, Picard functor (large).
-| CJ8 | Jacobian as abelian variety, J[n], theta divisor | planned |
+| CJ8 | Jacobian as abelian variety, J[n], theta divisor | **wip** (route decision: CJ-plan §10) |
+
+### CJ8a (done) — `CurvesJacobian/FunctionField/KummerPic.lean`
+
+* `kummerClasses k K n` (`f` with `div f ∈ n • Div`), `kummerToPic` (`f ↦ [D]`, `n • D = div f`),
+  `kummerToPic_surjective`, `ker_kummerToPic` (constants · `n`-th powers), `picTorsionEquiv`:
+  `kummerClasses ⧸ (constants + n-th powers) ≃+ Pic(K)[n]`; `deg_eq_zero_of_mem_picTorsion`.
+  Divisor-level half of Milne AV III.9.2. Next: Kummer extensions `K(f^{1/n})` unramified ⇔
+  `div f ∈ n • Div`, and the link to `π₁` (pi1). The count `n^{2g}` is open (§10).
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
 | CJ11 | fppf Kummer map for formal groups | planned |
