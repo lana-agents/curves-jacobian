@@ -19,10 +19,10 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "0340edf0c72fb664e28a31a4f600ad33347f6a6f",
+   "rev": "58b577bd3ab81789e66986e4500e8c2a395e082a",
    "name": "\u00abweil-curves\u00bb",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "0340edf0c72fb664e28a31a4f600ad33347f6a6f",
+   "inputRev": "58b577bd3ab81789e66986e4500e8c2a395e082a",
    "inherited": false,
    "configFile": "lakefile.toml"
   },

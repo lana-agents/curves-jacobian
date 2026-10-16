@@ -109,7 +109,17 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * Next (large): Hilbert 90 `H¹(X_et, 𝔾ₘ) = Pic X`; `H²(X_k̄, 𝔾ₘ) = 0` for curves (Tsen);
   then `H²(X_k̄, μₙ) ≅ Pic(X_k̄)/n ≅ ℤ/n` via degree; `H¹(X_et, 𝔾ₘ) = Pic X` needs invertible sheaves (tensor product of sheaves of modules
   is not in Mathlib: presheaf-level only) — large.
-| CJ7 | Picard group of schemes, Picard functor, representability | planned |
+| CJ7 | Picard group of schemes, Picard functor, representability | **wip** (divisor-level Pic of curves done) |
+
+### CJ7a (done) — `CurvesJacobian/Scheme/CurvePic.lean` (weil-curves pinned 58b577b)
+
+* `ClosedPoint X`, `isClosed_singleton_iff` (closed ⇔ non-generic), `CurveDivisor X`,
+  `divisorEquiv : CurveDivisor X ≃+ Divisor k K(X)`, `pointDegree`, `CurveDivisor.deg`.
+* `curveDiv f` with `curveDiv_apply` (ord at the place of `x`), `curveDiv_mul`, `deg_curveDiv`,
+  `mem_stalk_iff` (`f ∈ 𝒪_{X,x} ↔ ord_x f ≥ 0`).
+* `CurvePic X := CurveDivisor X ⧸ curvePrincipal`, `curvePicEquiv : CurvePic X ≃+ Pic k K(X)`,
+  `CurvePic.deg`, `CurvePic0 := ker deg`.
+* Not done: invertible sheaves / `H¹(X_et, 𝔾ₘ)` comparison, Picard functor (large).
 | CJ8 | Jacobian as abelian variety, J[n], theta divisor | planned |
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
