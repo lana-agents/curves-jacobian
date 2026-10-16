@@ -101,7 +101,13 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `kummerMap X n = n • 𝟙`, `isLocallySurjective_kummerMap`, `epi_kummerMap`, `mu X n`,
   `kummer_shortExact`: `0 → μₙ → 𝔾ₘ → 𝔾ₘ → 0` short exact for `n` invertible on `X`
   (Stacks 03PK).
-* Next: cohomology long exact sequence (Mathlib `Sheaf.H` via `Ext`); `H⁰(𝔾ₘ) = Γ(X, 𝒪)ˣ`; `H¹(X_et, 𝔾ₘ) = Pic X` needs invertible sheaves (tensor product of sheaves of modules
+
+### CJ6c (done) — `CurvesJacobian/Etale/KummerCohomology.lean`
+
+* `isTerminal_etaleTerminal`, `H0GmEquiv : H⁰(X, 𝔾ₘ) ≃+ Γ(X, 𝒪)ˣ`, `kummerδ`, and the exactness
+  of the Kummer long exact sequence `kummer_exact_Gm`, `kummer_exact_δ`, `kummer_exact_mu`.
+* Next (large): Hilbert 90 `H¹(X_et, 𝔾ₘ) = Pic X`; `H²(X_k̄, 𝔾ₘ) = 0` for curves (Tsen);
+  then `H²(X_k̄, μₙ) ≅ Pic(X_k̄)/n ≅ ℤ/n` via degree; `H¹(X_et, 𝔾ₘ) = Pic X` needs invertible sheaves (tensor product of sheaves of modules
   is not in Mathlib: presheaf-level only) — large.
 | CJ7 | Picard group of schemes, Picard functor, representability | planned |
 | CJ8 | Jacobian as abelian variety, J[n], theta divisor | planned |
