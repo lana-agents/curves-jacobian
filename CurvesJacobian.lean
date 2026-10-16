@@ -11,6 +11,7 @@ import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
 import CurvesJacobian.Galois.FunctionFieldF
+import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Scheme.ConstantField

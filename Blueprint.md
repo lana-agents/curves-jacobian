@@ -147,8 +147,10 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   the inertia of every place `W ⊇ k` — characters of `Π_X = H ⧸ ⟨⟨all inertia⟩⟩`), and for `k`
   algebraically closed `picTorsionEquivUnramified : Pic(F)[n] ≃+ Additive (unramifiedChars D n)`
   — Milne AV III.9.2 for curves in the Galois model.
-* Open: identifying `unramifiedChars` with `Hom_cont(π₁ᵉᵗ(X), μₙ)` for the proper scheme `X`
-  (pi1 has the comparison for affine curves); the count `n^{2g}` (lead/π₁ track).
+* `Galois/PiCharacters.lean` (done): `SAll D` (inertia of all places, in `H`), `PiX D = H ⧸
+  ⟨⟨SAll D⟩⟩`, `unramifiedCharsEquiv : unramifiedChars D n ≃* ContinuousMonoidHom (PiX D) μₙ`,
+  `picTorsionEquivPiChars : Pic(F)[n] ≃+ Additive (ContinuousMonoidHom Π_X μₙ)`.
+* Open (π₁ track, PI1TOP): `Π_X ≅ π₁ᵉᵗ` of the proper scheme `X`; the count `n^{2g}`.
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
 | CJ11 | fppf Kummer map for formal groups | planned |
