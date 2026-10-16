@@ -5,7 +5,18 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
 | # | content | status |
 |---|---|---|
 | CJ0 | skeleton | done |
-| CJ1 | Serre's criterion for Noetherian domains (Stacks 031S, 031T), associated-primes form | planned |
+| CJ1 | Serre's criterion for Noetherian domains (Stacks 031S, 031T), associated-primes form | **done** |
+
+### CJ1 (done) — `CurvesJacobian/CommAlg/SerreCriterion.lean`
+
+* `AssPrimesHeightOne A` ((S₂): associated primes of `A ⧸ (a)`, `a ≠ 0`, have height 1);
+  `RegularInCodimOne A` ((R₁): `A_𝔭` DVR for `ht 𝔭 = 1`).
+* `isIntegrallyClosed_iff_regularInCodimOne_and_assPrimesHeightOne` (Stacks 031S for domains).
+* `mem_range_of_forall_height_eq_one`: (S₂) ⇒ `A = ⋂_{ht 𝔭 = 1} A_𝔭`; normal case
+  `mem_range_of_forall_height_eq_one_of_isIntegrallyClosed` (Stacks 031T (2)).
+* `isIntegrallyClosed_of_assPrimesHeightOne`: (S₂) + height-one localisations integrally closed ⇒ normal.
+* Divergence: (S₂) is in associated-primes form, not depth form (no depth in Mathlib); CJ2 links them.
+
 | CJ2 | depth of Noetherian local rings, (R_k)/(S_k) (Stacks 031P), regular ⇒ normal | planned |
 | CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | planned |
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |

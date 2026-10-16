@@ -1,1 +1,2 @@
 import CurvesJacobian.Basic
+import CurvesJacobian.CommAlg.SerreCriterion
