@@ -122,7 +122,7 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `Scheme/PointDegree.lean`: `pointDegree_eq_finrank` — `deg x = [κ(x) : k]` for the scheme residue
   field (`stalkRingEquiv`: stalk ≅ valuation ring of the place, compatibly with `k`).
 * Not done: invertible sheaves / `H¹(X_et, 𝔾ₘ)` comparison, Picard functor (large).
-| CJ8 | Jacobian as abelian variety, J[n], theta divisor | **wip** (route decision: CJ-plan §10) |
+| CJ8 | Jacobian as abelian variety, J[n], theta divisor | **wip** (Pic[n] ≅ unramified μₙ-characters done; CJ-plan §10–11) |
 
 ### CJ8a (done) — `CurvesJacobian/FunctionField/KummerPic.lean`
 
@@ -143,8 +143,12 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `Galois/UnramifiedKummer.lean`: `IsUnramifiedKummer D n v` (Kummer class trivial on all inertia
   groups of places `W ⊇ k`) and `isUnramifiedKummer_iff`: `↔ ∀ P, n ∣ ord_P v` — via
   continuous-kummer-theory's `evalTriv_res_kummer_eq_zpow` and `evalTriv_kummer_surjective`.
-* Next: assemble with CJ8a into `Pic(F)[n] ≃ {unramified Kummer classes}` (k algebraically
-  closed) and characters of `Π_X = H ⧸ ⟨⟨all inertia⟩⟩`.
+* `Galois/PicTorsion.lean` (done): `unramifiedChars D n ≤ H¹(Gal(Ω/F), μₙ)` (classes trivial on
+  the inertia of every place `W ⊇ k` — characters of `Π_X = H ⧸ ⟨⟨all inertia⟩⟩`), and for `k`
+  algebraically closed `picTorsionEquivUnramified : Pic(F)[n] ≃+ Additive (unramifiedChars D n)`
+  — Milne AV III.9.2 for curves in the Galois model.
+* Open: identifying `unramifiedChars` with `Hom_cont(π₁ᵉᵗ(X), μₙ)` for the proper scheme `X`
+  (pi1 has the comparison for affine curves); the count `n^{2g}` (lead/π₁ track).
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
 | CJ11 | fppf Kummer map for formal groups | planned |
