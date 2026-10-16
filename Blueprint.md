@@ -28,7 +28,11 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
   `mem_span_of_isWeaklyRegular_pair`.
 * `isIntegrallyClosed_iff_regularInCodimOne_and_serreS2`: **Serre's criterion** for Noetherian
   domains in the depth form of Stacks 031S.
-* Open in CJ2: `depth` as an `ℕ∞`-valued invariant, general (S_k) for modules, regular ⇒ normal.
+* `SerreR1 A` (Stacks 031P (R₁): `A_𝔭` regular for `ht 𝔭 ≤ 1`, Mathlib `IsRegularLocalRing`),
+  `serreR1_iff_regularInCodimOne`, and `isIntegrallyClosed_iff_serreR1_and_serreS2`: Stacks 031S
+  verbatim for Noetherian domains.
+* Open in CJ2: `depth` as an `ℕ∞`-valued invariant, general (S_k) for modules, regular ⇒ normal
+  (Stacks 0567; needs regular local ⇒ domain).
 
 | CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | planned |
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |

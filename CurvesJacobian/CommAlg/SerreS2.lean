@@ -6,6 +6,7 @@ Authors: LANA Project
 import CurvesJacobian.CommAlg.SerreCriterion
 import Mathlib.RingTheory.Regular.RegularSequence
 import Mathlib.RingTheory.Ideal.KrullsHeightTheorem
+import Mathlib.RingTheory.RegularLocalRing.Defs
 
 /-!
 # Serre's condition (S₂) via regular sequences
@@ -220,5 +221,55 @@ theorem isIntegrallyClosed_iff_regularInCodimOne_and_serreS2 :
     IsIntegrallyClosed A ↔ RegularInCodimOne A ∧ SerreS2 A := by
   rw [serreS2_iff_assPrimesHeightOne]
   exact isIntegrallyClosed_iff_regularInCodimOne_and_assPrimesHeightOne
+
+/-- **Serre's condition (R₁)** (Stacks, Definition 10.157.1 = Tag 031P): `A_𝔭` is a regular
+local ring for every prime `𝔭` of height `≤ 1`. -/
+def SerreR1 (A : Type*) [CommRing A] : Prop :=
+  ∀ (p : Ideal A) [p.IsPrime], p.height ≤ 1 → IsRegularLocalRing (Localization.AtPrime p)
+
+/-- For a Noetherian domain, (R₁) in the sense of regular local rings is equivalent to
+`A_𝔭` being a discrete valuation ring for every height-one prime `𝔭`. -/
+theorem serreR1_iff_regularInCodimOne : SerreR1 A ↔ RegularInCodimOne A := by
+  constructor
+  · intro h p _ hp
+    have hreg := h p hp.le
+    have hdim : ringKrullDim (Localization.AtPrime p) = 1 := by
+      rw [IsLocalization.AtPrime.ringKrullDim_eq_height p, hp]; rfl
+    have hnf : ¬ IsField (Localization.AtPrime p) := by
+      intro hf
+      have := ringKrullDim_eq_zero_of_isField hf
+      rw [hdim] at this
+      exact absurd this (by decide)
+    have hcot : Module.finrank (ResidueField (Localization.AtPrime p))
+        (CotangentSpace (Localization.AtPrime p)) = 1 := by
+      have := (IsRegularLocalRing.iff_finrank_cotangentSpace _).1 hreg
+      rw [hdim] at this
+      exact_mod_cast this
+    exact ((IsDiscreteValuationRing.TFAE (Localization.AtPrime p) hnf).out 0 5).2 hcot
+  · intro h p _ hp
+    rcases (show p.height = 0 ∨ p.height = 1 by
+      obtain ⟨n, hn⟩ := ENat.ne_top_iff_exists.1 (Ideal.height_ne_top_of_isPrime (I := p))
+      rw [← hn] at hp ⊢
+      norm_cast at hp ⊢
+      omega) with h0 | h1
+    · have hp0 : p = ⊥ := Ideal.height_eq_zero_iff_eq_bot.1 h0
+      haveI : IsNoetherianRing (Localization.AtPrime p) :=
+        IsLocalization.isNoetherianRing p.primeCompl _ inferInstance
+      apply IsRegularLocalRing.of_spanFinrank_maximalIdeal_le
+      have hm : maximalIdeal (Localization.AtPrime p) = ⊥ := by
+        rw [← IsLocalization.AtPrime.map_eq_maximalIdeal p (Localization.AtPrime p)]
+        exact (Ideal.map_eq_bot_iff_le_ker _).2 (fun x hx ↦ by
+          rw [hp0, Ideal.mem_bot] at hx; rw [hx]; exact zero_mem _)
+      rw [hm, Submodule.spanFinrank_bot]
+      exact ringKrullDim_nonneg_of_nontrivial
+    · haveI := h p h1
+      infer_instance
+
+/-- **Serre's criterion for normality**, in the form of Stacks, Lemma 10.157.4 (Tag 031S), for
+Noetherian domains: `A` is normal iff it has properties (R₁) and (S₂). -/
+theorem isIntegrallyClosed_iff_serreR1_and_serreS2 :
+    IsIntegrallyClosed A ↔ SerreR1 A ∧ SerreS2 A := by
+  rw [serreR1_iff_regularInCodimOne]
+  exact isIntegrallyClosed_iff_regularInCodimOne_and_serreS2
 
 end CurvesJacobian
