@@ -10,6 +10,8 @@ import CurvesJacobian.Etale.KummerCover
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.Galois.FunctionFieldF
+import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic

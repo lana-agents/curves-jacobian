@@ -137,8 +137,14 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `FunctionField/KummerInertia.lean` (done): `IsInertial`, `LiesOverPlace`,
   `inertial_fixes_kummerRoot` — for `k` algebraically closed, `n` invertible, `yⁿ = f`,
   `n ∣ ord_P f`: every automorphism inertial at a valuation ring `W | P` fixes `y`.
-* Next: the converse (`n ∤ ord_P f` ⇒ some inertial `σ` moves `y`), unramified characters of
-  `Gal(Ω/K)` via continuous-kummer-theory, and the comparison with `π₁ᵉᵗ` (pi1).
+* `Galois/FunctionFieldF.lean` (deps pi1 8e0239a, continuous-kummer-theory e3fc64c):
+  `isFunctionField_F` (the function field `F = Ω^H` of the Galois model is a weil-curves function
+  field over `k`), `exists_valuationSubring_liesOver` (places of `F` extend to `Ω`).
+* `Galois/UnramifiedKummer.lean`: `IsUnramifiedKummer D n v` (Kummer class trivial on all inertia
+  groups of places `W ⊇ k`) and `isUnramifiedKummer_iff`: `↔ ∀ P, n ∣ ord_P v` — via
+  continuous-kummer-theory's `evalTriv_res_kummer_eq_zpow` and `evalTriv_kummer_surjective`.
+* Next: assemble with CJ8a into `Pic(F)[n] ≃ {unramified Kummer classes}` (k algebraically
+  closed) and characters of `Π_X = H ⧸ ⟨⟨all inertia⟩⟩`.
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
 | CJ11 | fppf Kummer map for formal groups | planned |
