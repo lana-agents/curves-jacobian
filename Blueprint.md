@@ -31,8 +31,15 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
 * `SerreR1 A` (Stacks 031P (R₁): `A_𝔭` regular for `ht 𝔭 ≤ 1`, Mathlib `IsRegularLocalRing`),
   `serreR1_iff_regularInCodimOne`, and `isIntegrallyClosed_iff_serreR1_and_serreS2`: Stacks 031S
   verbatim for Noetherian domains.
-* Open in CJ2: `depth` as an `ℕ∞`-valued invariant, general (S_k) for modules, regular ⇒ normal
-  (Stacks 0567; needs regular local ⇒ domain).
+
+### CJ2b (done) — `CurvesJacobian/CommAlg/RegularLocal.lean`
+
+* `isRegularLocalRing_quotient_span_singleton`: `x ∈ 𝔪 \ 𝔪²` ⇒ `R ⧸ (x)` regular local,
+  `dim R ⧸ (x) + 1 = dim R`.
+* `IsRegularLocalRing.isDomain` (Stacks 00NP).
+* `depthGeTwo_of_isRegularLocalRing` (dim ≥ 2 ⇒ depth ≥ 2; part of Stacks 00NQ).
+* `isIntegrallyClosed_of_isRegularRing`: a regular domain is normal (Stacks 0567).
+
 
 | CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | planned |
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |
