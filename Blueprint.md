@@ -131,6 +131,14 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   `kummerClasses ⧸ (constants + n-th powers) ≃+ Pic(K)[n]`; `deg_eq_zero_of_mem_picTorsion`.
   Divisor-level half of Milne AV III.9.2. Next: Kummer extensions `K(f^{1/n})` unramified ⇔
   `div f ∈ n • Div`, and the link to `π₁` (pi1). The count `n^{2g}` is open (§10).
+
+### CJ8b (wip) — Kummer covers and inertia
+
+* `FunctionField/KummerInertia.lean` (done): `IsInertial`, `LiesOverPlace`,
+  `inertial_fixes_kummerRoot` — for `k` algebraically closed, `n` invertible, `yⁿ = f`,
+  `n ∣ ord_P f`: every automorphism inertial at a valuation ring `W | P` fixes `y`.
+* Next: the converse (`n ∤ ord_P f` ⇒ some inertial `σ` moves `y`), unramified characters of
+  `Gal(Ω/K)` via continuous-kummer-theory, and the comparison with `π₁ᵉᵗ` (pi1).
 | CJ9 | stable curves over DVRs, log structures | planned |
 | CJ10 | Néron models, Raynaud extension | planned |
 | CJ11 | fppf Kummer map for formal groups | planned |
