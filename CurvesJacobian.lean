@@ -14,6 +14,10 @@ import CurvesJacobian.Galois.FunctionFieldF
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Picard.Dual
+import CurvesJacobian.Picard.LineBundle
+import CurvesJacobian.Picard.PicGroup
+import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
