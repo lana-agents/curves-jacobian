@@ -85,7 +85,16 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   vs. Mathlib's `AlgebraicCycle`.
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | **wip** (CJ4a done) |
 | CJ5 | canonical embedding, hyperelliptic curves, Hurwitz bound, Bertini | planned |
-| CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | planned |
+| CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | **wip** |
+
+### CJ6a (done) — `CurvesJacobian/Etale/KummerCover.lean`
+
+* `kummerPair`, `kummerPresentation`, `etale_kummer`: `R[T]/(Tⁿ - u)` is standard étale for
+  `n, u` units; `faithfullyFlat_kummer` (free of rank `n`); `root_pow_kummer`. The local input of
+  the Kummer sequence (Stacks 03PK).
+* Next: `𝔾ₘ`, `μₙ` as sheaves on Mathlib's small étale site `X.Etale` and the Kummer short exact
+  sequence; `H¹(X_et, 𝔾ₘ) = Pic X` needs invertible sheaves (tensor product of sheaves of modules
+  is not in Mathlib: presheaf-level only) — large.
 | CJ7 | Picard group of schemes, Picard functor, representability | planned |
 | CJ8 | Jacobian as abelian variety, J[n], theta divisor | planned |
 | CJ9 | stable curves over DVRs, log structures | planned |
