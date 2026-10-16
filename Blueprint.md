@@ -17,7 +17,7 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
 * `isIntegrallyClosed_of_assPrimesHeightOne`: (S₂) + height-one localisations integrally closed ⇒ normal.
 * Divergence: (S₂) is in associated-primes form, not depth form (no depth in Mathlib); CJ2 links them.
 
-| CJ2 | depth of Noetherian local rings, (R_k)/(S_k) (Stacks 031P), regular ⇒ normal | **wip** (S₂ for domains done) |
+| CJ2 | depth of Noetherian local rings, (R_k)/(S_k) (Stacks 031P), regular ⇒ normal | **done** (for domains) |
 
 ### CJ2a (done) — `CurvesJacobian/CommAlg/SerreS2.lean`
 
@@ -39,6 +39,13 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
 * `IsRegularLocalRing.isDomain` (Stacks 00NP).
 * `depthGeTwo_of_isRegularLocalRing` (dim ≥ 2 ⇒ depth ≥ 2; part of Stacks 00NQ).
 * `isIntegrallyClosed_of_isRegularRing`: a regular domain is normal (Stacks 0567).
+
+### CJ2c (done) — `CurvesJacobian/CommAlg/Depth.lean`
+
+* `depth I M : ℕ∞` (Stacks 00LI), `SerreS k A` (Stacks 031P (S_k)).
+* `depthGeTwo_iff`, `one_le_depth_of_isDomain`, `serreS_two_iff_serreS2`.
+* `isIntegrallyClosed_iff_serreR1_and_serreS_two`: Stacks 031S with the definitions of Stacks
+  031P, for Noetherian domains. (Non-domain Noetherian rings: not done.)
 
 
 | CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | planned |
