@@ -48,7 +48,15 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
   031P, for Noetherian domains. (Non-domain Noetherian rings: not done.)
 
 
-| CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | planned |
+| CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | **wip** |
+
+### CJ3a (done) — `CurvesJacobian/Scheme/ValuationPoints.lean`
+
+For `X` integral with all stalks valuation rings, `K = K(X)`:
+* `stalkValuationSubring hX x : ValuationSubring K` (the stalk `𝒪_{X,x}`);
+* `stalkValuationSubring_injective` (`X` separated; valuative criterion, Stacks 01KZ);
+* `exists_stalkValuationSubring_eq` (`π : X ⟶ Y` universally closed; Stacks 01KF + domination);
+* `pointEquivValuationSubring : X ≃ {O // ExtendsOver π O}`.
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |
 | CJ5 | canonical embedding, hyperelliptic curves, Hurwitz bound, Bertini | planned |
 | CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | planned |

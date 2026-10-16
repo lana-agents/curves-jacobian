@@ -3,3 +3,4 @@ import CurvesJacobian.CommAlg.Depth
 import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
+import CurvesJacobian.Scheme.ValuationPoints
