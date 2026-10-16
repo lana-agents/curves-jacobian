@@ -48,7 +48,7 @@ Status keys: **done** (proved, no `sorry`), **wip**, **planned**.
   031P, for Noetherian domains. (Non-domain Noetherian rings: not done.)
 
 
-| CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | **wip** |
+| CJ3 | normal Noetherian 1-dimensional schemes, closed points of curves ↔ places | **done** (points ↔ places) |
 
 ### CJ3a (done) — `CurvesJacobian/Scheme/ValuationPoints.lean`
 
@@ -65,9 +65,19 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * `stalkValuationSubring_eq_top_iff`: `𝒪_{X,x} = K(X) ↔ x` generic.
 * `curvePlaceEquiv`: for `IsCurveOver k X`, `k` perfect: non-generic points of `X` ≃
   `WeilCurves.FunctionField.Place k K(X)`, `x ↦ 𝒪_{X,x}`.
-* Open: `IsFunctionField k K(X)` for curves (from belyi's finite map to ℙ¹), so that weil-curves'
-  divisors, `ℓ(D)`, genus apply to `K(X)` (CJ4).
-| CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | planned (needs weil-curves) |
+
+### CJ4a (done) — `CurvesJacobian/FunctionField/OfSmooth.lean`, `Scheme/CurveFunctionField.lean`
+
+* Algebra: for `A` a standard smooth domain of relative dimension 1 over a perfect field:
+  `krullDimLE_one_of_smooth`, `exists_transcendental_of_smooth` (Kähler rank 1 vs. Ω = 0 for
+  finite separable fields), `exists_finite_injective_mvPolynomial_fin_one` (Noether
+  normalisation + going-up), `isFunctionField_of_smooth`.
+* Schemes: instance `isFunctionField_functionField` (`IsCurveOver k X`, `k` perfect ⇒
+  `IsFunctionField k K(X)`), `curveGenus`, `curve_riemannRoch`, `curve_deg_canonical`
+  (weil-curves Riemann–Roch transported to curves).
+* Open (CJ4b): `k` algebraically closed in `K(X)` for geometrically integral `X`; `curveGenus =
+  dim H¹(X, 𝒪_X)` (needs coherent cohomology); divisors on `X` vs. Mathlib's `AlgebraicCycle`.
+| CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | **wip** (CJ4a done) |
 | CJ5 | canonical embedding, hyperelliptic curves, Hurwitz bound, Bertini | planned |
 | CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | planned |
 | CJ7 | Picard group of schemes, Picard functor, representability | planned |
