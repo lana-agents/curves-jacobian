@@ -4,6 +4,7 @@ import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePlaces
 import CurvesJacobian.Scheme.ValuationPoints

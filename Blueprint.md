@@ -75,8 +75,14 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
 * Schemes: instance `isFunctionField_functionField` (`IsCurveOver k X`, `k` perfect ⇒
   `IsFunctionField k K(X)`), `curveGenus`, `curve_riemannRoch`, `curve_deg_canonical`
   (weil-curves Riemann–Roch transported to curves).
-* Open (CJ4b): `k` algebraically closed in `K(X)` for geometrically integral `X`; `curveGenus =
-  dim H¹(X, 𝒪_X)` (needs coherent cohomology); divisors on `X` vs. Mathlib's `AlgebraicCycle`.
+
+### CJ4b (part 1, done) — `CurvesJacobian/Scheme/ConstantField.lean`
+
+* `mem_range_algebraMap_of_isAlgebraic`: for `X` geometrically integral over a field `k`, `k` is
+  algebraically closed in `K(X)` (via belyi's `isDomain_tensorProduct_of_geometricallyIntegral`:
+  `L ⊗_k L` is a finite-dimensional domain, hence `L = k`). So `curveGenus` is the usual genus.
+* Open: `curveGenus = dim H¹(X, 𝒪_X)` (needs coherent cohomology on curves); divisors on `X`
+  vs. Mathlib's `AlgebraicCycle`.
 | CJ4 | comparison with weil-curves (places, divisors, ℓ(D)); genus = h¹(O) | **wip** (CJ4a done) |
 | CJ5 | canonical embedding, hyperelliptic curves, Hurwitz bound, Bertini | planned |
 | CJ6 | Kummer sequence, Pic = H¹(G_m), H²(X_k̄, μ_n) ≅ Z/n via degree | planned |
