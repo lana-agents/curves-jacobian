@@ -88,7 +88,8 @@ theorem isLocallySurjective_kummerMap {n : ℕ} (hn : 0 < n) (hnX : IsUnit (n : 
   let Z : 𝒰.I₀ → X.Etale := fun i ↦
     @Scheme.Etale.mk X _ (Spec.map (φ i) ≫ 𝒰.f i ≫ U.hom) (hZ i)
   let g : ∀ i, Z i ⟶ U := fun i ↦
-    MorphismProperty.Over.homMk (Spec.map (φ i) ≫ 𝒰.f i) (by simp only [Category.assoc]; rfl) trivial
+    MorphismProperty.Over.homMk (Spec.map (φ i) ≫ 𝒰.f i)
+      (by simp only [Category.assoc]; rfl) trivial
   refine GrothendieckTopology.superset_covering _ ?_
     ((Scheme.ofArrows_mem_smallEtaleTopology_iff g).2 ?_)
   · rw [Sieve.ofArrows, Sieve.generate_le_iff]
@@ -113,7 +114,8 @@ theorem isLocallySurjective_kummerMap {n : ℕ} (hn : 0 < n) (hnX : IsUnit (n : 
     simp only [CommRingCat.comp_apply] at hnat
     have e1 : (AdjoinRoot.of (kummerPoly n ((ui i : 𝒰.X i)))) (ui i : 𝒰.X i) =
         (φ i).hom ((Scheme.ΓSpecIso (𝒰.X i)).hom ((𝒰.f i).appTop sv)) := rfl
-    rw [AdjoinRoot.algebraMap_eq, e1, ← hnat, Iso.hom_inv_id_apply, Scheme.Hom.comp_appTop, CommRingCat.comp_apply]
+    rw [AdjoinRoot.algebraMap_eq, e1, ← hnat, Iso.hom_inv_id_apply, Scheme.Hom.comp_appTop,
+      CommRingCat.comp_apply]
   · ext x
     simp only [Set.mem_iUnion, Set.mem_range, Set.mem_univ, iff_true]
     obtain ⟨y, hy⟩ := 𝒰.covers x
