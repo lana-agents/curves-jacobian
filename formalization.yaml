@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "curves-jacobian"
+  description: >-
+    Lean 4 / Mathlib algebraic geometry of curves (Serre's normality criterion, curves as schemes,
+    Picard schemes and Jacobians, étale cohomology of curves, stable and Néron models) for the
+    formalisation of Mochizuki's relative p-adic Grothendieck conjecture and the IUT multiradial algorithm.
+  authors:
+    - "Claude (Anthropic)"
+    - "LANA Project"
+  responsible_maintainers:
+    - "Christian Merten"
+  license: "Apache-2.0"
+
+sources:
+  - title: "The Stacks Project"
+    authors: ["The Stacks Project Authors"]
+    type: "other"
+    location: "Section 10.157 (Tags 031O-031T)"
+    note: "Serre's criterion for normality."
+
+status:
+  scope: "skeleton"
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code"
+
+review:
+  status: "agent-reviewed"
+  reviewers: ["Claude (Anthropic)"]
+
+acknowledgements: "Built on Mathlib (Apache-2.0)."
