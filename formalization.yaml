@@ -22,7 +22,7 @@ sources:
     note: "Serre's criterion for normality."
 
 status:
-  scope: "Serre criterion for normality of Noetherian domains (R1 + S2, associated-primes form); A = intersection of height-one localisations"
+  scope: "Serre criterion for normality of Noetherian domains (R1 + S2, in associated-primes and depth-two forms); A = intersection of height-one localisations"
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
