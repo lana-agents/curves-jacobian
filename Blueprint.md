@@ -119,6 +119,8 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   `mem_stalk_iff` (`f ∈ 𝒪_{X,x} ↔ ord_x f ≥ 0`).
 * `CurvePic X := CurveDivisor X ⧸ curvePrincipal`, `curvePicEquiv : CurvePic X ≃+ Pic k K(X)`,
   `CurvePic.deg`, `CurvePic0 := ker deg`.
+* `Scheme/PointDegree.lean`: `pointDegree_eq_finrank` — `deg x = [κ(x) : k]` for the scheme residue
+  field (`stalkRingEquiv`: stalk ≅ valuation ring of the place, compatibly with `k`).
 * Not done: invertible sheaves / `H¹(X_et, 𝔾ₘ)` comparison, Picard functor (large).
 | CJ8 | Jacobian as abelian variety, J[n], theta divisor | planned |
 | CJ9 | stable curves over DVRs, log structures | planned |
