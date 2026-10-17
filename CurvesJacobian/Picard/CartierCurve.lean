@@ -169,7 +169,7 @@ noncomputable abbrev curveMap (t : C.functionField) : C ⟶ ProjectiveLine.schem
   homOfFunctionField k C (valuationRing_stalk_of_isCurveOver k C) t
 
 /-- The `k`-algebra structure on a stalk of `C`. -/
-noncomputable abbrev stalkAlgebra (x : C) : Algebra k (C.presheaf.stalk x) :=
+noncomputable abbrev curveStalkAlgebraK (x : C) : Algebra k (C.presheaf.stalk x) :=
   ((Scheme.ΓSpecIso (CommRingCat.of k)).inv ≫ (C ↘ Sk).appTop ≫
     C.presheaf.germ ⊤ x trivial).hom.toAlgebra
 
@@ -215,7 +215,7 @@ theorem curveMap_mem_U_one (t : C.functionField) (x : C)
     (hx : t ∈ Set.range (algebraMap (C.presheaf.stalk x) C.functionField)) :
     curveMap k C t x ∈ ProjectiveLine.U k 1 := by
   obtain ⟨a, ha⟩ := hx
-  letI := stalkAlgebra k C x
+  letI := curveStalkAlgebraK k C x
   set h := (genericPoint_spec C).specializes (Set.mem_univ x)
   haveI := isDominant_specMap_stalkSpecializes C x
   have hgen : C.fromSpecStalk (genericPoint C) ≫ curveMap k C t = functionFieldPoint k C t := by

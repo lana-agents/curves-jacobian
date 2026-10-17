@@ -115,4 +115,47 @@ theorem flat_tensor (u : R)
   exact Module.Flat.isBaseChange (R := K[X]) (M := R) (S := A[X]) (A ⊗[K] R)
     (Algebra.IsPushout.symm this).out
 
+section Transport
+
+variable {B : Type*} [CommRing B] [Algebra A B] (e : A ⊗[K] R ≃+* B)
+
+/-- An `A`-linear ring isomorphism `A ⊗_K R ≃ B` is an `A[X]`-algebra isomorphism for the actions
+through `X ↦ 1 ⊗ u` and `X ↦ e (1 ⊗ u)`. -/
+noncomputable def tensorAlgEquiv (he : ∀ a : A, e (a ⊗ₜ 1) = algebraMap A B a) (u : R) :
+    letI := tensorAlgebra (K := K) (A := A) u
+    letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+    (A ⊗[K] R) ≃ₐ[A[X]] B :=
+  letI := tensorAlgebra (K := K) (A := A) u
+  letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+  AlgEquiv.ofRingEquiv (f := e) fun p ↦ by
+    change e (aeval ((1 : A) ⊗ₜ[K] u) p) = aeval (e ((1 : A) ⊗ₜ[K] u)) p
+    rw [aeval_def, aeval_def]
+    refine (Polynomial.hom_eval₂ p (algebraMap A (A ⊗[K] R)) e.toRingHom
+      ((1 : A) ⊗ₜ[K] u)).trans ?_
+    congr 1
+    ext a
+    change e (a ⊗ₜ 1) = algebraMap A B a
+    exact he a
+
+theorem flat_of_tensorEquiv (he : ∀ a : A, e (a ⊗ₜ 1) = algebraMap A B a) (u : R)
+    (hflat : letI := (aeval (R := K) u).toRingHom.toAlgebra; Module.Flat K[X] R) :
+    letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+    Module.Flat A[X] B := by
+  letI := tensorAlgebra (K := K) (A := A) u
+  letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+  haveI := flat_tensor (A := A) u hflat
+  exact Module.Flat.of_linearEquiv (tensorAlgEquiv e he u).symm.toLinearEquiv
+
+theorem formallyUnramified_of_tensorEquiv (he : ∀ a : A, e (a ⊗ₜ 1) = algebraMap A B a)
+    (u : R)
+    (hu : Submodule.span R {KaehlerDifferential.D K R u} = ⊤) :
+    letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+    Algebra.FormallyUnramified A[X] B := by
+  letI := tensorAlgebra (K := K) (A := A) u
+  letI : Algebra A[X] B := (aeval (R := A) (e ((1 : A) ⊗ₜ[K] u))).toRingHom.toAlgebra
+  haveI := formallyUnramified_tensor (A := A) u hu
+  exact Algebra.FormallyUnramified.of_equiv (tensorAlgEquiv e he u)
+
+end Transport
+
 end CurvesJacobian.CartierChart
