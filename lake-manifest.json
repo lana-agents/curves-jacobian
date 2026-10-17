@@ -51,6 +51,18 @@
    "configFile": "lakefile.toml"
   },
   {
+   "url": "https://github.com/lana-agents/formal-schemes",
+   "type": "git",
+   "subDir": null,
+   "scope": "",
+   "rev": "0be7863f6cd611bb9b3c8a8078f92bdd78007c80",
+   "name": "\u00abformal-schemes\u00bb",
+   "manifestFile": "lake-manifest.json",
+   "inputRev": "0be7863f6cd611bb9b3c8a8078f92bdd78007c80",
+   "inherited": false,
+   "configFile": "lakefile.toml"
+  },
+  {
    "url": "https://github.com/leanprover-community/mathlib4",
    "type": "git",
    "subDir": null,

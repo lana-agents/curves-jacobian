@@ -7,6 +7,7 @@ import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
 import CurvesJacobian.Etale.KummerCover
+import CurvesJacobian.FunctionField.CechGenus
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
@@ -14,6 +15,9 @@ import CurvesJacobian.Galois.FunctionFieldF
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Picard.CechBaseChange
+import CurvesJacobian.Picard.CurveCover
+import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.IdealSheaf
@@ -23,7 +27,9 @@ import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
+import CurvesJacobian.Picard.PushoutAlgebra
 import CurvesJacobian.Picard.RelEffCartier
+import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Scheme.ConstantField
