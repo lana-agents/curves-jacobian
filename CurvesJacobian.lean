@@ -53,6 +53,7 @@ import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.ModulesGlue
 import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OverSigma
+import CurvesJacobian.Picard.OverSigmaSheaf
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
