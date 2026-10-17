@@ -13,11 +13,11 @@ import Mathlib.CategoryTheory.Monoidal.Skeleton
 isomorphism classes of `𝒪_X`-modules form a commutative monoid `Skeleton X.Modules`. The classes
 of invertible sheaves are units (with inverse the dual, `Modules.tensorDualIso`) and form a
 subgroup `X.picSubgroup` of its group of units. The Picard group (Stacks, Tag 01CX) is
-`X.Pic := Additive X.picSubgroup`, written additively: `[L] + [M] = [L ⊗ M]`, `-[L] = [L^∨]`.
+`X.PicLarge := Additive X.picSubgroup`, written additively: `[L] + [M] = [L ⊗ M]`, `-[L] = [L^∨]`.
 
-* `Pic.mk L`: the class of an invertible sheaf `L`.
-* `Pic.mk_eq_mk_iff`: `[L] = [M] ↔ L ≅ M`; `Pic.mk_eq_zero_iff`: `[L] = 0 ↔ L ≅ 𝟙_`.
-* `Pic.mk_tensor`, `Pic.mk_dual`, `Pic.mk_surjective`.
+* `PicLarge.mk L`: the class of an invertible sheaf `L`.
+* `PicLarge.mk_eq_mk_iff`: `[L] = [M] ↔ L ≅ M`; `PicLarge.mk_eq_zero_iff`: `[L] = 0 ↔ L ≅ 𝟙_`.
+* `PicLarge.mk_tensor`, `PicLarge.mk_dual`, `PicLarge.mk_surjective`.
 -/
 
 open CategoryTheory MonoidalCategory Limits Opposite TopologicalSpace
@@ -80,16 +80,17 @@ def picSubgroup : Subgroup (Skeleton X.Modules)ˣ where
     infer_instance
 
 variable (X) in
-/-- The Picard group of a scheme: isomorphism classes of invertible sheaves, with the group law
-`[L] + [M] = [L ⊗ M]` (Stacks, Tag 01CX). -/
-def Pic : Type (u + 1) := Additive (picSubgroup X)
+/-- The Picard group of a scheme (Stacks, Tag 01CX): isomorphism classes of invertible sheaves,
+with the group law `[L] + [M] = [L ⊗ M]`, as a type in the universe `u + 1`. The Picard group
+`X.Pic : Type u` is obtained by shrinking it (`CurvesJacobian.Picard.Small`). -/
+def PicLarge : Type (u + 1) := Additive (picSubgroup X)
 
-instance : AddCommGroup X.Pic := inferInstanceAs (AddCommGroup (Additive (picSubgroup X)))
+instance : AddCommGroup X.PicLarge := inferInstanceAs (AddCommGroup (Additive (picSubgroup X)))
 
-namespace Pic
+namespace PicLarge
 
 /-- The class of an invertible sheaf in the Picard group. -/
-def mk (L : X.Modules) [L.IsInvertible] : X.Pic :=
+def mk (L : X.Modules) [L.IsInvertible] : X.PicLarge :=
   Additive.ofMul ⟨unitOf L, by
     change SkIsInvertible (toSkeleton L)
     rw [skIsInvertible_toSkeleton]
@@ -133,7 +134,7 @@ lemma mk_dual (L : X.Modules) [L.IsInvertible] : mk (dual L) = -mk L := by
   rw [eq_neg_iff_add_eq_zero, add_comm, ← mk_tensor, mk_eq_zero_iff]
   exact ⟨tensorDualIso L⟩
 
-lemma mk_surjective (x : X.Pic) : ∃ (L : X.Modules) (_ : L.IsInvertible), mk L = x := by
+lemma mk_surjective (x : X.PicLarge) : ∃ (L : X.Modules) (_ : L.IsInvertible), mk L = x := by
   rcases hx : Additive.toMul x with ⟨a, ha⟩
   have : ((fromSkeleton _).obj a.val).IsInvertible := ha
   refine ⟨(fromSkeleton _).obj a.val, this, ?_⟩
@@ -145,12 +146,28 @@ lemma mk_surjective (x : X.Pic) : ∃ (L : X.Modules) (_ : L.IsInvertible), mk L
 
 /-- Induction principle for the Picard group. -/
 @[elab_as_elim]
-lemma ind {p : X.Pic → Prop} (h : ∀ (L : X.Modules) [L.IsInvertible], p (mk L)) (x : X.Pic) :
+lemma ind {p : X.PicLarge → Prop} (h : ∀ (L : X.Modules) [L.IsInvertible], p (mk L))
+    (x : X.PicLarge) :
     p x := by
   obtain ⟨L, _, rfl⟩ := mk_surjective x
   exact h L
 
-end Pic
+/-- A representative of a class in the Picard group. -/
+def rep (x : X.PicLarge) : X.Modules :=
+  (fromSkeleton _).obj ((Additive.toMul x : picSubgroup X) : (Skeleton X.Modules)ˣ).val
+
+instance (x : X.PicLarge) : (rep x).IsInvertible := (Additive.toMul x).2
+
+lemma mk_rep (x : X.PicLarge) : mk (rep x) = x := by
+  apply Additive.toMul.injective
+  apply Subtype.ext
+  apply Units.ext
+  exact toSkeleton_fromSkeleton_obj _
+
+lemma rep_mk (L : X.Modules) [L.IsInvertible] : Nonempty (rep (mk L) ≅ L) :=
+  mk_eq_mk_iff.mp (mk_rep (mk L))
+
+end PicLarge
 
 end AlgebraicGeometry.Scheme
 

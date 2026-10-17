@@ -19,6 +19,7 @@ import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.Pullback
+import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField

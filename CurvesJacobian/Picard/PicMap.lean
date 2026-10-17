@@ -3,7 +3,7 @@ Copyright (c) 2026 LANA Project. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
-import CurvesJacobian.Picard.Pullback
+import CurvesJacobian.Picard.Small
 
 /-!
 # Functoriality of the Picard group
@@ -221,21 +221,6 @@ end Modules
 namespace Pic
 
 open Modules
-
-/-- A representative of a class in the Picard group. -/
-def rep (x : X.Pic) : X.Modules :=
-  (fromSkeleton _).obj ((Additive.toMul x : picSubgroup X) : (Skeleton X.Modules)ˣ).val
-
-instance (x : X.Pic) : (rep x).IsInvertible := (Additive.toMul x).2
-
-lemma mk_rep (x : X.Pic) : mk (rep x) = x := by
-  apply Additive.toMul.injective
-  apply Subtype.ext
-  apply Units.ext
-  exact toSkeleton_fromSkeleton_obj _
-
-lemma rep_mk (L : X.Modules) [L.IsInvertible] : Nonempty (rep (mk L) ≅ L) :=
-  mk_eq_mk_iff.mp (mk_rep (mk L))
 
 /-- The pullback map on Picard groups, `[L] ↦ [f^* L]`. -/
 def map (f : X ⟶ Y) : Y.Pic →+ X.Pic :=
