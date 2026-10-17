@@ -167,7 +167,12 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   back ideal on affines is the extension), `a ⊗ 1` a nonzerodivisor because `Γ(W)/a` is
   `Γ(V)`-flat (`isSMulRegular_inl_of_isPushout`, via `lTensor_injective_of_exact_of_flat`),
   `D_T → T` flat by pullback pasting; `degree_baseChange` (Mathlib `finrank_of_isPullback`).
-  Open: on curves, rel. eff. Cartier ⇔ finite locally free (0B9D); divisors over `k̄` ↔ CJ7a.
+  JAC1c (part): `Picard/CartierCriterion`, `CartierChart`, `CartierCurve`, `RelEffCartierCurve`:
+  `RelEffCartier.ofFiniteFlat` — on `C ×_k T` (C a curve over perfect k, T any k-scheme) a closed
+  subscheme finite, flat and lfp over `T` is a relative effective Cartier divisor (0B9D, (1)⇒(2)),
+  via an étale coordinate near the point, a big affine chart flat over `k[u]`, and an algebraic
+  local criterion (Nakayama in `B_q`, fibre ring with principal maximal ideal).
+  Open: the converse (0B9D (2)⇒(1), proper case), `ofSection`; divisors over `k̄` ↔ CJ7a.
 * JAC2 (part 1, done) — `Picard/CurveCover.lean`, `Picard/CechBaseChange.lean`,
   `FunctionField/CechGenus.lean`, `Picard/CurveGenus.lean` (dep. formal-schemes 0be7863 for
   `TwoCech`):
