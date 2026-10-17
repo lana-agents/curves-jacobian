@@ -15,7 +15,9 @@ import CurvesJacobian.Galois.FunctionFieldF
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Picard.BaseChangeSquare
 import CurvesJacobian.Picard.CechBaseChange
+import CurvesJacobian.Picard.CechLineBundle
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
@@ -28,6 +30,8 @@ import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
 import CurvesJacobian.Picard.PushoutAlgebra
+import CurvesJacobian.Picard.QcohBaseChange
+import CurvesJacobian.Picard.QcohLocal
 import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.Small

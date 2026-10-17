@@ -156,15 +156,15 @@ lemma spec_map_self {U : (Spec A).Opens} (c : Γ(Spec A, U)) :
   rfl
 
 /-- Restriction of functions on `Spec A` as an `A`-algebra map. -/
-def specRes {V V' : (Spec A).Opens} (h : V' ≤ V) : Γ(Spec A, V) →ₐ[A] Γ(Spec A, V') where
+def specAlgRes {V V' : (Spec A).Opens} (h : V' ≤ V) : Γ(Spec A, V) →ₐ[A] Γ(Spec A, V') where
   toRingHom := ((Spec A).presheaf.map (homOfLE h).op).hom
   commutes' a := by
     simp only [IsAffineOpen.algebraMap_Spec_obj, CommRingCat.hom_comp, RingHom.coe_comp,
       Function.comp_apply]
     exact spec_map_map _ _ _
 
-lemma specRes_apply {V V' : (Spec A).Opens} (h : V' ≤ V) (c : Γ(Spec A, V)) :
-    specRes h c = (Spec A).presheaf.map (homOfLE h).op c := rfl
+lemma specAlgRes_apply {V V' : (Spec A).Opens} (h : V' ≤ V) (c : Γ(Spec A, V)) :
+    specAlgRes h c = (Spec A).presheaf.map (homOfLE h).op c := rfl
 
 variable (M : ModuleCat.{u} A)
 
@@ -172,7 +172,7 @@ variable (M : ModuleCat.{u} A)
 def tensorPresheaf : (Spec A).Opensᵒᵖ ⥤ Ab.{u} where
   obj V := AddCommGrpCat.of (Γ(Spec A, V.unop) ⊗[A] M)
   map f := AddCommGrpCat.ofHom
-    (TensorProduct.map (specRes f.unop.le).toLinearMap (LinearMap.id (M := M))).toAddMonoidHom
+    (TensorProduct.map (specAlgRes f.unop.le).toLinearMap (LinearMap.id (M := M))).toAddMonoidHom
   map_id V := by
     ext x
     change TensorProduct.map _ _ x = x
@@ -180,7 +180,7 @@ def tensorPresheaf : (Spec A).Opensᵒᵖ ⥤ Ab.{u} where
     | zero => simp
     | tmul c m =>
       simp only [TensorProduct.map_tmul, AlgHom.toLinearMap_apply, LinearMap.id_coe, id_eq]
-      rw [specRes_apply]
+      rw [specAlgRes_apply]
       congr 1
     | add x y hx hy => rw [map_add, hx, hy]
   map_comp f g := by
@@ -190,7 +190,7 @@ def tensorPresheaf : (Spec A).Opensᵒᵖ ⥤ Ab.{u} where
     | zero => simp
     | tmul c m =>
       simp only [TensorProduct.map_tmul, AlgHom.toLinearMap_apply, LinearMap.id_coe, id_eq]
-      rw [specRes_apply, specRes_apply, specRes_apply]
+      rw [specAlgRes_apply, specAlgRes_apply, specAlgRes_apply]
       congr 1
     | add x y hx hy => rw [map_add, map_add, map_add, hx, hy]
 
@@ -201,10 +201,10 @@ instance (V : (Spec A).Opensᵒᵖ) :
 /-- The presheaf of modules `V ↦ 𝒪(V) ⊗_A M` on `Spec R`. -/
 def tensorPre : (Spec A).PresheafOfModules :=
   _root_.PresheafOfModules.ofPresheaf (tensorPresheaf M) (fun V V' f r x ↦ by
-    change TensorProduct.map (specRes f.unop.le).toLinearMap LinearMap.id
+    change TensorProduct.map (specAlgRes f.unop.le).toLinearMap LinearMap.id
         ((show Γ(Spec A, V.unop) from r) • (show Γ(Spec A, V.unop) ⊗[A] M from x)) =
-      (specRes f.unop.le (show Γ(Spec A, V.unop) from r)) •
-        TensorProduct.map (specRes f.unop.le).toLinearMap LinearMap.id
+      (specAlgRes f.unop.le (show Γ(Spec A, V.unop) from r)) •
+        TensorProduct.map (specAlgRes f.unop.le).toLinearMap LinearMap.id
           (show Γ(Spec A, V.unop) ⊗[A] M from x)
     generalize (show Γ(Spec A, V.unop) ⊗[A] M from x) = y
     generalize (show Γ(Spec A, V.unop) from r) = c
@@ -316,7 +316,7 @@ lemma tensorPreTensor_naturality_aux {V V' : (Spec A).Opensᵒᵖ} (f : V ⟶ V'
     (y : (Γ(Spec A, V.unop) ⊗[A] M) ⊗[Γ(Spec A, V.unop)] (Γ(Spec A, V.unop) ⊗[A] N)) :
     (TensorProduct.AlgebraTensorModule.distribBaseChange A Γ(Spec A, V'.unop) M N).symm
         ((tensorPre M ⊗ tensorPre N).map f y) =
-      TensorProduct.map (specRes f.unop.le).toLinearMap LinearMap.id
+      TensorProduct.map (specAlgRes f.unop.le).toLinearMap LinearMap.id
         ((TensorProduct.AlgebraTensorModule.distribBaseChange A Γ(Spec A, V.unop) M N).symm y) := by
   induction y using TensorProduct.induction_on with
   | zero =>
@@ -327,8 +327,8 @@ lemma tensorPreTensor_naturality_aux {V V' : (Spec A).Opensᵒᵖ} (f : V ⟶ V'
     exact (congrArg _ (map_add _ _ _)).trans (map_add _ _ _)
   | tmul a b =>
     change (TensorProduct.AlgebraTensorModule.distribBaseChange A Γ(Spec A, V'.unop) M N).symm
-        ((TensorProduct.map (specRes f.unop.le).toLinearMap LinearMap.id a) ⊗ₜ
-          (TensorProduct.map (specRes f.unop.le).toLinearMap LinearMap.id b)) = _
+        ((TensorProduct.map (specAlgRes f.unop.le).toLinearMap LinearMap.id a) ⊗ₜ
+          (TensorProduct.map (specAlgRes f.unop.le).toLinearMap LinearMap.id b)) = _
     induction a using TensorProduct.induction_on with
     | zero => simp
     | add a a' ha ha' => rw [TensorProduct.add_tmul, map_add, TensorProduct.add_tmul, map_add,
@@ -386,7 +386,7 @@ section Invertible
 lemma isUnit_algebraMap_of_le_basicOpen {V : (Spec A).Opens} {r : A}
     (h : V ≤ PrimeSpectrum.basicOpen r) : IsUnit (algebraMap A Γ(Spec A, V) r) := by
   have := (IsLocalization.Away.algebraMap_isUnit (S := Γ(Spec A, PrimeSpectrum.basicOpen r)) r).map
-    (specRes h)
+    (specAlgRes h)
   rwa [AlgHom.commutes] at this
 
 lemma isBasisOn_tensorPre {r : A} {m : M}
@@ -400,7 +400,7 @@ lemma isBasisOn_tensorPre {r : A} {m : M}
       Scheme.PresheafOfModules.res (tensorPre M) h
         ((1 : Γ(Spec A, PrimeSpectrum.basicOpen r)) ⊗ₜ[A] m) = c ⊗ₜ[A] m := by
     intro c
-    change c • TensorProduct.map (specRes h).toLinearMap LinearMap.id
+    change c • TensorProduct.map (specAlgRes h).toLinearMap LinearMap.id
       ((1 : Γ(Spec A, PrimeSpectrum.basicOpen r)) ⊗ₜ[A] m) = _
     rw [TensorProduct.map_tmul, AlgHom.toLinearMap_apply, map_one, TensorProduct.smul_tmul',
       smul_eq_mul, mul_one]
