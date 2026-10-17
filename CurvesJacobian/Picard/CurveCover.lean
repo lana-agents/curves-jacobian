@@ -21,7 +21,8 @@ Let `X` be a curve over a perfect field `k` (`Belyi.IsCurveOver`).
 * `IsCurveOver.isIso_appTop`: `Γ(X, 𝒪_X) = k`, i.e. `k → Γ(X, ⊤)` is an isomorphism
   (`Γ(X, 𝒪_X)` is integral over `k` since `X` is proper, and `k` is algebraically closed in
   `K(X)` by geometric integrality, `CurvesJacobian.mem_range_algebraMap_of_isAlgebraic`).
-* `IsCurveOver.isIso_app_pullback_snd` (Stacks, Tag 0B9U, for `f_T : X_T → T`): for every
+* `IsCurveOver.isIso_app_pullback_snd` (for `f_T : X_T → T`; the hypothesis of Stacks, Lemma
+  44.4.3 = Tag 0B9N, established as in the proof of Lemma 44.6.1 = Tag 0B9U): for every
   `k`-scheme `T` and every quasi-compact quasi-separated open `W ⊆ T` (e.g. affine), the map
   `𝒪_T(W) → 𝒪_{X_T}(f_T⁻¹ W)` is an isomorphism, i.e. `𝒪_T ≅ f_{T*} 𝒪_{X_T}` on such opens.
   This is flat base change of global sections (Mathlib's
@@ -124,7 +125,9 @@ theorem IsCurveOver.isIso_appTop : IsIso (X ↘ Spec (CommRingCat.of k)).appTop 
     (ConcreteCategory.isIso_iff_bijective _).mpr (IsCurveOver.bijective_structureToGlobal k X)
   exact IsIso.of_isIso_comp_left (Scheme.ΓSpecIso (CommRingCat.of k)).inv _
 
-/-- **Stacks, Tag 0B9U** (conclusion `𝒪_T ≅ f_{T*}𝒪_{X_T}`): for a curve `X` over a perfect
+/-- `𝒪_T ≅ f_{T*}𝒪_{X_T}` (flat base change, Stacks, Lemma 30.5.2 = Tag 02KH, applied to
+`Γ(X, 𝒪_X) = k`; this is the argument in the proof of Stacks, Lemma 44.6.1 = Tag 0B9U, verifying
+the hypothesis of Lemma 44.4.3 = Tag 0B9N): for a curve `X` over a perfect
 field `k`, any `k`-scheme `T` and any quasi-compact quasi-separated open `W ⊆ T`, the pullback
 `f_T : X_T = X ×_k T → T` induces an isomorphism `𝒪_T(W) ≅ 𝒪_{X_T}(f_T⁻¹ W)`. -/
 theorem IsCurveOver.isIso_app_pullback_snd {T : Scheme.{u}} (g : T ⟶ Spec (CommRingCat.of k))

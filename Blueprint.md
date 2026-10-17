@@ -174,7 +174,8 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   - `IsCurveOver.exists_finite_to_P1`, `exists_two_affine_cover` (belyi's `homOfFunctionField`),
     `isAffineOpen_inf`;
   - `IsCurveOver.isIso_appTop` (`Γ(X, 𝒪) = k`) and `isIso_app_pullback_snd`
-    (Stacks 0B9U conclusion: `𝒪_T(W) ≅ 𝒪_{X_T}(f_T⁻¹W)` for every `k`-scheme `T`, `W` qcqs);
+    (`𝒪_T(W) ≅ 𝒪_{X_T}(f_T⁻¹W)` for every `k`-scheme `T`, `W` qcqs: flat base change 02KH +
+    `Γ(X, 𝒪) = k`, as in the proof of 0B9U, giving the hypothesis of 0B9N);
   - `Cech.cechH1BaseChange`: for `X/S`, `S`, `T` affine, `U`, `V`, `U ∩ V` affine,
     `Ȟ¹(U_T, V_T; 𝒪_{X_T}) ≅ Γ(T) ⊗_{Γ(S)} Ȟ¹(U, V; 𝒪_X)` (`TwoCech.H1BaseChangeEquiv`);
   - `finrank_cechH1FF`: for disjoint nonempty finite sets of places `s`, `s'`,
@@ -185,6 +186,7 @@ For `X` integral with all stalks valuation rings, `K = K(X)`:
   perfect two-term complex over `Γ(T)` (Stacks 0B91 for curves), `Rf_{T*}L` and base change.
 
 Literature looked up: Stacks Project Tags 031P, 031Q, 031R, 031S, 031T, 0567 (2026-10-16);
-056Q (Lemma 31.19.1), 0B9U (Lemma 44.6.1) (2026-10-17).
+056Q (Lemma 31.19.1), 0B9U (Lemma 44.6.1), 0B9N (Lemma 44.4.3), 02KH (Lemma 30.5.2)
+(2026-10-17).
 [LocAn] cites Serre's criterion as "[Mats], Chapter 7, §17.I, Theorem 39" (Lemma 13.3); Matsumura
 is not available locally.
