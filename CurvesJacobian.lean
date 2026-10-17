@@ -18,6 +18,8 @@ import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Picard.BaseChangeSquare
 import CurvesJacobian.Picard.CechBaseChange
 import CurvesJacobian.Picard.CechLineBundle
+import CurvesJacobian.Picard.ChartSheaf
+import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
