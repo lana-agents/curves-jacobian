@@ -34,6 +34,7 @@ import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
+import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.HilbAffineData
@@ -60,6 +61,7 @@ import CurvesJacobian.Picard.QuasiFiniteCriterion
 import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
+import CurvesJacobian.Picard.RelEffCartierDegree
 import CurvesJacobian.Picard.RelEffCartierFinite
 import CurvesJacobian.Picard.RelEffCartierSection
 import CurvesJacobian.Picard.SchemeGeneric
