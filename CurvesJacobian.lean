@@ -71,6 +71,7 @@ import CurvesJacobian.Picard.RelEffCartierCurve
 import CurvesJacobian.Picard.RelEffCartierDegree
 import CurvesJacobian.Picard.RelEffCartierFinite
 import CurvesJacobian.Picard.RelEffCartierSection
+import CurvesJacobian.Picard.RigidIso
 import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
