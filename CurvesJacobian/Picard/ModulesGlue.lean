@@ -171,10 +171,12 @@ instance (W : Y.Opens) : Module Γ(Y, W) (D.sec W) where
     change rr (rV_le V i W) r • (0 : Γ(M i, rV V i W)) = 0
     rw [smul_zero]
   smul_add r s t := Subtype.ext <| funext fun i ↦ by
-    change rr (rV_le V i W) r • (s.1 i + t.1 i) = rr (rV_le V i W) r • s.1 i + rr (rV_le V i W) r • t.1 i
+    change rr (rV_le V i W) r • (s.1 i + t.1 i) =
+      rr (rV_le V i W) r • s.1 i + rr (rV_le V i W) r • t.1 i
     rw [smul_add]
   add_smul r r' s := Subtype.ext <| funext fun i ↦ by
-    change rr (rV_le V i W) (r + r') • s.1 i = rr (rV_le V i W) r • s.1 i + rr (rV_le V i W) r' • s.1 i
+    change rr (rV_le V i W) (r + r') • s.1 i =
+      rr (rV_le V i W) r • s.1 i + rr (rV_le V i W) r' • s.1 i
     rw [rr, map_add, add_smul]
   zero_smul s := Subtype.ext <| funext fun i ↦ by
     change rr (rV_le V i W) 0 • s.1 i = 0

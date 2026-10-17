@@ -34,6 +34,7 @@ import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
+import CurvesJacobian.Picard.EndInvertible
 import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.Hilb
