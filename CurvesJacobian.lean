@@ -55,7 +55,9 @@ import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
+import CurvesJacobian.Picard.PicRigid
 import CurvesJacobian.Picard.PicSigma
+import CurvesJacobian.Picard.PicSigmaCurve
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
