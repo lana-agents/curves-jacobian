@@ -49,6 +49,7 @@ import CurvesJacobian.Picard.HilbSheaf
 import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.LineBundle
+import CurvesJacobian.Picard.ModulesGlue
 import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.PicGroup
