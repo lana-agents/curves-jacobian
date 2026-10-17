@@ -19,6 +19,7 @@ import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Picard.BaseChangeSquare
 import CurvesJacobian.Picard.CartierChart
+import CurvesJacobian.Picard.CartierCurve
 import CurvesJacobian.Picard.CartierCriterion
 import CurvesJacobian.Picard.CechBaseChange
 import CurvesJacobian.Picard.CechLineBundle
