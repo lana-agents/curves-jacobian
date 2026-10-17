@@ -11,9 +11,12 @@ import CurvesJacobian.FunctionField.CechGenus
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.Galois.ChartOfOpen
 import CurvesJacobian.Galois.CurveCharts
 import CurvesJacobian.Galois.EtalePi1
+import CurvesJacobian.Galois.EtalePi1Open
 import CurvesJacobian.Galois.FunctionFieldF
+import CurvesJacobian.Galois.NewCoordinate
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
