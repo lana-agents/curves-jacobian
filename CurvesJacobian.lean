@@ -41,6 +41,7 @@ import CurvesJacobian.Picard.HilbAffineOpen
 import CurvesJacobian.Picard.HilbAffineRep
 import CurvesJacobian.Picard.HilbAffineScheme
 import CurvesJacobian.Picard.HilbAffineUniv
+import CurvesJacobian.Picard.HilbGlue
 import CurvesJacobian.Picard.HilbSch
 import CurvesJacobian.Picard.HilbSheaf
 import CurvesJacobian.Picard.IdealSheaf
@@ -61,6 +62,7 @@ import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
 import CurvesJacobian.Picard.RelEffCartierFinite
 import CurvesJacobian.Picard.RelEffCartierSection
+import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TwoTermPerfect

@@ -23,8 +23,9 @@ presentation, with `Scheme.Hom.finrank` constantly `d`.
 
 Representability for affine `X` over affine `S` (Stacks, Lemma 44.2.5, Tag 0B99) is proved in
 `CurvesJacobian.Picard.HilbAffineRep` (`HilbAffine.isRepresentable_hilbSch`), using the Zariski
-sheaf property (`CurvesJacobian.Picard.HilbSheaf`); the gluing for general `X` (Proposition
-44.2.6, Tag 0B9A) is not done yet.
+sheaf property (`CurvesJacobian.Picard.HilbSheaf`); the gluing for general separated `X → S`
+(Proposition 44.2.6, Tag 0B9A) is `CurvesJacobian.isRepresentable_hilbSch` in
+`CurvesJacobian.Picard.HilbGlue`.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry
