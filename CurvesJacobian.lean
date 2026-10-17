@@ -36,8 +36,13 @@ import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.HilbAffineData
+import CurvesJacobian.Picard.HilbAffineOpen
+import CurvesJacobian.Picard.HilbAffineUniv
+import CurvesJacobian.Picard.HilbSch
 import CurvesJacobian.Picard.IdealSheaf
+import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.LineBundle
+import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicSpec
