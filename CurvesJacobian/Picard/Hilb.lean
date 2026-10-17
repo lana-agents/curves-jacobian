@@ -21,8 +21,10 @@ presentation, with `Scheme.Hom.finrank` constantly `d`.
   `C ×_k T / T` (the description in the introduction of Stacks, Section 44.3, Tag 0B9C, made
   precise by Lemma 44.3.1, Tag 0B9D; see `CurvesJacobian.relEffCartier_iff`).
 
-Representability (Stacks, Lemma 44.2.5, Tag 0B99, and Proposition 44.2.6, Tag 0B9A) is not
-proved here.
+Representability for affine `X` over affine `S` (Stacks, Lemma 44.2.5, Tag 0B99) is proved in
+`CurvesJacobian.Picard.HilbAffineRep` (`HilbAffine.isRepresentable_hilbSch`), using the Zariski
+sheaf property (`CurvesJacobian.Picard.HilbSheaf`); the gluing for general `X` (Proposition
+44.2.6, Tag 0B9A) is not done yet.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry
