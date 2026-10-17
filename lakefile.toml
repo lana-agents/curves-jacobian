@@ -21,7 +21,7 @@ name = "CurvesJacobian"
 [[require]]
 name = "belyi"
 git = "https://github.com/lana-agents/belyi"
-rev = "65229a52a9e91417ba8353abdf6ec9a6f96dc48b"
+rev = "3a28da73a34109355c63c0bb5de19e16326d5d6e"
 
 # Function fields over perfect fields: places, divisors, Riemann–Roch, genus, Pic (W1–W6).
 [[require]]
@@ -33,7 +33,7 @@ rev = "58b577bd3ab81789e66986e4500e8c2a395e082a"
 [[require]]
 name = "pi1"
 git = "https://github.com/lana-agents/pi1"
-rev = "77a06d12c78b4fd8d923e3dba7a145942bf85a3a"
+rev = "67456a68126079eb05681b6f5f3a9505e26fb266"
 
 # Kummer theory `Kˣ/(Kˣ)ⁿ ≃ H¹_cont(G_K, μₙ)`.
 [[require]]

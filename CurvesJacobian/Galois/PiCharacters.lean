@@ -26,7 +26,8 @@ characters, and:
 * `CurvesJacobian.picTorsionEquivPiChars D n :
     Pic(F)[n] ≃+ Additive (ContinuousMonoidHom Π_X μₙ)` (with `picTorsionEquivUnramified`).
 
-Identifying `Π_X` with `π₁ᵉᵗ` of the proper scheme `X` is not done here (pi1 track).
+`Π_X` is identified with `π₁ᵉᵗ` of the proper scheme `X` in `Galois/EtalePi1.lean`
+(`CurvesJacobian.etalePi1EquivPiX'`).
 -/
 
 open KummerTheory Curve AffOrbicurve WeilCurves.FunctionField
