@@ -33,6 +33,7 @@ import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.FlatAlgebra
+import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.PicGroup
