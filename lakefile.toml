@@ -27,7 +27,7 @@ rev = "6c167ce0132b88700f92692c38294ae398e09e66"
 [[require]]
 name = "weil-curves"
 git = "https://github.com/lana-agents/weil-curves"
-rev = "58b577bd3ab81789e66986e4500e8c2a395e082a"
+rev = "007793ba8b839f1746d9477e643a075e66a220c6"
 
 # Étale fundamental groups; Galois-theoretic π₁ of curves and surjectivity of inertia.
 [[require]]
