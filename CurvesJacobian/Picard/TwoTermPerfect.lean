@@ -19,9 +19,10 @@ cokernel are finitely generated. Then there is a map `δ : K₀ → K₁` of fin
 `B ⊗ δ` and `B ⊗ d` have isomorphic kernels and cokernels
 (`CurvesJacobian.TwoTerm.exists_finite_projective`).
 
-This is the two-term case of the construction in the proof of the
-base change statement of Stacks, Lemma 36.30.4 (Tag 0B91), the algebraic heart of cohomology and
-base change for curves (often called Mumford's lemma). The construction: choose a finite free `K₁` with `γ : K₁ → C₁` such that
+This is the two-term case of the construction in the proof of the base change statement of
+Stacks, Lemma 36.30.4 (Tag 0B91), the algebraic heart of cohomology and base change for curves
+(often called Mumford's lemma). The construction: choose a finite free `K₁` with
+`γ : K₁ → C₁` such that
 `C₁ = d(C₀) + γ(K₁)`, and let `K₀ = C₀ ×_{C₁} K₁`. Then
 `0 → K₀ → C₀ × K₁ → C₁ → 0` is exact (`IsBicartesian`), which identifies kernels and cokernels
 (`kerEquiv`, `cokerEquiv`); it stays exact after any base change because `C₁` is flat, `K₀` is
