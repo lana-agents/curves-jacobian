@@ -43,9 +43,12 @@ import CurvesJacobian.Picard.Pullback
 import CurvesJacobian.Picard.PushoutAlgebra
 import CurvesJacobian.Picard.QcohBaseChange
 import CurvesJacobian.Picard.QcohLocal
+import CurvesJacobian.Picard.QuasiFiniteCriterion
 import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
+import CurvesJacobian.Picard.RelEffCartierFinite
+import CurvesJacobian.Picard.RelEffCartierSection
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TwoTermPerfect
