@@ -42,6 +42,7 @@ import CurvesJacobian.Picard.HilbAffineOpen
 import CurvesJacobian.Picard.HilbAffineRep
 import CurvesJacobian.Picard.HilbAffineScheme
 import CurvesJacobian.Picard.HilbAffineUniv
+import CurvesJacobian.Picard.HilbCurve
 import CurvesJacobian.Picard.HilbGlue
 import CurvesJacobian.Picard.HilbSch
 import CurvesJacobian.Picard.HilbSheaf
