@@ -15,10 +15,15 @@ import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Picard.Dual
+import CurvesJacobian.Picard.FlatAlgebra
+import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
+import CurvesJacobian.Picard.PicSpec
+import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
+import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Scheme.ConstantField
