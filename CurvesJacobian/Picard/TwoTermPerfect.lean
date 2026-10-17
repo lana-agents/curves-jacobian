@@ -19,10 +19,9 @@ cokernel are finitely generated. Then there is a map `δ : K₀ → K₁` of fin
 `B ⊗ δ` and `B ⊗ d` have isomorphic kernels and cokernels
 (`CurvesJacobian.TwoTerm.exists_finite_projective`).
 
-This is the two-term case of Stacks, Lemma 15.78.4 (Tag 0B6N) together with the
+This is the two-term case of the construction in the proof of the
 base change statement of Stacks, Lemma 36.30.4 (Tag 0B91), the algebraic heart of cohomology and
-base change for curves ("Mumford's lemma", Mumford, *Abelian varieties*, §5, as presented in
-Stacks). The construction: choose a finite free `K₁` with `γ : K₁ → C₁` such that
+base change for curves (often called Mumford's lemma). The construction: choose a finite free `K₁` with `γ : K₁ → C₁` such that
 `C₁ = d(C₀) + γ(K₁)`, and let `K₀ = C₀ ×_{C₁} K₁`. Then
 `0 → K₀ → C₀ × K₁ → C₁ → 0` is exact (`IsBicartesian`), which identifies kernels and cokernels
 (`kerEquiv`, `cokerEquiv`); it stays exact after any base change because `C₁` is flat, `K₀` is
@@ -243,7 +242,7 @@ lemma exists_finite_free_sup (h : Module.Finite A (C₁ ⧸ range d)) :
   refine ⟨(c₀, -v), ?_⟩
   simp [hc₀]
 
-/-- **Two-term version of Mumford's lemma** (Stacks, Lemma 15.78.4, Tag 0B6N; base change as in
+/-- **Two-term version of Mumford's lemma** (base change as in
 Stacks, Lemma 36.30.4, Tag 0B91): over a Noetherian ring `A`, a map `d : C₀ → C₁` of flat
 modules with finitely generated kernel and cokernel is, universally, computed by a map
 `δ : K₀ → K₁` of finite projective modules: for every `A`-algebra `B`, the base changes `B ⊗ δ`

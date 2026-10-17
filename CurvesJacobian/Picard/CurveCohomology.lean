@@ -287,7 +287,8 @@ lemma isAffineOpen_chart_inf [IsFinite π] :
 
 include π in
 /-- **Finiteness of the Čech cohomology** of an invertible sheaf on `X_{T₀}`, `Γ(T₀)`
-Noetherian (Stacks, Lemma 30.19.2, Tag 02O5, for curves; via Serre's theorem on `ℙ¹`). -/
+Noetherian (the case of curves of Stacks, Proposition 30.19.1, Tag 02O5, for `H⁰`, `H¹`; via
+Serre's theorem on `ℙ¹`). -/
 theorem finite_cechModH0_H1 [IsFinite π] [IsNoetherianRing Γ(T₀, ⊤)] (L : (XT).Modules)
     [L.IsInvertible] :
     Module.Finite Γ(T₀, ⊤) (cechModH0 T₀ L (curveChartMap (T₀ := T₀) π ⁻¹ᵁ ProjectiveLine.U k 0)

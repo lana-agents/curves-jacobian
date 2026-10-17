@@ -14,7 +14,8 @@ isomorphism `e : A ⊗_{R₀} R₀' ≃ A'`, `a ⊗ b ↦ a b`). If an `A'`-modu
 an `A`-module `M` along `A → A'` (`IsBaseChange A' θ`), then `N` is also the base change of `M`
 along `R₀ → R₀'`: `R₀' ⊗_{R₀} M ≅ N`, `b ⊗ m ↦ b • θ m`
 (`CurvesJacobian.bijective_liftBaseChange_of_isBaseChange`). This is the transitivity
-`R₀' ⊗_{R₀} M ≅ (A ⊗_{R₀} R₀') ⊗_A M ≅ A' ⊗_A M` (Stacks, Lemma 10.12.7, Tag 00DE).
+`R₀' ⊗_{R₀} M ≅ (A ⊗_{R₀} R₀') ⊗_A M ≅ A' ⊗_A M` (associativity and cancellation of
+tensor products).
 -/
 
 open TensorProduct

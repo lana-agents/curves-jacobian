@@ -16,7 +16,7 @@ Let `φ : Y ⟶ X` be a morphism of schemes, `L` an invertible `𝒪_X`-module, 
 
 * `Scheme.Modules.isBaseChange_pullbackRes`: `Γ(φ^*L, U') = Γ(Y, U') ⊗_{Γ(X, U)} Γ(L, U)`,
   i.e. `θ` is a base change (sections of the pullback of a quasi-coherent module over affines;
-  Stacks, Lemma 26.7.3, Tag 01I9 / Lemma 17.10.5, Tag 01BJ, for invertible modules).
+  Stacks, Lemma 26.7.3, Tag 01I9, for invertible modules).
 
 The proof is local on `Γ(X, U)`: on the basic opens `D(f)` on which `L` has a basis `m₀|_{D(f)}`,
 `θ(m₀)` restricts to a basis of `φ^*L` on `D(φ^♯ f)` (`isBasisOn_pullbackSection`), and the
