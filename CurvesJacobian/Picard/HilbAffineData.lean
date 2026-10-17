@@ -28,6 +28,11 @@ makes `F_W` representable by an affine scheme: `MatData A w` is in natural bijec
 maps `U → A` out of an explicit finitely presented ring `U = univRing I d w`
 (`univRingHomEquiv`; `U` is a quotient of `ℤ[X_{i,a,b}, v_a]` by the entries of the commutators
 `[X_i, X_j]` and of `w_l(X) v - e_l`).
+
+Everything is natural in `A`: `MatData.map`, `univRingHomEquiv_comp`, and on the ideal side
+`kerIdeal_map` (the ideal of `(X, v)` commutes with base change, by reduction of every polynomial
+to a combination of the `w l`), `hasMonomialBasis_map` and `monomialBasisEquiv_symm_map`. Hence
+`A ↦ {J // HasMonomialBasis w J}` (with `J ↦ J A'[x]`) is represented by `Spec (univRing I d w)`.
 -/
 
 open MvPolynomial
@@ -389,5 +394,128 @@ def univRingHomEquiv (w : Fin d → I →₀ ℕ) : (univRing I d w →+* A) ≃
       simp [genVec₀, genVec]
 
 end Universal
+
+section Naturality
+
+variable {A' : Type u} [CommRing A'] (g : A →+* A') {w : Fin d → I →₀ ℕ}
+
+/-- Base change of matrix data along `A → A'`. -/
+def MatData.map (M : MatData A w) : MatData A' w where
+  X i := (M.X i).map g
+  v := g ∘ M.v
+  comm := map_comm g M.X M.comm
+  eval_eq l := by
+    ext a
+    have h2 := RingHom.map_mulVec g (evalMat M.X M.comm (monomial (w l) 1)) M.v a
+    rw [← evalMat_map g _ M.comm, MvPolynomial.map_monomial, map_one g] at h2
+    rw [← h2, M.eval_eq, Pi.single_apply, Pi.single_apply]
+    split_ifs <;> simp
+
+/-- `univRingHomEquiv` is natural in `A`. -/
+lemma univRingHomEquiv_comp (f : univRing I d w →+* A) :
+    univRingHomEquiv w (g.comp f) = (univRingHomEquiv w f).map g :=
+  MatData.ext _ rfl rfl
+
+lemma evalVec_map (M : MatData A w) (p : MvPolynomial I A) :
+    evalVec (M.map g).X (M.map g).comm (M.map g).v (MvPolynomial.map g p) =
+      g ∘ evalVec M.X M.comm M.v p := by
+  funext a
+  rw [evalVec_apply, Function.comp_apply, evalVec_apply, RingHom.map_mulVec,
+    ← evalMat_map g _ M.comm]
+  rfl
+
+lemma evalVec_C_mul (X : I → Matrix (Fin d) (Fin d) A) (hX : ∀ i j, X i * X j = X j * X i)
+    (v : Fin d → A) (c : A) (p : MvPolynomial I A) :
+    evalVec X hX v (C c * p) = c • evalVec X hX v p := by
+  rw [evalVec_mul, evalMat_C_mulVec]
+
+lemma evalVec_sum (M : MatData A w) (c : Fin d → A) :
+    evalVec M.X M.comm M.v (∑ l, C (c l) * monomial (w l) 1) = c := by
+  rw [map_sum]
+  simp only [evalVec_C_mul]
+  simp only [evalVec_apply, M.eval_eq]
+  ext b
+  simp [Finset.sum_apply, Pi.single_apply]
+
+/-- Every polynomial is congruent modulo `kerIdeal` to a combination of the monomials `w l`. -/
+lemma exists_sub_mem_kerIdeal (M : MatData A w) (p : MvPolynomial I A) :
+    ∃ c : Fin d → A, p - ∑ l, C (c l) * monomial (w l) 1 ∈ kerIdeal M.X M.comm M.v := by
+  induction p using MvPolynomial.induction_on' with
+  | monomial m a =>
+    refine ⟨a • evalVec M.X M.comm M.v (monomial m 1), ?_⟩
+    rw [mem_kerIdeal, map_sub, evalVec_sum, show monomial m a = C a * monomial m 1 by
+      rw [C_mul_monomial, mul_one], evalVec_C_mul, sub_self]
+  | add p q hp hq =>
+    obtain ⟨c, hc⟩ := hp
+    obtain ⟨c', hc'⟩ := hq
+    refine ⟨c + c', ?_⟩
+    have := Ideal.add_mem _ hc hc'
+    convert this using 1
+    simp only [Pi.add_apply, map_add, add_mul, Finset.sum_add_distrib]
+    ring
+
+/-- The ideal of `(X, v)` is compatible with base change. -/
+lemma kerIdeal_map (M : MatData A w) :
+    (kerIdeal M.X M.comm M.v).map (MvPolynomial.map g) =
+      kerIdeal (M.map g).X (M.map g).comm (M.map g).v := by
+  have hle : (kerIdeal M.X M.comm M.v).map (MvPolynomial.map g) ≤
+      kerIdeal (M.map g).X (M.map g).comm (M.map g).v := by
+    rw [Ideal.map_le_iff_le_comap]
+    intro p hp
+    rw [Ideal.mem_comap, mem_kerIdeal, evalVec_map, (mem_kerIdeal _ _ _ _).mp hp]
+    funext a
+    simp
+  refine le_antisymm hle fun p hp ↦ ?_
+  -- `p ≡ ∑ c_l w_l` modulo the extended ideal
+  have key : ∀ q : MvPolynomial I A', ∃ c : Fin d → A',
+      q - ∑ l, C (c l) * monomial (w l) 1 ∈ (kerIdeal M.X M.comm M.v).map (MvPolynomial.map g) := by
+    intro q
+    induction q using MvPolynomial.induction_on' with
+    | monomial m a =>
+      obtain ⟨c, hc⟩ := exists_sub_mem_kerIdeal M (monomial m 1)
+      refine ⟨fun l ↦ a * g (c l), ?_⟩
+      have h1 := Ideal.mul_mem_left _ (C a) (Ideal.mem_map_of_mem (MvPolynomial.map g) hc)
+      have e : monomial m a - ∑ l, C (a * g (c l)) * monomial (w l) 1 =
+          C a * MvPolynomial.map g (monomial m 1 - ∑ l, C (c l) * monomial (w l) 1) := by
+        rw [map_sub, map_sum, mul_sub, Finset.mul_sum, MvPolynomial.map_monomial, map_one,
+          C_mul_monomial, mul_one]
+        congr 1
+        refine Finset.sum_congr rfl fun l _ ↦ ?_
+        rw [map_mul C, map_mul (MvPolynomial.map g), MvPolynomial.map_C, MvPolynomial.map_monomial,
+          map_one g, mul_assoc]
+      rw [e]
+      exact h1
+    | add p q hp hq =>
+      obtain ⟨c, hc⟩ := hp
+      obtain ⟨c', hc'⟩ := hq
+      refine ⟨c + c', ?_⟩
+      have := Ideal.add_mem _ hc hc'
+      convert this using 1
+      simp only [Pi.add_apply, map_add, add_mul, Finset.sum_add_distrib]
+      ring
+  obtain ⟨c, hc⟩ := key p
+  have h0 := (mem_kerIdeal _ _ _ _).mp (hle hc)
+  rw [map_sub, (mem_kerIdeal _ _ _ _).mp hp, evalVec_sum (M.map g), zero_sub, neg_eq_zero] at h0
+  rw [h0] at hc
+  simpa using hc
+
+/-- `F_W` is stable under base change: the extended ideal still has the monomial basis. -/
+lemma hasMonomialBasis_map {J : Ideal (MvPolynomial I A)} (hJ : HasMonomialBasis w J) :
+    HasMonomialBasis w (J.map (MvPolynomial.map g)) := by
+  have e := congrArg Subtype.val ((monomialBasisEquiv (w := w)).symm_apply_apply ⟨J, hJ⟩)
+  simp only at e
+  rw [← e]
+  change HasMonomialBasis w ((kerIdeal _ _ _).map (MvPolynomial.map g))
+  rw [kerIdeal_map]
+  exact hasMonomialBasis_kerIdeal _ (MatData.eval_eq _)
+
+/-- `monomialBasisEquiv` is natural: base change of ideals corresponds to base change of matrix
+data. -/
+lemma monomialBasisEquiv_symm_map (M : MatData A w) :
+    ((monomialBasisEquiv (w := w)).symm (M.map g)).1 =
+      ((monomialBasisEquiv (w := w)).symm M).1.map (MvPolynomial.map g) :=
+  (kerIdeal_map g M).symm
+
+end Naturality
 
 end CurvesJacobian.HilbAffine
