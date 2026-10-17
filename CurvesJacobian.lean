@@ -32,6 +32,7 @@ import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
+import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
