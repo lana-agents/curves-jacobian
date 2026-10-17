@@ -50,8 +50,10 @@ import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.OpenSubfunctor
+import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
+import CurvesJacobian.Picard.PicSigma
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
@@ -68,6 +70,7 @@ import CurvesJacobian.Picard.RelEffCartierSection
 import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
+import CurvesJacobian.Picard.TranslateRep
 import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
