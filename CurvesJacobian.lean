@@ -4,6 +4,7 @@ import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
 import CurvesJacobian.Cusp.Inertia
+import CurvesJacobian.Cusp.InertiaNontrivial
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
