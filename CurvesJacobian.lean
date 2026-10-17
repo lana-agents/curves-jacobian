@@ -13,6 +13,7 @@ import CurvesJacobian.FunctionField.CechGenus
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.Galois.BelyiInfty
 import CurvesJacobian.Galois.ChartOfOpen
 import CurvesJacobian.Galois.CurveCharts
 import CurvesJacobian.Galois.EtalePi1
