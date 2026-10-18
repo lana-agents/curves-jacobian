@@ -127,6 +127,7 @@ import CurvesJacobian.Galois.PicTorsionCount
 import CurvesJacobian.Galois.SmoothDescent
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Kummer.BaseChangeFunctionField
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ClosedRestriction
@@ -134,8 +135,10 @@ import CurvesJacobian.Kummer.CompletionDescent
 import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
+import CurvesJacobian.Kummer.JacobianPi1
 import CurvesJacobian.Kummer.JacobianTate
 import CurvesJacobian.Kummer.JacobianTorsion
+import CurvesJacobian.Kummer.JacobianTorsionCount
 import CurvesJacobian.Kummer.MiddleExact
 import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.NFCharacterization
@@ -167,6 +170,7 @@ import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.CurvePerfect
+import CurvesJacobian.Picard.DivisorPic
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
 import CurvesJacobian.Picard.EpsDecomp
@@ -261,6 +265,7 @@ import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
 import CurvesJacobian.Picard.RelEffCartierDegree
 import CurvesJacobian.Picard.RelEffCartierFinite
+import CurvesJacobian.Picard.RelEffCartierPicAdd
 import CurvesJacobian.Picard.RelEffCartierPullback
 import CurvesJacobian.Picard.RelEffCartierSection
 import CurvesJacobian.Picard.RelEffCartierSub
@@ -288,6 +293,7 @@ import CurvesJacobian.Picard.ZeroSchemeDegree
 import CurvesJacobian.Picard.ZeroSchemeDivisor
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
+import CurvesJacobian.Scheme.CurveIdealDivisor
 import CurvesJacobian.Scheme.CurvePic
 import CurvesJacobian.Scheme.CurvePlaces
 import CurvesJacobian.Scheme.GeomIntegralAlgClosed
