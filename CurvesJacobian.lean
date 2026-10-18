@@ -148,6 +148,7 @@ import CurvesJacobian.Picard.EulerCharTwist
 import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
+import CurvesJacobian.Picard.GrpSeparated
 import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.HilbAffineData
 import CurvesJacobian.Picard.HilbAffineOpen
@@ -182,6 +183,8 @@ import CurvesJacobian.Picard.PicDegreeAdd
 import CurvesJacobian.Picard.PicDegreeDivisor
 import CurvesJacobian.Picard.PicDegreeTranslate
 import CurvesJacobian.Picard.PicDegreeZero
+import CurvesJacobian.Picard.PicDimension
+import CurvesJacobian.Picard.PicEffective
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicFField
 import CurvesJacobian.Picard.PicFFieldPoint
@@ -196,6 +199,7 @@ import CurvesJacobian.Picard.PicLocTriv
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
 import CurvesJacobian.Picard.PicScheme
+import CurvesJacobian.Picard.PicSeparated
 import CurvesJacobian.Picard.PicSigma
 import CurvesJacobian.Picard.PicSigmaCurve
 import CurvesJacobian.Picard.PicSigmaCurveOpen
@@ -204,6 +208,7 @@ import CurvesJacobian.Picard.PicSigmaSheafCurve
 import CurvesJacobian.Picard.PicSmooth
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
+import CurvesJacobian.Picard.PicTangentKer
 import CurvesJacobian.Picard.PicTangentSetup
 import CurvesJacobian.Picard.PicTangentTwist
 import CurvesJacobian.Picard.Pullback
