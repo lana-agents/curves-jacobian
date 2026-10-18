@@ -190,6 +190,8 @@ import CurvesJacobian.Picard.HilbSheaf
 import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.Jacobian
+import CurvesJacobian.Picard.JacobianBaseChange
+import CurvesJacobian.Picard.JacobianGalois
 import CurvesJacobian.Picard.JacobianPoints
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.LocIso
