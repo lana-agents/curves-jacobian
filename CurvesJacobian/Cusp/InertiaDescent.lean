@@ -5,6 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.InertiaEtale
 import CurvesJacobian.Galois.CountableSubfield
+import CurvesJacobian.Cusp.PlaceTransitivity
 
 /-!
 # Unramifiedness descends along constant field extensions
@@ -24,7 +25,7 @@ The second condition is visibly stable under constant field extension: for `k₀
 
 Finally, for `k₀ → k` and `Ω` separably closed of characteristic `0`, the relative algebraic
 closure `Ω₀ = CurvesJacobian.Cusp.lineAlgClosure k₀ t` of `k₀(t)` in `Ω` provides such an `Ω₀`
-(algebraically closed, Galois over `k₀(t₀)`), with `t₀ = CurvesJacobian.Cusp.lineGen k₀ t` and
+(algebraically closed, Galois over `k₀(t₀)`), with `t₀ = CurvesJacobian.Cusp.lineAlgGen k₀ t` and
 `ι = CurvesJacobian.Cusp.lineIncl k₀ t`; `CurvesJacobian.Cusp.inertia_fix_descent_lineAlgClosure`
 is the descent statement in this situation.
 -/
@@ -48,12 +49,6 @@ lemma valuationSubring_valuation_lt_one_iff (A : ValuationSubring K) (x : K) :
       inv_le_one₀ ((Valuation.pos_iff _).2 hx)]
     simp only [hx, false_or, not_le]
     exact ⟨fun h ↦ ⟨h.le, h⟩, fun h ↦ h.2⟩
-
-/-- The maximal ideal of `f⁻¹ A` is the preimage of the maximal ideal of `A`. -/
-lemma valuation_comap_lt_one_iff (A : ValuationSubring L) (f : K →+* L) (x : K) :
-    (A.comap f).valuation x < 1 ↔ A.valuation (f x) < 1 := by
-  rw [valuationSubring_valuation_lt_one_iff, valuationSubring_valuation_lt_one_iff,
-    ValuationSubring.mem_comap, ValuationSubring.mem_comap, map_inv₀, map_eq_zero]
 
 end Valuation
 
@@ -272,7 +267,7 @@ abbrev lineAlgClosure (t : Ω) : IntermediateField (K₀ k₀ t) Ω := algebraic
 
 variable (k₀) in
 /-- The coordinate `t₀ = t ∈ Ω₀`. -/
-def lineGen (t : Ω) : lineAlgClosure k₀ t :=
+def lineAlgGen (t : Ω) : lineAlgClosure k₀ t :=
   ⟨t, (lineAlgClosure k₀ t).algebraMap_mem ⟨t, mem_adjoin_simple_self k₀ t⟩⟩
 
 variable (k₀) in
@@ -283,19 +278,19 @@ def lineIncl (t : Ω) : lineAlgClosure k₀ t →ₐ[k₀] Ω :=
 @[simp] lemma lineIncl_apply (t : Ω) (x : lineAlgClosure k₀ t) :
     lineIncl k₀ t x = (x : Ω) := rfl
 
-@[simp] lemma lineIncl_lineGen (t : Ω) : lineIncl k₀ t (lineGen k₀ t) = t := rfl
+@[simp] lemma lineIncl_lineGen (t : Ω) : lineIncl k₀ t (lineAlgGen k₀ t) = t := rfl
 
 instance [CharZero k₀] [IsSepClosed Ω] (t : Ω) : IsAlgClosed (lineAlgClosure k₀ t) :=
   haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap k₀ Ω).injective
   isAlgClosed_algebraicClosure _ _
 
 lemma isAlgebraic_lineAlgClosure (t : Ω) :
-    Algebra.IsAlgebraic (K₀ k₀ (lineGen k₀ t)) (lineAlgClosure k₀ t) := by
-  have hmap : (K₀ k₀ (lineGen k₀ t)).map (lineIncl k₀ t) = K₀ k₀ t := by
+    Algebra.IsAlgebraic (K₀ k₀ (lineAlgGen k₀ t)) (lineAlgClosure k₀ t) := by
+  have hmap : (K₀ k₀ (lineAlgGen k₀ t)).map (lineIncl k₀ t) = K₀ k₀ t := by
     rw [IntermediateField.adjoin_map, Set.image_singleton, lineIncl_lineGen]
-  let e : K₀ k₀ (lineGen k₀ t) ≃ₐ[k₀] K₀ k₀ t :=
+  let e : K₀ k₀ (lineAlgGen k₀ t) ≃ₐ[k₀] K₀ k₀ t :=
     (IntermediateField.equivMap _ (lineIncl k₀ t)).trans (IntermediateField.equivOfEq hmap)
-  refine ⟨fun x ↦ IsAlgebraic.of_ringHom_of_comp_eq (e : K₀ k₀ (lineGen k₀ t) →+* K₀ k₀ t)
+  refine ⟨fun x ↦ IsAlgebraic.of_ringHom_of_comp_eq (e : K₀ k₀ (lineAlgGen k₀ t) →+* K₀ k₀ t)
     ((lineIncl k₀ t : lineAlgClosure k₀ t →+* Ω)) ?_ e.surjective (lineIncl k₀ t).injective
     (RingHom.ext fun _ ↦ rfl)⟩
   exact mem_algebraicClosure_iff.1 x.2
@@ -303,18 +298,18 @@ lemma isAlgebraic_lineAlgClosure (t : Ω) :
 set_option synthInstance.maxHeartbeats 400000 in
 -- `Module.IsTorsionFree` for the intermediate field types is slow to synthesize
 instance [CharZero k₀] [IsSepClosed Ω] (t : Ω) :
-    IsGalois (K₀ k₀ (lineGen k₀ t)) (lineAlgClosure k₀ t) := by
+    IsGalois (K₀ k₀ (lineAlgGen k₀ t)) (lineAlgClosure k₀ t) := by
   haveI := isAlgebraic_lineAlgClosure (k₀ := k₀) t
-  haveI : CharZero (K₀ k₀ (lineGen k₀ t)) :=
-    charZero_of_injective_algebraMap (algebraMap k₀ (K₀ k₀ (lineGen k₀ t))).injective
-  haveI : IsAlgClosure (K₀ k₀ (lineGen k₀ t)) (lineAlgClosure k₀ t) :=
+  haveI : CharZero (K₀ k₀ (lineAlgGen k₀ t)) :=
+    charZero_of_injective_algebraMap (algebraMap k₀ (K₀ k₀ (lineAlgGen k₀ t))).injective
+  haveI : IsAlgClosure (K₀ k₀ (lineAlgGen k₀ t)) (lineAlgClosure k₀ t) :=
     (isAlgClosure_iff _ _).2 ⟨inferInstance, inferInstance⟩
   exact isGalois_iff.2 ⟨Algebra.IsAlgebraic.isSeparable_of_perfectField, inferInstance⟩
 
 /-- `t₀` is transcendental over `k₀` when `t` is transcendental over an extension `k` of `k₀`. -/
 lemma transcendental_lineGen {k : Type u} [Field k] [Algebra k₀ k] [Algebra k Ω]
     [IsScalarTower k₀ k Ω] {t : Ω} (ht : Transcendental k t) :
-    Transcendental k₀ (lineGen k₀ t) :=
+    Transcendental k₀ (lineAlgGen k₀ t) :=
   fun h ↦ ht ((h.algHom (lineIncl k₀ t)).tower_top k)
 
 variable {k : Type u} [Field k] [CharZero k] [Algebra k₀ k] [Algebra k Ω] [IsScalarTower k₀ k Ω]
@@ -327,10 +322,10 @@ theorem inertia_fix_descent_lineAlgClosure [IsSepClosed Ω] {t : Ω} [IsGalois (
     (ht : Transcendental k t) {W : ValuationSubring Ω} (hWk : ∀ c : k, algebraMap k Ω c ∈ W)
     (hWt : W.valuation t < 1) (z : lineAlgClosure k₀ t)
     (hz : ∀ σ ∈ GaloisPi1.inertia (P := K₀ k t) W, σ z = z) :
-    ∀ σ₀ ∈ GaloisPi1.inertia (P := K₀ k₀ (lineGen k₀ t))
+    ∀ σ₀ ∈ GaloisPi1.inertia (P := K₀ k₀ (lineAlgGen k₀ t))
       (W.comap (lineIncl k₀ t : lineAlgClosure k₀ t →+* Ω)), σ₀ z = z := by
   haveI : CharZero k₀ := RingHom.charZero (algebraMap k₀ k)
-  haveI : IsGalois (K₀ k (lineIncl k₀ t (lineGen k₀ t))) Ω := ‹IsGalois (K₀ k t) Ω›
+  haveI : IsGalois (K₀ k (lineIncl k₀ t (lineAlgGen k₀ t))) Ω := ‹IsGalois (K₀ k t) Ω›
   exact inertia_fix_descent (lineIncl k₀ t) ht hWk hWt z hz
 
 end Construction
