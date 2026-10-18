@@ -174,6 +174,25 @@ lemma fixedAlg_ext {φ ψ : A →ₐ[L] B}
   | tmul l β => rw [descentEquiv_tmul, map_smul, map_smul, h]
   | add z z' hz hz' => rw [map_add, map_add, map_add, hz, hz']
 
+/-- **Speiser for base change**: if `χ : A^G ⟶ R` is bijective, so is its extension
+`A ≅ L ⊗_k A^G ⟶ L ⊗_k R ≅ B`. -/
+theorem bijective_extendInv (χ : fixedAlg ρ hρ →ₐ[k] R) (hχ : Function.Bijective χ) :
+    Function.Bijective (extendInv B hρ χ) := by
+  let e : L ⊗[k] fixedAlg ρ hρ ≃ₐ[L] B := (Algebra.TensorProduct.congr AlgEquiv.refl
+    (AlgEquiv.ofBijective χ hχ)).trans (Algebra.IsPushout.equiv k L R B)
+  have h : extendInv B hρ χ = e.toAlgHom.comp (descentEquiv ρ hρ).symm.toAlgHom := by
+    refine fixedAlg_ext hρ fun β ↦ ?_
+    have hb : (β : A) = descentEquiv ρ hρ (1 ⊗ₜ β) := by rw [descentEquiv_tmul, one_smul]
+    rw [extendInv_coe, AlgHom.comp_apply]
+    change _ = e ((descentEquiv ρ hρ).symm (β : A))
+    rw [hb, AlgEquiv.symm_apply_apply]
+    change _ = Algebra.IsPushout.equiv k L R B
+      (Algebra.TensorProduct.congr AlgEquiv.refl (AlgEquiv.ofBijective χ hχ) (1 ⊗ₜ β))
+    rw [Algebra.TensorProduct.congr_apply, Algebra.TensorProduct.map_tmul]
+    exact (pushoutEquiv_one_tmul R B _).symm
+  rw [h]
+  exact e.bijective.comp (descentEquiv ρ hρ).symm.bijective
+
 /-- **Galois descent of algebra maps**: `G`-equivariant `L`-algebra maps `A ⟶ L ⊗_k R`
 correspond to `k`-algebra maps `A^G ⟶ R`. -/
 def equivariantHomEquiv : EquivariantHom B σ ρ ≃ (fixedAlg ρ hρ →ₐ[k] R) where

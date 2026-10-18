@@ -6,6 +6,7 @@ Authors: LANA Project
 import CurvesJacobian.Descent.GaloisHom
 import Mathlib.AlgebraicGeometry.Morphisms.Affine
 import Mathlib.Algebra.Category.Ring.Constructions
+import Mathlib.AlgebraicGeometry.Morphisms.IsIso
 
 /-!
 # Galois descent of affine schemes
@@ -433,6 +434,27 @@ lemma eq_pull_univEqMor (f : EqMor t aU) :
     f = EqMor.pull (descAffHom aU) aU (affineDescentEquiv t aU f).1
       (affineDescentEquiv t aU f).2 (univEqMor aU) :=
   (affineDescentEquiv t aU).injective (by rw [affineDescentEquiv_pull])
+
+/-- **The universal equivariant morphism `(Spec Γ(U)^G)_L ⟶ U` is an isomorphism**
+(`U` affine): Speiser's lemma `L ⊗_k Γ(U)^G ≅ Γ(U)`. -/
+theorem isIso_univEqMor : IsIso (univEqMor aU).1 := by
+  rw [← MorphismProperty.isomorphisms.iff, (MorphismProperty.isomorphisms _).arrow_mk_iso_iff
+    (arrowIsoSpecΓOfIsAffine _), MorphismProperty.isomorphisms.iff, isIso_SpecMap_iff]
+  let χ := (specHomEquiv (descAffHom aU) aU).symm ⟨𝟙 _, Category.id_comp _⟩
+  have hχ : Function.Bijective χ := by
+    have : ∀ β, χ β = (Scheme.ΓSpecIso (CommRingCat.of (invAlg aU))).inv.hom β := fun β ↦ by
+      rw [specHomEquiv_symm_apply, Scheme.Hom.id_appTop]
+      rfl
+    rw [show (χ : invAlg aU → SecT (descAffHom aU)) = _ from funext this]
+    exact (ConcreteCategory.bijective_of_isIso _)
+  have e : (univEqMor aU).1.appTop.hom = (extendInv (SecU (pullback.snd (descAffHom aU) (sL k L)))
+      aU.secAct_algebraMap χ).toRingHom := by
+    change (homOfΓ _ _).appTop.hom = _
+    rw [homOfΓ_appTop]
+    rfl
+  rw [e]
+  exact bijective_extendInv (R := SecT (descAffHom aU))
+    (B := SecU (pullback.snd (descAffHom aU) (sL k L))) aU.secAct_algebraMap χ hχ
 
 end Affine
 
