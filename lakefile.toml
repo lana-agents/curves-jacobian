@@ -53,3 +53,11 @@ rev = "e58ecf04554f14c8d1cc2753136f9d785525df5a"
 name = "local-class-field-theory"
 git = "https://github.com/lana-agents/local-class-field-theory"
 rev = "a6655a871f92138e486362f08f7df48204f3e985"
+
+# Elliptic curves over fields: normality / Dedekind property of the affine coordinate ring and the
+# multiplication-by-2 pullback (`mulByTwoCoordHom`), for the strictly Belyi type of E ∖ {0}
+# (`CurvesJacobian.Cusp.Elliptic*`). Same revision as iut's pin.
+[[require]]
+name = "elliptic-curves"
+git = "https://github.com/lana-agents/elliptic-curves"
+rev = "bebec3fc9f2602e81c83e5236789572a541c85fb"
