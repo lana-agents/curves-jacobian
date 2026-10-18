@@ -13,12 +13,16 @@ import CurvesJacobian.FunctionField.CechGenus
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.Galois.BelyiAffinePart
+import CurvesJacobian.Galois.BelyiCoordinate
 import CurvesJacobian.Galois.BelyiInfty
+import CurvesJacobian.Galois.BelyiSurfaceGroup
 import CurvesJacobian.Galois.ChartOfOpen
 import CurvesJacobian.Galois.CurveCharts
 import CurvesJacobian.Galois.EtalePi1
 import CurvesJacobian.Galois.EtalePi1Open
 import CurvesJacobian.Galois.FunctionFieldF
+import CurvesJacobian.Galois.MaxSpecBaseChange
 import CurvesJacobian.Galois.NewCoordinate
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
