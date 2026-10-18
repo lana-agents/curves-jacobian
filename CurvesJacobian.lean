@@ -66,6 +66,7 @@ import CurvesJacobian.Galois.BelyiInfty
 import CurvesJacobian.Galois.BelyiSurfaceGroup
 import CurvesJacobian.Galois.ChartOfOpen
 import CurvesJacobian.Galois.ClosedSurfaceGroup
+import CurvesJacobian.Galois.ClosedSurfaceGroupAlgClosed
 import CurvesJacobian.Galois.ClosedSurfaceGroupCountable
 import CurvesJacobian.Galois.CountableModel
 import CurvesJacobian.Galois.CountableSubfield
@@ -77,6 +78,7 @@ import CurvesJacobian.Galois.EtalePi1Open
 import CurvesJacobian.Galois.FunctionFieldF
 import CurvesJacobian.Galois.GenericEtale
 import CurvesJacobian.Galois.HurwitzFinset
+import CurvesJacobian.Galois.LineCoverModel
 import CurvesJacobian.Galois.MaxSpecBaseChange
 import CurvesJacobian.Galois.NewCoordinate
 import CurvesJacobian.Galois.PiCharacters
