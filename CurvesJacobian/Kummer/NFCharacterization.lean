@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Kummer.ClosedCharacterization
-import CurvesJacobian.Kummer.NF
+import CurvesJacobian.Kummer.NFDescent
 
 /-!
 # [AbsTopIII] Prop. 1.8 for NF-curves at NF-points over finite extensions `k_x`
@@ -19,12 +19,9 @@ import CurvesJacobian.Kummer.NF
   is the Kummer class of an NF-constant;
 * `NFModel.exists_restrictClosed_eq_of_isNFConstant` (**Prop. 1.8(ii), "only if"**);
 * `NFModel.exists_restrictClosed_of_isNF` (**Prop. 1.8(i), "only if"**, `Ẑ(1)`-level);
-* `NFModel.exists_eq_kummerMapZHat_of_restrictClosed` (**Prop. 1.8(i), "if"**), under the
-  hypothesis `NFModel.UnitsDescend`: units of `U` are NF-rational functions up to constants of
-  `k̄`. This is the descent of principal divisors supported on NF-points from `X_{k̄}` to `X_NF`
-  (implicit in the proof of [AbsTopIII] Prop. 1.8, T3 l.2099–2106); it is not yet formalised and
-  enters as an explicit, named hypothesis (a debt recorded in continuous-kummer-theory's
-  `Plans/MR5Plan.md`).
+* `NFModel.exists_eq_kummerMapZHat_of_restrictClosed` (**Prop. 1.8(i), "if"**), using
+  `NFModel.unitsDescend` (`Kummer/NFDescent.lean`): units of `U` are NF-rational functions up to
+  constants of `k̄`.
 -/
 
 open KummerTheory Curve AffOrbicurve IsLocalRing Polynomial
@@ -49,7 +46,6 @@ lemma eval₂_mem_of_mem (S : Subfield Ω) {y : Ω} (hy : y ∈ S) (p : ℚ[X]) 
     rw [eval₂_monomial, eq_ratCast (algebraMap ℚ Ω) c]
     exact S.mul_mem (SubfieldClass.ratCast_mem S c) (S.pow_mem hy n)
 
-omit [CharZero k] in
 /-- **The value of an NF-rational function at an NF-point is an algebraic number**
 ([AbsTopIII] Def. 1.7: NF-points are the `k̄_NF`-points of `X_NF`): if `g ∈ F_NF` has the same
 residue at an NF-point `W` as an element `y` of `k̄`, then `y` is algebraic over `ℚ`. -/
@@ -256,23 +252,14 @@ theorem exists_restrictClosed_eq_of_isNFConstant (htf : IsTorallyKummerFaithful 
   · letI := Decomposition.residueAlgebra A hk
     rw [map_mul, map_mul, h1, one_mul, constMapZHat_toKummerCompletion]
 
-/-- **Descent of units to `k̄_NF` up to constants** (the part of [AbsTopIII] Prop. 1.8, proof
-T3 l.2099–2106, which says that a function on `X_{k̄}` whose divisor is supported on NF-points —
-here: a unit of `U`, whose divisor is supported on the NF-cusps — is NF up to a constant). Not yet
-formalised; used as an explicit hypothesis of `exists_eq_kummerMapZHat_of_restrictClosed`. -/
-def UnitsDescend : Prop :=
-  ∀ w : units D, ∃ l : Ω, l ≠ 0 ∧ l ∈ kbar k Ω ∧
-    l * algebraMap (F D) Ω ((w : (F D)ˣ) : F D) ∈ N.FNF
-
 set_option maxHeartbeats 1000000 in
 -- unification of `ContH1` terms over `Gal(κ(A)/k_x)` is slow
 set_option synthInstance.maxHeartbeats 100000 in
 -- unification of `ContH1` terms over `Gal(κ(A)/k_x)` is slow (coercion of `k_x` to a type)
-/-- **[AbsTopIII] Prop. 1.8(i), "if", for NF-curves** (modulo the descent hypothesis
-`UnitsDescend`): if `η ∈ P_U` restricts trivially to an NF-point `x₁` and nontrivially to a
-closed point `x₂` (`[k_{x_i} : k] < ∞`), then `η` is the Kummer class of a nonconstant
+/-- **[AbsTopIII] Prop. 1.8(i), "if", for NF-curves**: if `η ∈ P_U` restricts trivially to an
+NF-point `x₁` and nontrivially to a closed point `x₂` (`[k_{x_i} : k] < ∞`), then `η` is the Kummer class of a nonconstant
 NF-rational function. Applied to a positive multiple `η†` of a class this is (i). -/
-theorem exists_eq_kummerMapZHat_of_restrictClosed (hdesc : N.UnitsDescend)
+theorem exists_eq_kummerMapZHat_of_restrictClosed
     (htf : IsTorallyKummerFaithful k) (hJ : IsKummerFaithfulJac D)
     (hkF : ∀ x : F D, IsAlgebraic k x → x ∈ Set.range (algebraMap k (F D))) (hHL : D.HL = D.H)
     (η : ContH1 (Pi D) (ZHatOne (F D) Ω)) (hη : η ∈ PU D)
@@ -298,7 +285,7 @@ theorem exists_eq_kummerMapZHat_of_restrictClosed (hdesc : N.UnitsDescend)
   -- `w(x₁) = 1`
   have hw1 :=
     (restrictClosed_kummerMapZHat_eq_one_iff D A₁ hk₁ hkres₁ hHL ht₁ htf w hwA hwA').1 h₁
-  obtain ⟨l, hl0, hlk, hlw⟩ := hdesc w
+  obtain ⟨l, hl0, hlk, hlw⟩ := N.unitsDescend w
   have hkbar : ∀ z ∈ kbar k Ω, z ∈ A₁ := fun z hz => kbar_mem A₁ hk₁ ⟨z, hz⟩
   have hlwA : l * algebraMap (F D) Ω ((w : (F D)ˣ) : F D) ∈ A₁ :=
     A₁.mul_mem _ _ (hkbar l hlk) hwA

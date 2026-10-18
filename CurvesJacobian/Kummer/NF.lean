@@ -5,6 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ConstantExtension
+import Mathlib.FieldTheory.LinearDisjoint
 
 /-!
 # NF-curves, NF-points, NF-rational functions and NF-constants ([AbsTopIII] Def. 1.7)
@@ -19,12 +20,12 @@ In `pi1`'s Galois model (`k̄ = kbar k Ω`, `F k̄ = F (baseChange D)` the funct
 
 * `CurvesJacobian.Kummer.NFModel D`: a **descent of `X_{k̄}` to `k̄_NF`**, i.e. a subfield
   `F_NF ⊆ F k̄` (the function field `k̄_NF(X_NF)`) containing `k̄_NF`, with `F_NF ∩ k̄ = k̄_NF` and
-  `F_NF · k̄ = F k̄`, such that the cusps of `U = Spec R` (the places `W ⊇ k` with `t ∉ W`) descend
-  (`U` is an NF-curve), and `F_NF` has transcendence degree `≤ 1` (`X_NF` is a curve over
-  `k̄_NF`; this is what makes the restriction of an NF-point to `F_NF` a `k̄_NF`-rational point,
-  `NFModel.isAlgebraic_residue`). Since `k̄_NF` is algebraically closed, `F_NF` and `k̄` are
-  linearly disjoint over `k̄_NF`, so `F_NF ⊗_{k̄_NF} k̄ ≅ F k̄`: this is
-  `X_{k̄} ≅ X_NF ×_{k̄_NF} k̄` on function fields.
+  `F_NF · k̄ = F k̄`, `F_NF` and `k̄` linearly disjoint over `k̄_NF` (so `F_NF ⊗_{k̄_NF} k̄` embeds
+  into `F k̄` with image generating it: `X_{k̄} ≅ X_NF ×_{k̄_NF} k̄` on function fields), such
+  that the cusps of `U = Spec R` (the places `W ⊇ k` with `t ∉ W`) descend (`U` is an NF-curve).
+  That `X_NF` is a curve over `k̄_NF` (`F_NF` has transcendence degree `≤ 1`) follows:
+  `NFModel.trdeg_le_one` in `Kummer/NFDescent.lean`, where also the descent of units of `U`
+  (`NFModel.unitsDescend`) is proved.
 * `CurvesJacobian.Kummer.NFModel.IsNFPoint`: a place `W` of `Ω` (a point of `X(k̄)`) is an NF-point
   if its restriction to `F_NF` is nontrivial, i.e. `W ∩ F k̄` lies over a (`k̄_NF`-rational) point
   of `X_NF`;
@@ -45,6 +46,18 @@ universe u
 variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω}
   (D : Pi1.Orbifold.GaloisData k t) [IsGalois (K₀ k t) Ω] [CharZero k] [CharZero Ω]
 
+omit [IsGalois (K₀ k t) Ω] in
+/-- `k̄_NF ⊆ k̄`: an algebraic number of `Ω` is algebraic over `k`. -/
+lemma mem_kbar_of_isAlgebraic {x : Ω} (hx : IsAlgebraic ℚ x) : x ∈ kbar k Ω :=
+  mem_algebraicClosure_iff.2 (hx.extendScalars (algebraMap ℚ k).injective)
+
+variable (k Ω) in
+/-- `k̄` as an intermediate field of `Ω / k̄_NF`, where `k̄_NF = algebraicClosure ℚ Ω` is the
+algebraic closure of `ℚ` in `Ω`. -/
+def kbarNF : IntermediateField (algebraicClosure ℚ Ω) Ω :=
+  (kbar k Ω).toSubfield.toIntermediateField fun x =>
+    mem_kbar_of_isAlgebraic (mem_algebraicClosure_iff.1 x.2)
+
 /-- **A descent of `X_{k̄}` (and of the cusps of `U`) to `k̄_NF`** ([AbsTopIII] Def. 1.7(i),
 `U` an NF-curve), in terms of function fields inside `Ω`. -/
 structure NFModel where
@@ -61,9 +74,12 @@ structure NFModel where
   /-- The cusps of `U` (places `W ⊇ k` with `t ∉ W`) are NF-points. -/
   cusp_nf : ∀ W : ValuationSubring Ω, (∀ c : k, algebraMap k Ω c ∈ W) → t ∉ W →
     ∃ g ∈ FNF, g ∉ W
-  /-- `X_NF` is a curve over `k̄_NF`: `F_NF` has transcendence degree `≤ 1` over `ℚ` (equivalently
-  over the algebraic extension `k̄_NF` of `ℚ`). -/
-  trdeg_le_one : Algebra.trdeg ℚ FNF ≤ 1
+  /-- `F_NF` and `k̄` are linearly disjoint over `k̄_NF` (`IntermediateField.LinearDisjoint`):
+  together with `mem_closure` this says `F_NF ⊗_{k̄_NF} k̄ ≅ k̄_NF(X_NF) ⊗_{k̄_NF} k̄` embeds into
+  `F k̄` with image generating it as a field, i.e. `X_{k̄} ≅ X_NF ×_{k̄_NF} k̄` on function
+  fields ([AbsTopIII] Def. 1.7(i): `X_{k̄}` is defined over `k̄_NF`). -/
+  linearDisjoint : (FNF.toIntermediateField (K := algebraicClosure ℚ Ω) fun x =>
+    algebraic_mem _ (mem_algebraicClosure_iff.1 x.2)).LinearDisjoint (kbarNF k Ω)
 
 namespace NFModel
 
@@ -123,7 +139,6 @@ namespace NFModel
 
 variable {D} (N : NFModel D)
 
-omit [CharZero k] in
 /-- A place `W` at which a nonzero element of `F_NF` has positive valuation is an NF-point. -/
 lemma isNFPoint_of_valuation_lt_one (W : ValuationSubring Ω) {x : Ω} (hx : x ∈ N.FNF)
     (hx0 : x ≠ 0) (hxW : W.valuation x < 1) : N.IsNFPoint W := by
