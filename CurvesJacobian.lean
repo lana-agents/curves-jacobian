@@ -13,6 +13,7 @@ import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
+import CurvesJacobian.Cusp.CoverCuspDegree
 import CurvesJacobian.Cusp.CoverNormalization
 import CurvesJacobian.Cusp.CoverOpen
 import CurvesJacobian.Cusp.CurveGaloisData
