@@ -69,6 +69,7 @@ import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.CurvePerfect
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
+import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.Hilb
