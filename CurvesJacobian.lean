@@ -160,6 +160,7 @@ import CurvesJacobian.Picard.EulerCharTwist
 import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
+import CurvesJacobian.Picard.GaloisPoints
 import CurvesJacobian.Picard.GrpSeparated
 import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.HilbAdd
