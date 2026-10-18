@@ -23,6 +23,7 @@ import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.Cor37c
+import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
@@ -51,6 +52,8 @@ import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.FieldChange
+import CurvesJacobian.Cusp.FillAutExt
+import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.FillChain
 import CurvesJacobian.Cusp.FillElemOp
 import CurvesJacobian.Cusp.FillSeq
