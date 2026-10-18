@@ -49,8 +49,10 @@ import CurvesJacobian.Cusp.CuspTerminalFew
 import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.EllipticCurveScheme
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
+import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.FieldChange
 import CurvesJacobian.Cusp.FillAutExt
 import CurvesJacobian.Cusp.FillAutUnique
