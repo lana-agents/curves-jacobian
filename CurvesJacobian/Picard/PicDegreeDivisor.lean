@@ -15,6 +15,8 @@ invertible sheaf and `D` a relative effective Cartier divisor on `C ×_k T`,
 `χ(M ⊗ 𝒪(D)) = χ(M) + deg D` for the chart Čech complexes
 (`CurvesJacobian.chiCurve_add_divisor`). In particular `χ(𝒪(D)) = deg D + 1 − g`, i.e. with the
 normalisation of Stacks, Tag 0BA0, `𝒪(D)` has degree `deg D` (`chiCurve_ofDivisor`).
+Consequently the degree `χ − (1 − g)` is additive on sums `z + z'` where `z` is a difference of
+effective divisor classes (`chiCurve_add_sub_divisor`, `chiCurve_add_of_divisors`).
 
 The divisor `D` is finite over `T` (Stacks, Lemma 44.3.1, Tag 0B9D), so its underlying scheme is
 Artinian and `Cech.chi_twist_divisor` applies; `h⁰(D, M(D)|_D) = deg D` is the rank of an
@@ -138,6 +140,49 @@ theorem chiCurve_ofDivisor (hF : IsField Γ(T, ⊤))
     exact ⟨structureSheafIsoUnit _⟩
   rw [h0, zero_add, chiCurve_structureSheaf π hF] at h
   rw [h]
+  ring
+
+/-- Twisting by a difference of effective divisors:
+`χ(M + [𝒪(D)] − [𝒪(E)]) = χ(M) + deg D − deg E`. -/
+theorem chiCurve_add_sub_divisor (hF : IsField Γ(T, ⊤))
+    (M : (pullback (C ↘ Sk) (T ↘ Sk)).Modules) [M.IsInvertible]
+    (D E : RelEffCartier (pullback.snd (C ↘ Sk) (T ↘ Sk))) (t : T) :
+    chiCurve π (T ↘ Sk) (Scheme.Pic.rep (Scheme.Pic.mk M + D.picClass - E.picClass)) =
+      chiCurve π (T ↘ Sk) M + D.degree t - E.degree t := by
+  set M' := Scheme.Pic.rep (Scheme.Pic.mk M - E.picClass)
+  have h1 := chiCurve_add_divisor π hF M' E t
+  have h2 := chiCurve_add_divisor π hF M' D t
+  have hM : Scheme.Pic.mk M' + E.picClass = Scheme.Pic.mk M := by
+    rw [Scheme.Pic.mk_rep]
+    abel
+  have hM' : Scheme.Pic.mk M' + D.picClass = Scheme.Pic.mk M + D.picClass - E.picClass := by
+    rw [Scheme.Pic.mk_rep]
+    abel
+  have e : Scheme.Pic.rep (Scheme.Pic.mk M) ≅ M :=
+    (Scheme.Pic.mk_eq_mk_iff.mp (Scheme.Pic.mk_rep _)).some
+  rw [hM, chiCurve_congr π _ e] at h1
+  rw [hM'] at h2
+  rw [h2]
+  linarith
+
+/-- **Additivity of the degree** on classes of differences of effective divisors: if
+`z = [𝒪(D)] − [𝒪(E)]`, then `χ(z + z') = χ(z) + χ(z') − χ(𝒪)` for every `z'`, i.e.
+`deg (z + z') = deg z + deg z'` with `deg = χ − (1 − g)`. -/
+theorem chiCurve_add_of_divisors (hF : IsField Γ(T, ⊤))
+    (D E : RelEffCartier (pullback.snd (C ↘ Sk) (T ↘ Sk)))
+    (z' : (pullback (C ↘ Sk) (T ↘ Sk)).Pic) :
+    chiCurve π (T ↘ Sk) (Scheme.Pic.rep (D.picClass - E.picClass + z')) =
+      chiCurve π (T ↘ Sk) (Scheme.Pic.rep (D.picClass - E.picClass)) +
+        chiCurve π (T ↘ Sk) (Scheme.Pic.rep z') - (1 - genusNat k C) := by
+  obtain ⟨t⟩ := nonempty_of_isField hF
+  have h1 := chiCurve_add_sub_divisor π hF (Scheme.Pic.rep z') D E t
+  have h2 := chiCurve_add_sub_divisor π hF (structureSheaf (pullback (C ↘ Sk) (T ↘ Sk))) D E t
+  have h0 : Scheme.Pic.mk (structureSheaf (pullback (C ↘ Sk) (T ↘ Sk))) = 0 := by
+    rw [Scheme.Pic.mk_eq_zero_iff]
+    exact ⟨structureSheafIsoUnit _⟩
+  rw [h0, zero_add, chiCurve_structureSheaf π hF] at h2
+  rw [Scheme.Pic.mk_rep] at h1
+  rw [show D.picClass - E.picClass + z' = z' + D.picClass - E.picClass by abel, h1, h2]
   ring
 
 end CurvesJacobian
