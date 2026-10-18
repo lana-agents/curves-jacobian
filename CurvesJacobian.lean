@@ -27,6 +27,7 @@ import CurvesJacobian.Galois.NewCoordinate
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Picard.AbelMap
 import CurvesJacobian.Picard.BaseChangeSquare
 import CurvesJacobian.Picard.CartierChart
 import CurvesJacobian.Picard.CartierCriterion
@@ -61,6 +62,7 @@ import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.OverSigmaSheaf
 import CurvesJacobian.Picard.OverSigmaSheafSmall
+import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
@@ -81,6 +83,7 @@ import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
 import CurvesJacobian.Picard.RelEffCartierDegree
 import CurvesJacobian.Picard.RelEffCartierFinite
+import CurvesJacobian.Picard.RelEffCartierPullback
 import CurvesJacobian.Picard.RelEffCartierSection
 import CurvesJacobian.Picard.RigidGlue
 import CurvesJacobian.Picard.RigidIso
@@ -89,6 +92,7 @@ import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TranslateRep
+import CurvesJacobian.Picard.TwoCechInvertible
 import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
