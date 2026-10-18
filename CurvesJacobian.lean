@@ -173,5 +173,7 @@ import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
 import CurvesJacobian.Scheme.CurvePlaces
 import CurvesJacobian.Scheme.GeomIntegralAlgClosed
+import CurvesJacobian.Scheme.GeomIntegralConstantField
 import CurvesJacobian.Scheme.PointDegree
+import CurvesJacobian.Scheme.TensorDomainConstantField
 import CurvesJacobian.Scheme.ValuationPoints
