@@ -33,6 +33,7 @@ import CurvesJacobian.Cusp.CuspTerminal
 import CurvesJacobian.Cusp.CuspTerminalFew
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.FillChain
 import CurvesJacobian.Cusp.FillElemOp
 import CurvesJacobian.Cusp.FillStep
 import CurvesJacobian.Cusp.FixedPointConj
