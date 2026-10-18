@@ -27,10 +27,9 @@ Let `K` be a number field, `Ω` an algebraic closure, and `C` a hyperbolic curve
 * `CurvesJacobian.Cusp.isSlim_Delta`, `CurvesJacobian.Cusp.Delta_ne_bot`: if `U_Ω ⊆ X̄_Ω` is
   hyperbolic, `Δ_U` is slim and nontrivial (`Π̂_{g,r}` is free profinite of rank `2g + r - 1 ≥ 2`).
 
-The hyperbolicity hypothesis `hhyp` is stated for the geometric type `(g(X̄_Ω), #(X̄_Ω ∖ U_Ω))`,
-the standard definition of a hyperbolic curve ([AbsTopI] §0); its equivalence with
-`HypCurve.hyperbolic` (the type over `K`) is the invariance of the genus and of the geometric
-number of cusps under the base change `K ⊆ Ω` (not formalised here).
+The hyperbolicity hypothesis `hhyp` is stated for the geometric type `(g(X̄_Ω), #(X̄_Ω ∖ U_Ω))`;
+it follows from `HypCurve.hyperbolic` (the type over `K`) by
+`CurvesJacobian.Cusp.isHyperbolic_baseChange` (`CurvesJacobian.Cusp.Hyperbolic`).
 -/
 
 open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi

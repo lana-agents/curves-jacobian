@@ -5,13 +5,15 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.CurveGaloisData
+import CurvesJacobian.Cusp.Hyperbolic
 import Belyi.Anabelian.Chain
 
 /-!
 # The arithmetic `CuspidalExt` of an affine hyperbolic curve over a number field (MR8.3 (b))
 
 For a hyperbolic curve `C` over a number field `K` with at least one cusp (`hc`), an algebraic
-closure `Ω` of `K`, and `U_Ω ⊆ X̄_Ω` hyperbolic (`hhyp`), the input of the group-theoretic
+closure `Ω` of `K` (so that `U_Ω ⊆ X̄_Ω` is hyperbolic,
+`CurvesJacobian.Cusp.isHyperbolic_baseChange`), the input of the group-theoretic
 algorithms of [AbsTopI] §4 / [AbsTopII] §3 (`Belyi.Anabelian.CuspidalExt`):
 
 * `Π = π₁ᵉᵗ(U, x)` (`x` an `Ω`-rational point of `U_Ω`), `G = π₁ᵉᵗ(Spec K) ≅ Gal(Ω/K)`,
@@ -24,7 +26,7 @@ algorithms of [AbsTopI] §4 / [AbsTopII] §3 (`Belyi.Anabelian.CuspidalExt`):
   sequence). The change of base point is canonical up to inner automorphisms, so the
   conjugation-closed set does not depend on it.
 
-`CurvesJacobian.Cusp.arithmeticExt Ω C hc hhyp : Belyi.Anabelian.CuspidalExt`.
+`CurvesJacobian.Cusp.arithmeticExt Ω C hc : Belyi.Anabelian.CuspidalExt`.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi
@@ -111,17 +113,14 @@ lemma arithCusps_le {I} (hI : I ∈ arithCusps Ω C hc) : I ≤ (projGk Ω C hc)
 
 /-- **The arithmetic `CuspidalExt` of an affine hyperbolic curve over a number field**:
 `Π_U ↠ G_K` with `G_K` and `Δ_U` slim, `Δ_U ≠ 1`, and the cuspidal inertia groups. -/
-def arithmeticExt (hhyp : Pi1.SurfaceGroup.IsHyperbolic
-    (curveGenus Ω (baseChange K Ω C.Xbar)).toNat
-    (Nat.card ((baseChangeOpen K Ω C.U : Set (baseChange K Ω C.Xbar))ᶜ : Set _))) :
-    CuspidalExt.{u + 1} where
+def arithmeticExt : CuspidalExt.{u + 1} where
   Pi := ProfiniteGrp.of π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
   G := ProfiniteGrp.of π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω)))
   pr := projGk Ω C hc
   pr_surjective := projGk_surjective Ω C hc
   slim_G := isSlim_Gk Ω
-  slim_delta := isSlim_Delta Ω C hc hhyp
-  nontrivial_delta := Delta_ne_bot Ω C hc hhyp
+  slim_delta := isSlim_Delta Ω C hc (isHyperbolic_baseChange Ω C)
+  nontrivial_delta := Delta_ne_bot Ω C hc (isHyperbolic_baseChange Ω C)
   cusps := arithCusps Ω C hc
   cusps_le _ hI := arithCusps_le Ω C hc hI
 

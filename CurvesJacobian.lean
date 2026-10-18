@@ -8,8 +8,15 @@ import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.CurveGaloisData
+import CurvesJacobian.Cusp.CuspCount
+import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.GenusBaseChange
+import CurvesJacobian.Cusp.GenusLocAn
+import CurvesJacobian.Cusp.Hyperbolic
 import CurvesJacobian.Cusp.Inertia
 import CurvesJacobian.Cusp.InertiaNontrivial
+import CurvesJacobian.Cusp.KaehlerLocal
+import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
