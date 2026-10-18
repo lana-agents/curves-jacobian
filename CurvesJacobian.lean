@@ -6,6 +6,7 @@ import CurvesJacobian.CommAlg.SerreS2
 import CurvesJacobian.Cusp.ArithmeticCover
 import CurvesJacobian.Cusp.ArithmeticExt
 import CurvesJacobian.Cusp.ArithmeticFill
+import CurvesJacobian.Cusp.ArithmeticFillObj
 import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
