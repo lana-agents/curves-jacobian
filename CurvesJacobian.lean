@@ -138,6 +138,7 @@ import CurvesJacobian.Kummer.CompletionDescent
 import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
+import CurvesJacobian.Kummer.JacobianBridge
 import CurvesJacobian.Kummer.JacobianPi1
 import CurvesJacobian.Kummer.JacobianTate
 import CurvesJacobian.Kummer.JacobianTorsion
