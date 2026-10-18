@@ -111,6 +111,7 @@ import CurvesJacobian.Picard.CechBaseChange
 import CurvesJacobian.Picard.CechGlobal
 import CurvesJacobian.Picard.CechLineBundle
 import CurvesJacobian.Picard.ChartBaseChange
+import CurvesJacobian.Picard.ChartCoord
 import CurvesJacobian.Picard.ChartDescent
 import CurvesJacobian.Picard.ChartFibre
 import CurvesJacobian.Picard.ChartMatrix
@@ -146,6 +147,8 @@ import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.LocIso
 import CurvesJacobian.Picard.LocIsoOpen
+import CurvesJacobian.Picard.MatLift
+import CurvesJacobian.Picard.MatSheaf
 import CurvesJacobian.Picard.ModulesGlue
 import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OpenSubfunctorIso
@@ -171,6 +174,7 @@ import CurvesJacobian.Picard.PicFRep
 import CurvesJacobian.Picard.PicFSub
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicLft
+import CurvesJacobian.Picard.PicLift
 import CurvesJacobian.Picard.PicLocTriv
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
@@ -180,6 +184,7 @@ import CurvesJacobian.Picard.PicSigmaCurve
 import CurvesJacobian.Picard.PicSigmaCurveOpen
 import CurvesJacobian.Picard.PicSigmaSheaf
 import CurvesJacobian.Picard.PicSigmaSheafCurve
+import CurvesJacobian.Picard.PicSmooth
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.Pullback
@@ -202,6 +207,7 @@ import CurvesJacobian.Picard.RigidIso
 import CurvesJacobian.Picard.RigidUnique
 import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
+import CurvesJacobian.Picard.SmoothLift
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TensorSections
 import CurvesJacobian.Picard.TranslateRep
