@@ -3,12 +3,14 @@ import CurvesJacobian.CommAlg.Depth
 import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
+import CurvesJacobian.Cusp.ArithmeticCover
 import CurvesJacobian.Cusp.ArithmeticExt
 import CurvesJacobian.Cusp.ArithmeticFill
 import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BasePointChange
+import CurvesJacobian.Cusp.CoverOpen
 import CurvesJacobian.Cusp.CurveGaloisData
 import CurvesJacobian.Cusp.CuspConj
 import CurvesJacobian.Cusp.CuspCount
