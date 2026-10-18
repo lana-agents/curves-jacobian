@@ -24,6 +24,7 @@ import CurvesJacobian.Cusp.CuspCommensurable
 import CurvesJacobian.Cusp.CuspConj
 import CurvesJacobian.Cusp.CuspCount
 import CurvesJacobian.Cusp.CuspDegreeEq
+import CurvesJacobian.Cusp.CuspInertiaFacts
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.GenusBaseChange
