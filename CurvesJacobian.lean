@@ -87,6 +87,7 @@ import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PerfectOpen
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicFOpen
+import CurvesJacobian.Picard.PicFSub
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
