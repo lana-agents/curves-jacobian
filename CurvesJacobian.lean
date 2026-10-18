@@ -89,6 +89,7 @@ import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
 import CurvesJacobian.Picard.EulerChar
 import CurvesJacobian.Picard.EulerCharAdd
+import CurvesJacobian.Picard.EulerCharDivisor
 import CurvesJacobian.Picard.EulerCharTwist
 import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
@@ -117,6 +118,7 @@ import CurvesJacobian.Picard.OverSigmaSheafSmall
 import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PerfectOpen
 import CurvesJacobian.Picard.PicDegree
+import CurvesJacobian.Picard.PicDegreeDivisor
 import CurvesJacobian.Picard.PicDegreeTranslate
 import CurvesJacobian.Picard.PicDegreeZero
 import CurvesJacobian.Picard.PicF
