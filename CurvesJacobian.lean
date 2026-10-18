@@ -23,6 +23,7 @@ import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.Cor37b
+import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
 import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
