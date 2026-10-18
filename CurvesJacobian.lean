@@ -94,7 +94,9 @@ import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Cusp.SingleCusp
 import CurvesJacobian.Cusp.TorsionFree
+import CurvesJacobian.Descent.GaloisAffine
 import CurvesJacobian.Descent.GaloisAlgebra
+import CurvesJacobian.Descent.GaloisHom
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
