@@ -39,6 +39,7 @@ import CurvesJacobian.Galois.BelyiCoordinate
 import CurvesJacobian.Galois.BelyiInfty
 import CurvesJacobian.Galois.BelyiSurfaceGroup
 import CurvesJacobian.Galois.ChartOfOpen
+import CurvesJacobian.Galois.ClosedSurfaceGroup
 import CurvesJacobian.Galois.CountableModel
 import CurvesJacobian.Galois.CountableSubfield
 import CurvesJacobian.Galois.CountableSurfaceGroup

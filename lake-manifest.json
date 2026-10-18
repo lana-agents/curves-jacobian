@@ -91,10 +91,10 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "9dd6bfbf3049a43cda8b7623a2eb3af22fee1ddc",
+   "rev": "220df725493dd10d7be1b89f06f30da5f9add9da",
    "name": "oka",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "9dd6bfbf3049a43cda8b7623a2eb3af22fee1ddc",
+   "inputRev": "220df725493dd10d7be1b89f06f30da5f9add9da",
    "inherited": true,
    "configFile": "lakefile.toml"
   },
