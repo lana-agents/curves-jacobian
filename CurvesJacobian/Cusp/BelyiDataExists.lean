@@ -30,7 +30,8 @@ extension over which the genus-zero curve becomes an open of `ℙ¹` and three o
 there are a finite extension `M'` of `M` inside `Ω`, Belyi data `D : BelyiData CX` over `M'`
 and an index `j ≤ D.r` such that the `j`-th open of the run of fillings `W ⊆ … ⊆ V_{M'}` is
 `U = V_{M'} ×_X U_X` (`D.UW j = V_{M'} ∩ FV⁻¹(U_X)`). With `belyiCandidate_spec` (`m = r - j`)
-the corresponding candidate of the Belyi chain is `Π_U ↠ Π_V ↪ Π_X` ([AbsTopII] Cor 3.7 (a)).
+the corresponding candidate of the Belyi chain is `Π_U ↠ Π_V ↪ Π_X` ([AbsTopII] Cor 3.7 (a);
+`CurvesJacobian.Cusp.exists_belyiCandidate`).
 
 Construction: `U₀ = V ×_X U_X ⊆ V`; belyi's `exists_belyi_open_le_finSub` gives a finite extension
 `M'` and a finite `f : V̄_{M'} ⟶ ℙ¹_{M'}` with `W = f⁻¹(ℙ¹ ∖ {0, 1, ∞}) ⊆ (U₀)_{M'}` and
@@ -360,5 +361,58 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     exact hs
   · rintro ⟨t, ht, rfl⟩
     exact ⟨aV t, ht, e t⟩
+
+/-! ### [AbsTopII] Corollary 3.7 (a) -/
+
+section Cor37a
+
+variable [Algebra.IsAlgebraic K Ω] [CharZero Ω]
+
+instance isAlgebraic_finSub (M' : FinSub M Ω) : Algebra.IsAlgebraic M'.1 Ω :=
+  Algebra.IsAlgebraic.tower_top (K := M) (L := M'.1) (A := Ω)
+
+instance isScalarTower_finSub (M' : FinSub M Ω) : IsScalarTower K M'.1 Ω :=
+  IsScalarTower.of_algebraMap_eq fun x ↦ (IsScalarTower.algebraMap_apply K M Ω x).trans
+    (by rw [IsScalarTower.algebraMap_apply K M M'.1 x]; rfl)
+
+attribute [local instance] isAlgClosure_of_isAlgebraic
+
+set_option maxHeartbeats 1000000 in
+-- matching the existential of `exists_belyiData` (Belyi data over `M'.1`) is slow
+include S in
+/-- **[AbsTopII] Corollary 3.7 (a)** for an affine hyperbolic curve `CX` of strictly Belyi type
+over a number field: for every nonempty open `U_X ⊆ X` there is a Belyi chain (Belyi data `D`
+over a finite extension `M'`) and `m ≤ r` such that, for `U = UW_{r-m} = V ×_X U_X`, the
+candidate of the chain lies in `belyiCusp Π_X` and is `Π_U ↠ Π_V ↪ Π_X`. -/
+theorem exists_belyiCandidate (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
+    (hUXne : (UX : Set CX.Xbar).Nonempty) :
+    ∃ (M' : FinSub M Ω) (D : BelyiData (M := M'.1) CX) (m : ℕ) (hm : m ≤ D.r)
+      (hVa : IsAffineOpen (D.UW (Fin.last D.r))),
+      D.UW ⟨D.r - m, by omega⟩ =
+        hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) ∧
+      PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm ∈
+        belyiCusp (arithmeticExt Ω CX hcX) ∧
+      ∃ (eU : (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).PiU ≃ₜ*
+          π₁ᵉᵗ(fillPoint Ω D.CW D.hcW (D.hleW ⟨D.r - m, by omega⟩) ≫
+            baseChangeSpec M'.1 Ω Γ(D.CW.Xbar, D.UW ⟨D.r - m, by omega⟩)))
+        (eV : (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).PiV ≃ₜ*
+          π₁ᵉᵗ(fillPoint Ω D.CW D.hcW (D.hleW (Fin.last D.r)) ≫
+            baseChangeSpec M'.1 Ω Γ(D.CW.Xbar, D.UW (Fin.last D.r)))),
+        (∀ x, eV ((PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).surj
+            x) = D.stepHom Ω ⟨D.r - m, by omega⟩ (Fin.last D.r) (Fin.le_last _) (eU x)) ∧
+          ∀ y, (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).emb y =
+            D.φ₄ Ω hcX (eV y) := by
+  have hex := exists_belyiData Ω hcX S UX hUX hUXne
+  obtain ⟨M', D, j, hj, hVa, h⟩ := hex
+  refine ⟨M', D, D.r - j, Nat.sub_le _ _, hVa, ?_, ?_, ?_⟩
+  rotate_left
+  · exact D.belyiCandidate_mem Ω hcX _ _
+  · exact D.belyiCandidate_spec Ω hcX _ _
+  have he : (⟨D.r - (D.r - j), by omega⟩ : Fin (D.r + 1)) = ⟨j, Nat.lt_succ_of_le hj⟩ :=
+    Fin.ext (by simp only; omega)
+  rw [he]
+  exact h
+
+end Cor37a
 
 end CurvesJacobian.Cusp
