@@ -6,13 +6,13 @@ Authors: LANA Project
 import CurvesJacobian.Galois.AbelianPi1
 
 /-!
-# `#Pic(X)[n] = n^{2g}` over `ℚ̄`
+# `#Pic(X)[n] = n^{2g}` in characteristic zero
 
 * `CurvesJacobian.placeEquivOfAlgEquiv`, `CurvesJacobian.ord_placeEquivOfAlgEquiv`,
   `CurvesJacobian.picTorsionEquivOfAlgEquiv`: places, orders, divisor class groups and their
   `n`-torsion are invariant under `k`-isomorphisms of function fields.
 * `CurvesJacobian.natCard_picTorsion`: for a curve `X` of genus `g` over `k` (algebraically
-  closed, characteristic `0`, algebraic over `ℚ`) and `n ≥ 1`, `#Pic(K(X))[n] = n^{2g}`.
+  closed, characteristic `0`) and `n ≥ 1`, `#Pic(K(X))[n] = n^{2g}`.
 
 Proof: `Pic(F)[n] ≃ Hom_cont(Π_X, μₙ)` (`CurvesJacobian.picTorsionEquivPiChars`, Kummer theory),
 `Π_X ≃ π₁ᵉᵗ(X)` (`CurvesJacobian.etalePi1EquivPiX'`) and
@@ -174,7 +174,7 @@ end Transport
 
 section Main
 
-variable {k : Type u} [Field k] [IsAlgClosed k] [CharZero k] [Algebra.IsAlgebraic ℚ k]
+variable {k : Type u} [Field k] [IsAlgClosed k] [CharZero k]
   {X : Scheme.{u}} [X.Over (Spec (CommRingCat.of k))] [IsCurveOver k X] [IsIntegral X]
 
 attribute [local instance] isFunctionField_F
@@ -182,7 +182,7 @@ attribute [local instance] isFunctionField_F
 set_option synthInstance.maxHeartbeats 200000 in
 -- the group structure on the quotient `PiX D` takes long to synthesize
 /-- **`#Pic(X)[n] = n^{2g}`** for a curve `X` of genus `g` over `k` (algebraically closed,
-characteristic `0`, algebraic over `ℚ`) and `n ≥ 1`; `Pic(X) = Pic(K(X))` is weil-curves'
+characteristic `0`) and `n ≥ 1`; `Pic(X) = Pic(K(X))` is weil-curves'
 divisor class group of the function field (all places have degree `1`, so this is `Pic⁰[n]`). -/
 theorem natCard_picTorsion (n : ℕ) [NeZero n] :
     Nat.card (picTorsion k X.functionField n) = n ^ (2 * (curveGenus k X).toNat) := by

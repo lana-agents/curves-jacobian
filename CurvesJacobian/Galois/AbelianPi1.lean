@@ -23,7 +23,7 @@ all places centred on `U`, i.e. `n ∣ ord_P v` for all `P ≠ x₀`
 (`CurvesJacobian.kernel_SAll_le_of_kernel_SU_le`). Geometrically: the inertia at a single puncture
 of `X ∖ {x₀}` is a product of commutators, invisible to abelian covers.
 
-Over `k` algebraic over `ℚ` we know `π₁ᵉᵗ(U) ≃ₜ* Π̂_{g,1}`, the profinite completion of a free group
+In characteristic zero we know `π₁ᵉᵗ(U) ≃ₜ* Π̂_{g,1}`, the profinite completion of a free group
 of rank `2g` (`CurvesJacobian.etaleFundamentalGroup_equiv_profiniteSurfaceGroup`), hence:
 
 * `CurvesJacobian.card_continuousMonoidHom_etaleFundamentalGroup_proper`: for every geometric
@@ -398,7 +398,7 @@ end Count
 
 section Main
 
-variable {k : Type u} [Field k] [IsAlgClosed k] [CharZero k] [Algebra.IsAlgebraic ℚ k]
+variable {k : Type u} [Field k] [IsAlgClosed k] [CharZero k]
   {X : Scheme.{u}} [X.Over (Spec (CommRingCat.of k))] [IsCurveOver k X] [IsIntegral X]
 
 set_option synthInstance.maxHeartbeats 200000 in
@@ -406,7 +406,7 @@ set_option synthInstance.maxHeartbeats 200000 in
 set_option maxHeartbeats 1000000 in
 -- the Galois model of `π₁ᵉᵗ` is slow to elaborate
 /-- **`Hom_cont(π₁ᵉᵗ(X), μₙ)` has `n^{2g}` elements** for a curve `X` of genus `g` over `k`
-(algebraically closed, characteristic `0`, algebraic over `ℚ`), at every geometric point, for
+(algebraically closed, characteristic `0`), at every geometric point, for
 every discrete group `A ≃ ℤ/n`. -/
 theorem card_continuousMonoidHom_etaleFundamentalGroup_proper {Ω' : Type u} [Field Ω']
     [IsSepClosed Ω'] (pt : Spec (CommRingCat.of Ω') ⟶ X) (n : ℕ) [NeZero n]
@@ -483,7 +483,7 @@ theorem card_continuousMonoidHom_etaleFundamentalGroup_proper {Ω' : Type u} [Fi
     natCard_surfaceGen, add_zero]
 
 /-- **`Hom_cont(π₁ᵉᵗ(X), ℤ/n) ≅ (ℤ/n)^{2g}`** (cardinality form) for a proper curve `X` of genus `g`
-over `k` (algebraically closed, characteristic `0`, algebraic over `ℚ`), at every geometric
+over `k` (algebraically closed, characteristic `0`), at every geometric
 point. -/
 theorem card_continuousMonoidHom_zmod_etaleFundamentalGroup_proper {Ω' : Type u} [Field Ω']
     [IsSepClosed Ω'] (pt : Spec (CommRingCat.of Ω') ⟶ X) (n : ℕ) [NeZero n] :
