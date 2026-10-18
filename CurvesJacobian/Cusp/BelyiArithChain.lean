@@ -27,7 +27,8 @@ once-punctured elliptic curve and its quotients), all curves are *affine* hyperb
   (over `Spec M`), on the affine schemes `Spec Γ(·)`.
 
 (For a Belyi map `β` and `P = ℙ¹ ∖ {0, 1, ∞}`, this is [AbsTopII] Example 3.6; the existence of
-such data is [AbsTopII] Example 3.6 (i), MR8.4, belyi `exists_belyi_open_le_finSub`.)
+such data is [AbsTopII] Example 3.6 (i), MR8.4, belyi `exists_belyi_open_le_finSub`; for curves of
+strictly Belyi type it is `CurvesJacobian.Cusp.exists_belyiData`.)
 
 ## Main definitions
 
