@@ -56,6 +56,8 @@ abstract isomorphism `etaleFundamentalGroup_equiv_profiniteSurfaceGroup₀_of_is
 open CategoryTheory AlgebraicGeometry Belyi AlgebraicGeometry.FiniteEtale AffOrbicurve Topology
 open Pi1.Orbifold ProfiniteGrp ProfiniteGrp.ProfiniteCompletion Pi1.Profinite PreGaloisCategory
 
+universe u
+
 noncomputable section
 
 namespace CurvesJacobian.Cusp
@@ -320,7 +322,7 @@ section Infinity
 
 open Polynomial
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {W : ValuationSubring Ω}
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {W : ValuationSubring Ω}
   (hkW : ∀ c : k, algebraMap k Ω c ∈ W) {s : Ω} (hs : s ∉ W)
 
 include hkW hs in

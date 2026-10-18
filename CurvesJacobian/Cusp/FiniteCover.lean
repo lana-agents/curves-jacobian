@@ -519,7 +519,7 @@ end Galois
 
 section Line
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (S : Finset k)
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (S : Finset k)
 
 lemma lineToK₀S_algebraMap (ht : Transcendental k t) (p : Polynomial k) :
     lineToK₀S S ht (algebraMap (Polynomial k) (lineRingS S) p) = Polynomial.aeval (tK₀ k t) p :=
@@ -623,8 +623,8 @@ end Line
 
 section Action
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : GaloisData k t)
-  {X : Scheme.{0}} [IsIntegral X] (eL : X.functionField ≃+* D.L)
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : GaloisData k t)
+  {X : Scheme.{u}} [IsIntegral X] (eL : X.functionField ≃+* D.L)
   (f : X ⟶ P1 k) (hη : f.base (genericPoint X) ≠ P1.infty k) (hH : D.H ≤ D.HL)
 
 /-- An element of `H = Gal(Ω / L)` as an automorphism of `Ω` over `k(t_f)`. -/
@@ -698,7 +698,14 @@ theorem map_cuspInertia_coverMapS [IsFiniteEtale (coverMapS f S)] {τ₀ : X.fun
     (cuspInertia D X eL hH (coverOpenS f S) W).map
         (fundamentalGroupMap (coverMapS f S) hbase).toMonoidHom =
       lineInertiaS S ht W ⊓ (fundamentalGroupMap (coverMapS f S) hbase).toMonoidHom.range := by
-  rw [cuspInertia_eq_map, lineInertiaS_eq_map, Subgroup.map_map]
+  -- `cuspInertia_eq_map`, which is stated in universe `0` only
+  have hcI : cuspInertia D X eL hH (coverOpenS f S) W =
+      ((GaloisPi1.inertiaSubgroup (P := K₀ k t) W).comap D.H.subtype).map
+        (D.chartHom hH (genericL D X eL (coverOpenS f S))) := by
+    have : (Subtype.val ⁻¹' GaloisPi1.inertia W : Set D.H) =
+        ((GaloisPi1.inertiaSubgroup (P := K₀ k t) W).comap D.H.subtype : Set D.H) := rfl
+    rw [cuspInertia, this, ← MonoidHom.map_closure, Subgroup.closure_eq]
+  rw [hcI, lineInertiaS_eq_map, Subgroup.map_map]
   ext y
   constructor
   · rintro ⟨σ, hσ, rfl⟩

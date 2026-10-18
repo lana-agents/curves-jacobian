@@ -75,7 +75,7 @@ section Main
 
 open Pi1.ReidemeisterSchreier Pi1.ReidemeisterSchreier.SchreierRibbon
 
-variable {n : ℕ} {Fb : Type} [Finite Fb] [MulAction (FHat n) Fb]
+variable {n : ℕ} {Fb : Type*} [Finite Fb] [MulAction (FHat n) Fb]
   [MulAction (FreeGroup (Fin (n + 1))) Fb]
   (hcompat : ∀ (g : FreeGroup (Fin (n + 1))) (y : Fb),
     g • y = etaFn (GrpCat.of (FreeGroup (Fin (n + 1)))) g • y)

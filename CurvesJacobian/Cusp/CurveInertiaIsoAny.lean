@@ -41,6 +41,8 @@ open CategoryTheory AlgebraicGeometry Belyi AlgebraicGeometry.FiniteEtale AffOrb
 open Pi1.Orbifold ProfiniteGrp ProfiniteGrp.ProfiniteCompletion Pi1.Profinite PreGaloisCategory
 open Pi1.ReidemeisterSchreier (xInf)
 
+universe u
+
 noncomputable section
 
 namespace CurvesJacobian.Cusp
@@ -171,7 +173,7 @@ section Valuation
 
 open Polynomial
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {W : ValuationSubring Ω}
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {W : ValuationSubring Ω}
   (hkW : ∀ c : k, algebraMap k Ω c ∈ W) {S : Finset k} {s : Ω}
 
 include hkW in
@@ -235,9 +237,9 @@ end Valuation
 
 section Main
 
-variable {k Ω : Type} [Field k] [IsAlgClosed k] [CharZero k]
+variable {k Ω : Type u} [Field k] [IsAlgClosed k] [CharZero k]
   [Field Ω] [Algebra k Ω] [IsSepClosed Ω] {t : Ω} [IsGalois (K₀ k t) Ω] (D : GaloisData k t)
-  {X : Scheme.{0}} [X.Over (Spec (.of k))] [IsCurveOver k X] [IsIntegral X]
+  {X : Scheme.{u}} [X.Over (Spec (.of k))] [IsCurveOver k X] [IsIntegral X]
   (eL : X.functionField ≃+* D.L) (hH : D.H ≤ D.HL)
   (hk : ∀ c : k, ((eL (algebraMap k X.functionField c) : D.L) : Ω) = algebraMap k Ω c)
   {τ : X.functionField} (hτ : ((eL τ : D.L) : Ω) = t)
@@ -721,7 +723,7 @@ theorem exists_continuousMulEquiv_cuspInertia_curve_of_line
   have hr : r = Nat.card ((U : Set X)ᶜ : Set X) := by
     rw [Nat.card_congr (Equiv.ofBijective J ⟨hJinj, hJsurj⟩), Nat.card_congr μ', Nat.card_fin]
   -- the genus, by counting characters of order `2`
-  obtain ⟨e₀⟩ := etaleFundamentalGroup_equiv_profiniteSurfaceGroup₀_of_isAlgClosed (k := k) U
+  obtain ⟨e₀⟩ := etaleFundamentalGroup_equiv_profiniteSurfaceGroup_of_isAlgClosed (k := k) U
     hUfin hUne (specPoint D.L Ω ≫ genericL D X eL U)
   obtain ⟨R, hR⟩ : ∃ R, Nat.card ((U : Set X)ᶜ : Set X) = R + 1 :=
     Nat.exists_eq_succ_of_ne_zero (by
@@ -736,11 +738,11 @@ theorem exists_continuousMulEquiv_cuspInertia_curve_of_line
   have h1 : numChar2 (Pi1.ProfiniteSurfaceGroup g r) = 2 ^ (g + g + R) := by
     rw [hrR]
     exact hcnt g
-  have h2 : numChar2 (Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat
-      (Nat.card ((U : Set X)ᶜ : Set X))) =
+  have h2 : numChar2 (completion (GrpCat.of (ULift.{u} (Pi1.SurfaceGroup (curveGenus k X).toNat
+      (Nat.card ((U : Set X)ᶜ : Set X)))))) =
       2 ^ ((curveGenus k X).toNat + (curveGenus k X).toNat + R) := by
     rw [hR]
-    exact hcnt _
+    exact numChar2_surfaceCompletion _ _
   rw [h1, h2] at hnum
   have hg : g = (curveGenus k X).toNat := by
     have := Nat.pow_right_injective (le_refl 2) hnum

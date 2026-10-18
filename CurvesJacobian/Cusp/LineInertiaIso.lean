@@ -53,6 +53,8 @@ open ProfiniteGrp.ProfiniteCompletion Complex.PuncturedPlane Complex.PuncturedPl
 open scoped TensorProduct
 open AffOrbicurve
 
+universe u
+
 noncomputable section
 
 namespace CurvesJacobian.Cusp
@@ -193,7 +195,7 @@ instance (k : Type*) [Field k] : IsDomain (lineRing k) :=
 
 /-- **The comparison isomorphism on points**: the image of a loop `γ` in the étale fundamental
 group acts on the fibre of `A` by the monodromy of `γ` on `A^an`. -/
-lemma etaleFundamentalGroupEquivCompletion_symm_etaFn_hom_app {X : SchemeLFTℂ.{0}}
+lemma etaleFundamentalGroupEquivCompletion_symm_etaFn_hom_app {X : SchemeLFTℂ.{u}}
     [ConnectedSpace X.obj.left] (x : analytification.obj X)
     (γ : FundamentalGroup (analytification.obj X) x) (A : FiniteEtale X.obj.left)
     (y : (FiniteEtale.fiber (geometricPoint X x)).obj A) :
@@ -206,7 +208,7 @@ lemma etaleFundamentalGroupEquivCompletion_symm_etaFn_hom_app {X : SchemeLFTℂ.
 
 /-- A loop whose monodromy on `A^an` has a fixed point acts on the étale fibre with a fixed
 point. -/
-lemma exists_fixed_etaleFundamentalGroupEquivCompletion {X : SchemeLFTℂ.{0}}
+lemma exists_fixed_etaleFundamentalGroupEquivCompletion {X : SchemeLFTℂ.{u}}
     [ConnectedSpace X.obj.left] (x : analytification.obj X)
     (γ : FundamentalGroup (analytification.obj X) x) (A : FiniteEtale X.obj.left)
     (e : ((analytificationFiniteEtale X).obj A).hom.toLRSHom.base ⁻¹' {x})

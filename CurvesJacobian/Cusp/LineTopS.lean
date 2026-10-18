@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.LineAnalyticS
+import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.LineInertiaIso
 import Oka.Topology.Covering.BranchedSurfaceAny
 
@@ -40,6 +41,8 @@ open CategoryTheory AlgebraicGeometry ComplexAnalytic Topology Metric PreGaloisC
 open ProfiniteGrp.ProfiniteCompletion Complex.PuncturedPlane Complex.PuncturedPlane.LineBasis
 open BranchedCover.Gen
 open scoped TensorProduct
+
+universe u
 
 noncomputable section
 
@@ -288,8 +291,8 @@ characteristic `0`, `S ⊆ k` with `|S| = n + 1` and a geometric point `x` of
 `Θ : π₁ᵉᵗ(U, x) ≃ₜ* Π̂_{0,n+2}` such that for every cusp `c : Option S` (`none` is `∞`) and every
 finite étale `Y ⟶ U` with a branch at `c` (relation `t = a + s` resp. `t s = 1`), the cuspidal
 generator `c_{cuspIndex σ c}` acts on the fibre of `Y` at `x` with a fixed point. -/
-theorem exists_continuousMulEquiv_lineS_branch {k : Type} [Field k] [IsAlgClosed k] [CharZero k]
-    [Countable k] (S : Finset k) {n : ℕ} (hS : S.card = n + 1) {L : Type} [Field L]
+theorem exists_continuousMulEquiv_lineS_branch {k : Type u} [Field k] [IsAlgClosed k] [CharZero k]
+    [Countable k] (S : Finset k) {n : ℕ} (hS : S.card = n + 1) {L : Type u} [Field L]
     [IsSepClosed L] (x : Spec (.of L) ⟶ Spec (.of (lineRingS S))) :
     ∃ (σ : S ≃ Fin (n + 1)) (Θ : π₁ᵉᵗ(x) ≃ₜ* Pi1.ProfiniteSurfaceGroup 0 (n + 2)),
       ∀ (c : Option S) (Y : AlgebraicGeometry.FiniteEtale (Spec (.of (lineRingS S)))),
@@ -298,24 +301,24 @@ theorem exists_continuousMulEquiv_lineS_branch {k : Type} [Field k] [IsAlgClosed
           Θ.symm (etaFn _ (Pi1.SurfaceGroup.cusp (cuspIndex σ c))) • y = y := by
   classical
   obtain ⟨φ⟩ := Belyi.Converse.nonempty_ringHom_complex_of_countable k
-  letI : Algebra k (ULift.{0} ℂ) := (ULift.ringEquiv.symm.toRingHom.comp φ).toAlgebra
+  letI : Algebra k (ULift.{u} ℂ) := (ULift.ringEquiv.symm.toRingHom.comp φ).toAlgebra
   -- the image `S'` of `S` in `ℂ`, moved onto `{0, …, n}`
-  have hinj : Function.Injective fun a : k ↦ (algebraMap k (ULift.{0} ℂ) a).down :=
-    fun a b hab ↦ (algebraMap k (ULift.{0} ℂ)).injective (ULift.ext _ _ hab)
+  have hinj : Function.Injective fun a : k ↦ (algebraMap k (ULift.{u} ℂ) a).down :=
+    fun a b hab ↦ (algebraMap k (ULift.{u} ℂ)).injective (ULift.ext _ _ hab)
   have hS' : (imageS S).card = n + 1 := by
     rw [imageS, Finset.card_image_of_injective _ hinj, hS]
   obtain ⟨τ, hτ⟩ := exists_homeomorph_image_eq_pts (imageS S) hS'
   have hST : ∀ z, τ z ∈ pts n ↔ z ∈ imageS S := fun z ↦ by
     rw [← hτ, Finset.mem_image]
     exact ⟨fun ⟨a, ha, he⟩ ↦ τ.injective he ▸ ha, fun hz ↦ ⟨z, hz, rfl⟩⟩
-  have hmem : ∀ a : S, τ (algebraMap k (ULift.{0} ℂ) a).down ∈ pts n := fun a ↦
+  have hmem : ∀ a : S, τ (algebraMap k (ULift.{u} ℂ) a).down ∈ pts n := fun a ↦
     (hST _).2 (Finset.mem_image_of_mem _ a.2)
   let σf : S → Fin (n + 1) := fun a ↦ ptsEquiv n ⟨_, hmem a⟩
   have hσinj : Function.Injective σf := fun a b hab ↦ Subtype.ext (hinj (τ.injective
     (congrArg Subtype.val ((ptsEquiv n).injective hab))))
   let σ : S ≃ Fin (n + 1) := Equiv.ofBijective σf
     ((Fintype.bijective_iff_injective_and_card σf).2 ⟨hσinj, by simp [hS]⟩)
-  have hσ : ∀ a : S, (((σ a : ℕ)) : ℂ) = τ (algebraMap k (ULift.{0} ℂ) a).down := fun a ↦
+  have hσ : ∀ a : S, (((σ a : ℕ)) : ℂ) = τ (algebraMap k (ULift.{u} ℂ) a).down := fun a ↦
     coe_ptsEquiv n ⟨_, hmem a⟩
   -- the geometric basis of `π₁(ℂ ∖ {0, …, n})`, transported to `π₁(U_ℂ^an)`
   let e₂ := regionHomeo τ hST
@@ -347,7 +350,7 @@ theorem exists_continuousMulEquiv_lineS_branch {k : Type} [Field k] [IsAlgClosed
     refine e2.trans (Eq.trans ?_ e3.symm)
     exact congrArg (Pi1.SurfaceGen.ordProd (r := n + 1)) (funext hιj)
   have hnear : ∀ c : Option S, ∃ γ : FundamentalGroup (Region Set.univ (imageS S)) xS,
-      IsNearLoop ((c.map Subtype.val).map fun a ↦ (algebraMap k (ULift.{0} ℂ) a).down) γ ∧
+      IsNearLoop ((c.map Subtype.val).map fun a ↦ (algebraMap k (ULift.{u} ℂ) a).down) γ ∧
       (ι (Pi1.SurfaceGroup.cusp (cuspIndex σ c)) = FundamentalGroup.map (lineInvS S) xS γ ∨
         ι (Pi1.SurfaceGroup.cusp (cuspIndex σ c)) =
           (FundamentalGroup.map (lineInvS S) xS γ)⁻¹) := by
@@ -359,30 +362,30 @@ theorem exists_continuousMulEquiv_lineS_branch {k : Type} [Field k] [IsAlgClosed
       exact h
   -- the chain of isomorphisms
   haveI : ConnectedSpace (lineXS S).obj.left :=
-    inferInstanceAs (ConnectedSpace (Spec (.of (ULift.{0} ℂ ⊗[k] lineRingS S))))
+    inferInstanceAs (ConnectedSpace (Spec (.of (ULift.{u} ℂ ⊗[k] lineRingS S))))
   let ξ := geometricPoint (lineXS S) xa
-  let bc := FiniteEtale.baseChangeSpec k (ULift.{0} ℂ) (lineRingS S)
+  let bc := FiniteEtale.baseChangeSpec k (ULift.{u} ℂ) (lineRingS S)
   let Cmp := etaleFundamentalGroupEquivCompletion xa
-  let Inv := FiniteEtale.fundamentalGroupBaseChangeEquiv (k := k) (Ω := ULift.{0} ℂ)
+  let Inv := FiniteEtale.fundamentalGroupBaseChangeEquiv (k := k) (Ω := ULift.{u} ℂ)
     (R := lineRingS S) ξ
   obtain ⟨α⟩ := nonempty_iso_of_fiberFunctor (FiniteEtale.fiber x) (FiniteEtale.fiber (ξ ≫ bc))
   let Bp := autContinuousMulEquivOfIso α
   let Θ : π₁ᵉᵗ(x) ≃ₜ* Pi1.ProfiniteSurfaceGroup 0 (n + 2) :=
-    Bp.trans (Inv.symm.trans (Cmp.trans (Pi1.Profinite.completionCongr ι).symm))
+    Bp.trans (Inv.symm.trans (Cmp.trans (completionCongr' ι).symm))
   let Φ : FundamentalGroup (analytification.obj (lineXS S)) xa →* π₁ᵉᵗ(x) :=
     (α.conjAut.symm.toMonoidHom.comp (Inv.symm.symm.toMulEquiv.toMonoidHom.comp
       (Cmp.symm.toMulEquiv.toMonoidHom.comp
         (eta (GrpCat.of (FundamentalGroup (analytification.obj (lineXS S)) xa))).hom)))
   have hΘ : ∀ z : Pi1.SurfaceGroup 0 (n + 2), Θ.symm (etaFn _ z) = Φ (ι z) := by
     intro z
-    change Bp.symm (Inv (Cmp.symm (Pi1.Profinite.completionCongr ι (etaFn _ z)))) = _
-    rw [Pi1.Profinite.completionCongr_apply, Pi1.Profinite.completionMap_eta]
+    change Bp.symm (Inv (Cmp.symm (completionCongr' ι (etaFn _ z)))) = _
+    rw [completionCongr'_etaFn]
     rfl
   refine ⟨σ, Θ, fun c Y b ↦ ?_⟩
   obtain ⟨γ, hγnear, hγι⟩ := hnear c
   let Yc := (FiniteEtale.pullback bc).obj Y
   obtain ⟨e, he⟩ := exists_monodromy_fixed_of_pBranch (Y' := Yc) (c.map Subtype.val)
-    (b.baseChange (ULift.{0} ℂ)) hγnear
+    (b.baseChange (ULift.{u} ℂ)) hγnear
   obtain ⟨y₁, hy₁⟩ := exists_fixed_etaleFundamentalGroupEquivCompletion xa _ Yc e he
   have hy₂ := fiberAutMap_fixed (FiniteEtale.pullbackFiberIso bc rfl)
     (Cmp.symm (etaFn _ (FundamentalGroup.map (lineInvS S) xS γ))) y₁ hy₁

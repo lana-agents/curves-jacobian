@@ -217,8 +217,8 @@ end Galois
 
 section Action
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : GaloisData k t)
-  {X : Scheme.{0}} [X.Over (Spec (.of k))] [IsIntegral X] (eL : X.functionField ≃+* D.L)
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : GaloisData k t)
+  {X : Scheme.{u}} [X.Over (Spec (.of k))] [IsIntegral X] (eL : X.functionField ≃+* D.L)
   (f : X ⟶ P1 k) [Nonempty (cuspOpen f)] (hη : f.base (genericPoint X) ≠ P1.infty k)
   [IsSepClosed Ω] [IsGalois (K₀ k t) Ω] (hH : D.H ≤ D.HL)
   (ht : Transcendental k (belyiT D eL f hη)) [IsGalois (K₀ k (belyiT D eL f hη)) Ω]
@@ -292,7 +292,7 @@ section Line
 
 open Polynomial
 
-variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {t : Ω}
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω}
 
 lemma lineToK₀_algebraMap (ht : Transcendental k t) (p : k[X]) :
     lineToK₀ ht (algebraMap k[X] (lineRing k) p) = aeval (tK₀ k t) p := by
@@ -328,8 +328,8 @@ lemma lineToK₀_injective (ht : Transcendental k t) : Function.Injective (lineT
 variable [IsSepClosed Ω] [IsGalois (K₀ k t) Ω]
 
 /-- Surjectivity of the Galois action does not depend on the name of the geometric point. -/
-lemma galoisAction_surjective_congr (F : Type) [Field F] [Algebra F Ω] [IsGalois F Ω]
-    {Y : Scheme.{0}} (j : Spec (.of F) ⟶ Y) {η η' : Spec (.of Ω) ⟶ Y}
+lemma galoisAction_surjective_congr (F : Type u) [Field F] [Algebra F Ω] [IsGalois F Ω]
+    {Y : Scheme.{u}} (j : Spec (.of F) ⟶ Y) {η η' : Spec (.of Ω) ⟶ Y}
     (h : Spec.map (CommRingCat.ofHom (algebraMap F Ω)) ≫ j = η)
     (h' : Spec.map (CommRingCat.ofHom (algebraMap F Ω)) ≫ j = η')
     (hs : Function.Surjective (FiniteEtale.galoisAction F j h)) :
@@ -367,6 +367,13 @@ theorem lineGalois_surjective (ht : Transcendental k t) : Function.Surjective (l
   have hs := FiniteEtale.galoisAction_surjective (F := K₀ k t) (Ω := Ω) (lineRing k) hinj hint
   exact galoisAction_surjective_congr (K₀ k t) _ _ rfl hs
 
+end Line
+
+section LineInertia
+
+variable {k Ω : Type} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} [IsSepClosed Ω]
+  [IsGalois (K₀ k t) Ω]
+
 /-- **Conjugating the inertia group of a place** of `Ω` over `k(t)`. -/
 lemma lineInertia_comap (ht : Transcendental k t) (W : ValuationSubring Ω)
     (σ : Ω ≃ₐ[K₀ k t] Ω) :
@@ -390,6 +397,6 @@ lemma lineInertia_comap (ht : Transcendental k t) (W : ValuationSubring Ω)
   ext τ
   simp [MulAut.conj_apply, map_mul]
 
-end Line
+end LineInertia
 
 end CurvesJacobian.Cusp

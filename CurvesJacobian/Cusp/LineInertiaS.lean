@@ -312,7 +312,7 @@ of the cuspidal inertia groups, over any algebraically closed field of character
 `Θ : π₁ᵉᵗ(U, η) ≃ₜ* Π̂_{0,n+2}` such that for every cusp `c : Option S` (`none` is `∞`) and every
 place `W ⊇ k` of `Ω` over `c` (`v_W(u_c) < 1` for the local coordinate `u_c`), some conjugate of
 the inertia group of `W` is mapped by `Θ` onto `I_{cuspIndex σ c}`. -/
-theorem exists_continuousMulEquiv_lineInertiaS {k Ω : Type} [Field k] [IsAlgClosed k] [CharZero k]
+theorem exists_continuousMulEquiv_lineInertiaS {k Ω : Type u} [Field k] [IsAlgClosed k] [CharZero k]
     [Field Ω] [Algebra k Ω] [IsSepClosed Ω] {t : Ω} [IsGalois (K₀ k t) Ω]
     (S : Finset k) {n : ℕ} (hS : S.card = n + 1) (ht : Transcendental k t) :
     ∃ (σ : S ≃ Fin (n + 1)) (Θ : π₁ᵉᵗ(lineGenS S ht) ≃ₜ* Pi1.ProfiniteSurfaceGroup 0 (n + 2)),
