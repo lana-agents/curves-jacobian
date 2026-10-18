@@ -15,6 +15,7 @@ import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
 import CurvesJacobian.Cusp.ChainPush
+import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
