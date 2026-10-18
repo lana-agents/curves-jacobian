@@ -59,16 +59,18 @@ namespace AlgebraicGeometry.FiniteEtale
 
 open PreGaloisCategory
 
-variable {X Y : Scheme.{u}} {Ω : Type u} [Field Ω]
+variable {X Y : Scheme.{u}} {Ω Ω' : Type u} [Field Ω] [Field Ω']
 
 /-- **A change of base point on `Y` induces one on `X`**, compatibly with `f : Y ⟶ X`. -/
-noncomputable def fiberIsoMap (f : Y ⟶ X) {ξ ξ' : Spec (.of Ω) ⟶ Y} {η η' : Spec (.of Ω) ⟶ X}
+noncomputable def fiberIsoMap (f : Y ⟶ X) {ξ : Spec (.of Ω) ⟶ Y} {ξ' : Spec (.of Ω') ⟶ Y}
+    {η : Spec (.of Ω) ⟶ X} {η' : Spec (.of Ω') ⟶ X}
     (h : ξ ≫ f = η) (h' : ξ' ≫ f = η') (α : fiber ξ ≅ fiber ξ') : fiber η ≅ fiber η' :=
   transportIso (pullbackFiberIso f h) (pullbackFiberIso f h') α
 
 /-- **Naturality of base point changes**: `f_* ∘ α_* = (fiberIsoMap α)_* ∘ f_*`. -/
-lemma fundamentalGroupMap_autContinuousMulEquivOfIso (f : Y ⟶ X) {ξ ξ' : Spec (.of Ω) ⟶ Y}
-    {η η' : Spec (.of Ω) ⟶ X} (h : ξ ≫ f = η) (h' : ξ' ≫ f = η') (α : fiber ξ ≅ fiber ξ')
+lemma fundamentalGroupMap_autContinuousMulEquivOfIso (f : Y ⟶ X) {ξ : Spec (.of Ω) ⟶ Y}
+    {ξ' : Spec (.of Ω') ⟶ Y} {η : Spec (.of Ω) ⟶ X} {η' : Spec (.of Ω') ⟶ X} (h : ξ ≫ f = η)
+    (h' : ξ' ≫ f = η') (α : fiber ξ ≅ fiber ξ')
     (σ : π₁ᵉᵗ(ξ)) :
     fundamentalGroupMap f h' (autContinuousMulEquivOfIso α σ) =
       autContinuousMulEquivOfIso (fiberIsoMap f h h' α) (fundamentalGroupMap f h σ) :=
@@ -76,8 +78,9 @@ lemma fundamentalGroupMap_autContinuousMulEquivOfIso (f : Y ⟶ X) {ξ ξ' : Spe
 
 /-- **The kernel of `π₁ᵉᵗ(Y) → π₁ᵉᵗ(X)` does not depend on the base point**, up to the change of
 base point given by an isomorphism of fibre functors. -/
-theorem ker_fundamentalGroupMap_eq_map (f : Y ⟶ X) {ξ ξ' : Spec (.of Ω) ⟶ Y}
-    {η η' : Spec (.of Ω) ⟶ X} (h : ξ ≫ f = η) (h' : ξ' ≫ f = η') (α : fiber ξ ≅ fiber ξ') :
+theorem ker_fundamentalGroupMap_eq_map (f : Y ⟶ X) {ξ : Spec (.of Ω) ⟶ Y}
+    {ξ' : Spec (.of Ω') ⟶ Y} {η : Spec (.of Ω) ⟶ X} {η' : Spec (.of Ω') ⟶ X} (h : ξ ≫ f = η)
+    (h' : ξ' ≫ f = η') (α : fiber ξ ≅ fiber ξ') :
     (fundamentalGroupMap f h').toMonoidHom.ker =
       (fundamentalGroupMap f h).toMonoidHom.ker.map
         (autContinuousMulEquivOfIso α).toMulEquiv.toMonoidHom :=
