@@ -27,8 +27,7 @@ of `U`).
   maps `geomToPi` of the curve `(X̄, U')` to a conjugate of `geomToPiFill`;
 * **`exists_mem_arithCusps_map_fillMap`**: every cuspidal inertia group of `Π_{U'}` (transported
   to `fillPoint`) is the image under `fillMap` of a cuspidal inertia group of `Π_U`;
-* **`fillStepElemOp`**: the operation `fillChainObj U₁ ⇝ fillChainObj U₂` of type `•`, provided
-  `U₁,Ω` has at least three geometric cusps.
+* **`fillStepElemOp`**: the operation `fillChainObj U₁ ⇝ fillChainObj U₂` of type `•`.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
@@ -464,10 +463,6 @@ lemma ker_fillStepMap : (fillStepMap Ω C hc h₁ h₂).toMonoidHom.ker =
     Subgroup.coe_map]
   rfl
 
-variable (h3 : 2 < Nat.card ((geomOpen Ω (fillCurve C h₁ hyp₁) : Set (geomCurve Ω
-  (fillCurve C h₁ hyp₁)))ᶜ : Set (geomCurve Ω (fillCurve C h₁ hyp₁))))
-
-include h3 in
 /-- `fillStepCusp` is a cuspidal decomposition group of `Δ_{U₁}` in the sense of [AbsTopI]
 Definition 4.2 (iii), (3Π): the commensurator in `Δ_{U₁}` of the (nontrivial) image of a
 cuspidal inertia group of `Π_U`. -/
@@ -481,8 +476,9 @@ lemma isCuspidal_fillStepCusp :
     (fillAlpha Ω C hc h₁ hc₁ hyp₁) hJ
   refine ⟨I, hI, ?_, ?_⟩
   · rw [image_fillChainObj, hIJ, Ne, Subgroup.map_eq_bot_iff_of_injective _ T.injective]
-    exact arithCusps_ne_bot Ω (fillCurve C h₁ hyp₁) hc₁ h3 hJ
-  · have hcomm := commensurator_inf_of_mem_arithCusps Ω (fillCurve C h₁ hyp₁) hc₁ h3 hJ
+    exact arithCusps_ne_bot Ω (fillCurve C h₁ hyp₁) hc₁
+      (one_lt_card_geomOpen_compl Ω (fillCurve C h₁ hyp₁) h₂ hc₂ hxU₂ hxU₁) hJ
+  · have hcomm := commensurator_inf_of_mem_arithCusps Ω (fillCurve C h₁ hyp₁) hc₁ hJ
     have k : Subgroup.Commensurable.commensurator ((fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂
         hxU₂ hxU₁ hx).map T.toMulEquiv.toMonoidHom) ⊓
           (projGk Ω (fillCurve C h₁ hyp₁) hc₁).toMonoidHom.ker.map T.toMulEquiv.toMonoidHom =
@@ -523,19 +519,19 @@ lemma fillStepMap_compat :
 
 /-- **Filling in a further cusp is an elementary operation of type `•`** ([AbsTopI] Definition
 4.2 (iii) (c)): for `U ⊆ U₁ ⊆ U₂ = U₁ ∪ {x}` with `(X̄, U₁)`, `(X̄, U₂)` hyperbolic with a cusp
-and `U₁,Ω` with at least three geometric cusps, `Π_{U₁} ↠ Π_{U₂}` between the chain objects
+`Π_{U₁} ↠ Π_{U₂}` between the chain objects
 `fillChainObj U₁` and `fillChainObj U₂` of `Π_U`. -/
 def fillStepElemOp :
     ElemOp (fillChainObj Ω C hc h₁ hc₁ hyp₁) (fillChainObj Ω C hc (h₁.trans h₂) hc₂ hyp₂) :=
   .decusp (fillStepMap Ω C hc h₁ h₂) (fillStepMap_surjective Ω C hc h₁ h₂ hc₂)
     (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
-    (isCuspidal_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx h3)
+    (isCuspidal_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
     (inTorsionFreeNormalOpen_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
     (ker_fillStepMap Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
     (fillStepMap_compat Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂)
 
 lemma fillStepElemOp_kind :
-    (fillStepElemOp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂ hxU₂ hxU₁ hx h3).kind = .decusp := rfl
+    (fillStepElemOp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂ hxU₂ hxU₁ hx).kind = .decusp := rfl
 
 end Step
 

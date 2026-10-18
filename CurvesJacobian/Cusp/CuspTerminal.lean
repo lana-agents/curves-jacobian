@@ -26,6 +26,10 @@ Main results:
 * `CurvesJacobian.Cusp.commensurator_cuspInertia`: **the commensurator of `I` in `π₁ᵉᵗ(U)` is
   `I`** (`Subgroup.Commensurable.commensurator`, as in `Belyi.Anabelian.ChainObj.IsCuspidal`);
   `mem_cuspInertia_of_relIndex_ne_zero`: already `[γIγ⁻¹ : I ∩ γIγ⁻¹] < ∞` forces `γ ∈ I`;
+* `CuspSep`, `commensurator_cuspInertia_of_or`: the same without the three-cusp hypothesis on
+  `U`, given an open normal `O₀ ⊆ H` with three translates of `W` separated modulo `O₀ · D_W`
+  (then every cover with Galois data in `O₀` has three cusps; used for curves of genus `≥ 1`
+  with one or two cusps in `CurvesJacobian.Cusp.CuspTerminalFew`);
 * `isClosed_cuspInertia`, `topologicalClosure_cuspInertia`,
   `commensurator_topologicalClosure_cuspInertia`: `I` is closed, so the same holds for `Ī = I`;
 * `cuspInertia_eq_map_decompH`: `I` is the image of the decomposition group `D_W ∩ H`.
@@ -522,6 +526,19 @@ variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : Galoi
 
 attribute [local instance] normOver normNonempty
 
+/-- **Three separated translates of a place**: elements `s₀, s₁, s₂ ∈ H` with
+`sᵢ ∉ O · sⱼ · D_W` for `i ≠ j` (`D_W` the decomposition group of `W`). For `O ⊇ H'` the Galois
+data of a cover, the places `sᵢ(W)` lie over three distinct cusps of the cover. -/
+def CuspSep (O : Subgroup D.H) (W : ValuationSubring Ω) : Prop :=
+  ∃ s : Fin 3 → D.H, ∀ i j, i ≠ j → ∀ o ∈ O, ∀ d ∈ decompH D W, s i ≠ o * s j * d
+
+omit [IsGalois (K₀ k t) Ω] [IsSepClosed Ω] [IsAlgClosed k] [CharZero k] [IsCurveOver k X]
+  [X.Over (Spec (CommRingCat.of k))] [IsIntegral X] in
+lemma CuspSep.mono {O O' : Subgroup D.H} (hO : O ≤ O') {W : ValuationSubring Ω}
+    (h : CuspSep D O' W) : CuspSep D O W := by
+  obtain ⟨s, hs⟩ := h
+  exact ⟨s, fun i j hij o ho d hd ↦ hs i j hij o (hO ho) d hd⟩
+
 omit [IsAlgClosed k] in
 include hk hτ in
 /-- The image in `π₁ᵉᵗ(U)` of an open subgroup `O ⊇ ker` of `H` is open. -/
@@ -559,19 +576,21 @@ whose compactification `N` has Galois data `H' ⊆ O`. If no element of `H'` map
 groups are not commensurable (`relIndex_cuspInertia_eq_zero_of_comapK_ne`); but they are the
 images in `π₁ᵉᵗ(U)` of finite index subgroups of `I_W, I_{W'}` (`map_cuspInertia_cover`). -/
 theorem inter_nonempty_of_isOpen_normal {U : X.Opens} [Nonempty U]
-    (hU : (U : Set X)ᶜ.Finite) (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X))
+    (hU : (U : Set X)ᶜ.Finite)
     {W W' : ValuationSubring Ω} (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
     (hkW' : ∀ c : k, algebraMap k Ω c ∈ W')
     (hWU : ¬ IsCentredOn D X eL U W) (hW'U : ¬ IsCentredOn D X eL U W')
     (hcomm : (cuspInertia D X eL hH U W).relIndex (cuspInertia D X eL hH U W') ≠ 0)
     (O : Subgroup D.H) [O.Normal] (hO : IsOpen (O : Set D.H))
-    (hNO : (D.chartHom hH (genericL D X eL U)).ker ≤ O) :
+    (hNO : (D.chartHom hH (genericL D X eL U)).ker ≤ O)
+    (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X) ∨ CuspSep D O W) :
     ({ρ : D.H | W'.comap ((ρ : Ω ≃ₐ[K₀ k t] Ω) : Ω →+* Ω) = W} ∩ (O : Set D.H)).Nonempty := by
   haveI := isLocallyNoetherian_of_isCurveOver k X
   haveI := GaloisPi1.compactSpace_of_isClosed D.H D.isClosed_H
   have htop : U ≠ ⊤ := by
     rintro rfl
-    simp at hU3
+    obtain ⟨y, hy, -⟩ := exists_notMem_of_not_isCentredOn D X eL hk ⊤ hkW hWU
+    exact hy trivial
   obtain ⟨τ', hτ', hUeq⟩ := exists_chartOne_eq k U hU htop
   have hUaff : IsAffineOpen U := hUeq ▸ isAffineOpen_chartOne hτ'
   have hUne : (U : Set X).Nonempty := ⟨_, (Classical.arbitrary U).2⟩
@@ -645,12 +664,56 @@ theorem inter_nonempty_of_isOpen_normal {U : X.Opens} [Nonempty U]
       Set (p ≫ U.ι).normalization)ᶜ :
       Set (p ≫ U.ι).normalization) := by
     haveI := hfin.to_subtype
-    have hqs := surjective_fromNormalization (k := k) hUne p
-    refine hU3.trans_le (Nat.card_le_card_of_surjective
-      (fun x ↦ (⟨q x.1, x.2⟩ : ((U : Set X)ᶜ : Set X))) ?_)
-    rintro ⟨x, hx⟩
-    obtain ⟨y, rfl⟩ := hqs x
-    exact ⟨⟨y, hx⟩, rfl⟩
+    rcases hU3 with hU3 | ⟨s, hs⟩
+    · have hqs := surjective_fromNormalization (k := k) hUne p
+      refine hU3.trans_le (Nat.card_le_card_of_surjective
+        (fun x ↦ (⟨q x.1, x.2⟩ : ((U : Set X)ᶜ : Set X))) ?_)
+      rintro ⟨x, hx⟩
+      obtain ⟨y, rfl⟩ := hqs x
+      exact ⟨⟨y, hx⟩, rfl⟩
+    -- three cusps of the cover, under the places `sᵢ(W)`
+    let Wi : Fin 3 → ValuationSubring Ω := fun i ↦
+      W.comap (((s i : D.H) : Ω ≃ₐ[K₀ k t] Ω).symm : Ω →+* Ω)
+    have hkWi : ∀ i (c : k), algebraMap k Ω c ∈ Wi i := fun i c ↦ by
+      change ((s i : D.H) : Ω ≃ₐ[K₀ k t] Ω).symm (algebraMap k Ω c) ∈ W
+      rw [IsScalarTower.algebraMap_apply k (K₀ k t) Ω, AlgEquiv.commutes,
+        ← IsScalarTower.algebraMap_apply k (K₀ k t) Ω]
+      exact hkW c
+    have hWiN : ∀ i, ¬ IsCentredOn D' _ eL' (q ⁻¹ᵁ U) (Wi i) := fun i ↦
+      (isCentredOn_normalization_iff p D eL hk hτ hUaff).not.2
+        ((isCentredOn_comap_iff D X eL U (hH (s i).2) W).not.2 hWU)
+    choose y hyU hy using fun i ↦
+      exists_notMem_of_not_isCentredOn D' _ eL' hkN (q ⁻¹ᵁ U) (hkWi i) (hWiN i)
+    let f : Fin 3 → (((q ⁻¹ᵁ U : (p ≫ U.ι).normalization.Opens) :
+        Set (p ≫ U.ι).normalization)ᶜ : Set (p ≫ U.ι).normalization) := fun i ↦ ⟨y i, hyU i⟩
+    have hinj : Function.Injective f := by
+      intro i j hij
+      by_contra hne
+      have hyy : y i = y j := congrArg Subtype.val hij
+      have hK : comapK D' _ eL' hkN (Wi i) = comapK D' _ eL' hkN (Wi j) := by
+        rw [← hy i, ← hy j, hyy]
+      have hL := comap_algebraMap_eq_of_comapK_eq D' _ eL' hkN hK
+      haveI : IsGalois D'.L Ω := IsGalois.tower_top_of_isGalois (K₀ k t) _ Ω
+      obtain ⟨ρ, hρ⟩ := exists_algEquiv_comap_eq (Wi i) (Wi j) hL
+      have hρL : ρ.restrictScalars (K₀ k t) ∈ D'.HL := by
+        have hcl := D'.isClosed_HL
+        have h := InfiniteGalois.fixingSubgroup_fixedField (⟨_, hcl⟩ : ClosedSubgroup _)
+        change ρ.restrictScalars (K₀ k t) ∈ (⟨_, hcl⟩ : ClosedSubgroup _).toSubgroup
+        rw [← h, IntermediateField.mem_fixingSubgroup_iff]
+        intro x hx
+        exact ρ.commutes ⟨x, hx⟩
+      let r : D.H := Subgroup.inclusion hle ⟨_, hρL⟩
+      refine hs j i (Ne.symm hne) r (hD'O _) ((s i)⁻¹ * r⁻¹ * s j) ?_ (by group)
+      rw [mem_decompH_iff]
+      ext x
+      have := SetLike.ext_iff.1 hρ (((s j : D.H) : Ω ≃ₐ[K₀ k t] Ω) x)
+      simp only [Wi, ValuationSubring.mem_comap, RingHom.coe_coe,
+        AlgEquiv.symm_apply_apply] at this
+      rw [ValuationSubring.mem_comap, this]
+      rfl
+    have hle3 := Nat.card_le_card_of_injective f hinj
+    simp only [Nat.card_eq_fintype_card, Fintype.card_fin] at hle3
+    omega
   have hrel := relIndex_cuspInertia_eq_zero_of_comapK_ne D' _ eL'
     (coverData_H_le D eL hk hτ q rfl (normGeneric k p)) hkN hτN hfin hcard hkW hkW' hWN hW'N
     hneN
@@ -700,8 +763,10 @@ include hk hτ in
 /-- **The transporter meets the kernel**: under the hypotheses of `inter_nonempty_of_isOpen_normal`
 there is `n ∈ H` acting trivially on `π₁ᵉᵗ(U)` with `n⁻¹(W') = W` (compactness of `H`). -/
 theorem exists_mem_ker_comap_eq {U : X.Opens} [Nonempty U]
-    (hU : (U : Set X)ᶜ.Finite) (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X))
-    {W W' : ValuationSubring Ω} (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
+    (hU : (U : Set X)ᶜ.Finite) {W W' : ValuationSubring Ω}
+    (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X) ∨ ∃ O₀ : Subgroup D.H, O₀.Normal ∧
+      IsOpen (O₀ : Set D.H) ∧ (D.chartHom hH (genericL D X eL U)).ker ≤ O₀ ∧ CuspSep D O₀ W)
+    (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
     (hkW' : ∀ c : k, algebraMap k Ω c ∈ W')
     (hWU : ¬ IsCentredOn D X eL U W) (hW'U : ¬ IsCentredOn D X eL U W')
     (hcomm : (cuspInertia D X eL hH U W).relIndex (cuspInertia D X eL hH U W') ≠ 0) :
@@ -714,8 +779,15 @@ theorem exists_mem_ker_comap_eq {U : X.Opens} [Nonempty U]
   obtain ⟨n, hnA, hnN⟩ := inter_nonempty_of_forall_isOpen_normal _ hNcl
     (isClosed_setOf_comap_eq D.H W W') fun O hO hOo hNO ↦ by
       haveI := hO
-      exact inter_nonempty_of_isOpen_normal D X eL hH hk hτ hU hU3 hkW hkW' hWU hW'U hcomm O hOo
-        hNO
+      rcases hU3 with hU3 | ⟨O₀, hO₀, hO₀o, hNO₀, hsep⟩
+      · exact inter_nonempty_of_isOpen_normal D X eL hH hk hτ hU hkW hkW' hWU hW'U hcomm O hOo
+          hNO (Or.inl hU3)
+      · haveI := hO₀
+        haveI : (O ⊓ O₀).Normal := Subgroup.normal_inf_normal O O₀
+        obtain ⟨n, hnA, hnO⟩ := inter_nonempty_of_isOpen_normal D X eL hH hk hτ hU hkW hkW' hWU
+          hW'U hcomm (O ⊓ O₀) (hOo.inter hO₀o) (le_inf hNO hNO₀)
+          (Or.inr (hsep.mono D (inf_le_right : O ⊓ O₀ ≤ O₀)))
+        exact ⟨n, hnA, hnO.1⟩
   exact ⟨n, hnN, hnA⟩
 
 include hk hτ in
@@ -723,8 +795,10 @@ include hk hτ in
 `γ ∈ π₁ᵉᵗ(U)` satisfies `[γ I γ⁻¹ : I ∩ γ I γ⁻¹] < ∞` for `I = I_W` (`W` a place over a cusp of
 `U`, `U` with at least three cusps), then `γ ∈ I`. -/
 theorem mem_cuspInertia_of_relIndex_ne_zero {U : X.Opens} [Nonempty U]
-    (hU : (U : Set X)ᶜ.Finite) (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X))
-    {W : ValuationSubring Ω} (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
+    (hU : (U : Set X)ᶜ.Finite) {W : ValuationSubring Ω}
+    (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X) ∨ ∃ O₀ : Subgroup D.H, O₀.Normal ∧
+      IsOpen (O₀ : Set D.H) ∧ (D.chartHom hH (genericL D X eL U)).ker ≤ O₀ ∧ CuspSep D O₀ W)
+    (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
     (hWU : ¬ IsCentredOn D X eL U W) {γ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)}
     (hcomm : (cuspInertia D X eL hH U W).relIndex
       ((cuspInertia D X eL hH U W).map (MulAut.conj γ).toMonoidHom) ≠ 0) :
@@ -764,9 +838,11 @@ include hk hτ in
 /-- **The commensurator of a cuspidal inertia group is itself** ([AbsTopI] Lemma 4.1 (i),
 `Topics in Absolute Anabelian Geometry I.txt` l.2742–2745: cuspidal decomposition groups are
 commensurably terminal), for `U` with at least three cusps. -/
-theorem commensurator_cuspInertia {U : X.Opens} [Nonempty U]
-    (hU : (U : Set X)ᶜ.Finite) (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X))
-    {W : ValuationSubring Ω} (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
+theorem commensurator_cuspInertia_of_or {U : X.Opens} [Nonempty U]
+    (hU : (U : Set X)ᶜ.Finite) {W : ValuationSubring Ω}
+    (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X) ∨ ∃ O₀ : Subgroup D.H, O₀.Normal ∧
+      IsOpen (O₀ : Set D.H) ∧ (D.chartHom hH (genericL D X eL U)).ker ≤ O₀ ∧ CuspSep D O₀ W)
+    (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
     (hWU : ¬ IsCentredOn D X eL U W) :
     Subgroup.Commensurable.commensurator (cuspInertia D X eL hH U W) =
       cuspInertia D X eL hH U W := by
@@ -786,6 +862,17 @@ theorem commensurator_cuspInertia {U : X.Opens} [Nonempty U]
       · intro hx
         refine ⟨γ⁻¹ * x * γ, mul_mem (mul_mem (inv_mem hγ) hx) hγ, by group⟩
     rw [e]
+
+include hk hτ in
+/-- **The commensurator of a cuspidal inertia group is itself**, for `U` with at least three
+cusps. -/
+theorem commensurator_cuspInertia {U : X.Opens} [Nonempty U]
+    (hU : (U : Set X)ᶜ.Finite) (hU3 : 2 < Nat.card ((U : Set X)ᶜ : Set X))
+    {W : ValuationSubring Ω} (hkW : ∀ c : k, algebraMap k Ω c ∈ W)
+    (hWU : ¬ IsCentredOn D X eL U W) :
+    Subgroup.Commensurable.commensurator (cuspInertia D X eL hH U W) =
+      cuspInertia D X eL hH U W :=
+  commensurator_cuspInertia_of_or D X eL hH hk hτ hU (Or.inl hU3) hkW hWU
 
 include hk hτ in
 /-- The commensurator of the (closed) cuspidal inertia group, in topological-closure form. -/

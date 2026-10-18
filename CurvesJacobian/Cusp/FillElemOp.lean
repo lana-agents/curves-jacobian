@@ -5,7 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.ArithmeticFillObj
 import CurvesJacobian.Cusp.NonRationalFill
-import CurvesJacobian.Cusp.CuspTerminal
+import CurvesJacobian.Cusp.CuspTerminalFew
 import CurvesJacobian.Cusp.CuspDegreeEq
 import CurvesJacobian.Cusp.TorsionFree
 
@@ -20,19 +20,19 @@ normal open torsion-free subgroup of `Δ_j`.
 For a hyperbolic curve `C` over a number field `K` with a cusp, and `U' = U ∪ {x}` (`x` a closed
 point of `X̄`, not necessarily `K`-rational) such that `(X̄, U')` is still hyperbolic with a cusp,
 the filling map `fillMap : Π_U ↠ Π_{U'}` is such an operation from the trivial chain object
-`Π₀ = Π_U` to `fillChainObj` (`CurvesJacobian.Cusp.fillElemOp`), provided `U_Ω` has at least three
-geometric cusps. That hypothesis enters through the commensurable terminality of cuspidal inertia
-groups ([AbsTopI] Lemma 4.1 (i), l.2742–2745; `CurvesJacobian.Cusp.commensurator_cuspInertia`),
-which identifies the cuspidal inertia group `I ∈ arithCusps` with its commensurator in `Δ_U`.
+`Π₀ = Π_U` to `fillChainObj` (`CurvesJacobian.Cusp.fillElemOp`). The commensurable terminality
+of cuspidal inertia groups ([AbsTopI] Lemma 4.1 (i), l.2742–2745;
+`CurvesJacobian.Cusp.commensurator_cuspInertia_of_hyperbolic`) identifies the cuspidal inertia
+group `I ∈ arithCusps` with its commensurator in `Δ_U`; it is nontrivial since `U_Ω` has at least
+two cusps (`U'` has one).
 
 ## Main results
 
 * `commensurator_map_inf_range`: for an injective `φ : P →* G` and `J ≤ P` commensurably
   terminal, `Comm_G(φ J) ⊓ φ(P) = φ J`;
-* `arithCusps_ne_bot`, `commensurator_inf_of_mem_arithCusps`: every `I ∈ arithCusps` is
-  nontrivial and equals `Comm_Π(I) ⊓ Δ` (if `U_Ω` has at least three cusps);
-* `fillElemOp`: the operation `Π_U ⇝ Π_{U'}` of type `•` (`fillElemOp_kind`);
-  `fillElemOp'`: the same under `2 < cuspDegree K X̄ U`.
+* `commensurator_inf_of_mem_arithCusps`: every `I ∈ arithCusps` equals `Comm_Π(I) ⊓ Δ`;
+  `arithCusps_ne_bot`: it is nontrivial if `U_Ω` has at least two cusps;
+* `fillElemOp`: the operation `Π_U ⇝ Π_{U'}` of type `•` (`fillElemOp_kind`).
 -/
 
 open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
@@ -145,48 +145,79 @@ lemma range_conj_geomToPi (g : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec 
     rw [hγ]
     group
 
-variable (h3 : 2 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)))
-
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
-include h3 in
-/-- **The cuspidal inertia groups of `π₁ᵉᵗ(U_Ω)`** are nontrivial and commensurably terminal
-([AbsTopI] Lemma 4.1 (i)), if `U_Ω` has at least three cusps. -/
-lemma geomCusps_ne_bot_and_commensurator {I₀} (hI₀ : I₀ ∈ geomCusps Ω C) :
-    I₀ ≠ ⊥ ∧ Subgroup.Commensurable.commensurator I₀ = I₀ := by
+omit [Algebra.IsAlgebraic K Ω] in
+/-- **The cuspidal inertia groups of `π₁ᵉᵗ(U_Ω)` are commensurably terminal** ([AbsTopI]
+Lemma 4.1 (i)): `U_Ω` is hyperbolic, so it has at least three cusps or genus at least one. -/
+lemma geomCusps_commensurator {I₀} (hI₀ : I₀ ∈ geomCusps Ω C) :
+    Subgroup.Commensurable.commensurator I₀ = I₀ := by
   obtain ⟨W, hkW, hWU, rfl⟩ := hI₀
   have hfin := compl_finite_baseChangeOpen K Ω C.nonempty
-  exact ⟨cuspInertia_ne_bot (geomData Ω C) (geomCurve Ω C)
-      (curveEquivL Ω (transcendental_geomCoord Ω C)) (curveGaloisData_H_le Ω _)
-      (curveEquivL_algebraMap Ω _) (curveEquivL_τ Ω _) hfin (lt_trans one_lt_two h3) hkW hWU,
-    commensurator_cuspInertia (geomData Ω C) (geomCurve Ω C)
-      (curveEquivL Ω (transcendental_geomCoord Ω C)) (curveGaloisData_H_le Ω _)
-      (curveEquivL_algebraMap Ω _) (curveEquivL_τ Ω _) hfin h3 hkW hWU⟩
+  have hhyp : 2 < 2 * (curveGenus Ω (geomCurve Ω C)).toNat +
+      Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)) :=
+    isHyperbolic_baseChange Ω C
+  refine commensurator_cuspInertia_of_hyperbolic (geomData Ω C) (geomCurve Ω C)
+    (curveEquivL Ω (transcendental_geomCoord Ω C)) (curveGaloisData_H_le Ω _)
+    (curveEquivL_algebraMap Ω _) (curveEquivL_τ Ω _) hfin ?_ hkW hWU
+  by_cases h3 : 2 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C))
+  · exact Or.inl h3
+  · exact Or.inr (by omega)
 
-include h3 in
-/-- **The cuspidal inertia groups of `Π_U` are nontrivial** (if `U_Ω` has at least three
-cusps). -/
-theorem arithCusps_ne_bot {I} (hI : I ∈ arithCusps Ω C hc) : I ≠ ⊥ := by
+omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+/-- The cuspidal inertia groups of `π₁ᵉᵗ(U_Ω)` are nontrivial if `U_Ω` has at least two cusps. -/
+lemma geomCusps_ne_bot
+    (h2 : 1 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)))
+    {I₀} (hI₀ : I₀ ∈ geomCusps Ω C) : I₀ ≠ ⊥ := by
+  obtain ⟨W, hkW, hWU, rfl⟩ := hI₀
+  exact cuspInertia_ne_bot (geomData Ω C) (geomCurve Ω C)
+    (curveEquivL Ω (transcendental_geomCoord Ω C)) (curveGaloisData_H_le Ω _)
+    (curveEquivL_algebraMap Ω _) (curveEquivL_τ Ω _)
+    (compl_finite_baseChangeOpen K Ω C.nonempty) h2 hkW hWU
+
+/-- **The cuspidal inertia groups of `Π_U` are nontrivial** if `U_Ω` has at least two cusps. -/
+theorem arithCusps_ne_bot
+    (h2 : 1 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)))
+    {I} (hI : I ∈ arithCusps Ω C hc) : I ≠ ⊥ := by
   obtain ⟨I₀, hI₀, g, rfl⟩ := hI
   have hψ : Function.Injective ((MulAut.conj g).toMonoidHom.comp (geomToPi Ω C hc)) :=
     (MulAut.conj g).injective.comp (geomToPi_injective Ω C hc)
   rw [Subgroup.map_map, Ne, Subgroup.map_eq_bot_iff_of_injective _ hψ]
-  exact (geomCusps_ne_bot_and_commensurator Ω C h3 hI₀).1
+  exact geomCusps_ne_bot Ω C h2 hI₀
 
-include h3 in
 /-- **A cuspidal inertia group of `Π_U` is its own commensurator in `Δ_U`** ([AbsTopI]
-Lemma 4.1 (i)), if `U_Ω` has at least three cusps. -/
+Lemma 4.1 (i)). -/
 theorem commensurator_inf_of_mem_arithCusps {I} (hI : I ∈ arithCusps Ω C hc) :
     Subgroup.Commensurable.commensurator I ⊓ (projGk Ω C hc).toMonoidHom.ker = I := by
   obtain ⟨I₀, hI₀, g, rfl⟩ := hI
   have hψ : Function.Injective ((MulAut.conj g).toMonoidHom.comp (geomToPi Ω C hc)) :=
     (MulAut.conj g).injective.comp (geomToPi_injective Ω C hc)
   rw [Subgroup.map_map, ← range_conj_geomToPi Ω C hc g]
-  exact commensurator_map_inf_range hψ (geomCusps_ne_bot_and_commensurator Ω C h3 hI₀).2
+  exact commensurator_map_inf_range hψ (geomCusps_commensurator Ω C hI₀)
 
 variable {U' : C.Xbar.Opens} (h : C.U ≤ U') (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
   (hyp : haveI := IsCurveOver.isIntegral K C.Xbar
     2 < 2 * Anabelian.curveGenus K C.Xbar + cuspDegree K C.Xbar U')
   {x : C.Xbar} (hxU' : x ∈ U') (hxU : x ∉ C.U) (hx : (U' : Set C.Xbar) \ C.U ⊆ {x})
+
+omit [NumberField K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+include h hc' hxU' hxU in
+/-- If `U ⊊ U'` and `U'` has a cusp, then `U_Ω` has at least two geometric cusps. -/
+lemma one_lt_card_geomOpen_compl :
+    1 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)) := by
+  have hfin := compl_finite_baseChangeOpen K Ω C.nonempty
+  obtain ⟨z, hz⟩ := compl_nonempty_baseChangeOpen (k := K) (Ω := Ω) hc'
+  obtain ⟨y, hy⟩ := Scheme.Pullback.exists_preimage_pullback (f := C.Xbar ↘ Spec (.of K))
+    (g := specAlgebraMap K Ω) x (Classical.arbitrary _) (Subsingleton.elim _ _)
+  have hyU' : y ∈ baseChangeOpen K Ω U' := by
+    change (pullback.fst (C.Xbar ↘ Spec (.of K)) (specAlgebraMap K Ω)) y ∈ U'
+    rw [hy.1]
+    exact hxU'
+  have hyU : y ∉ geomOpen Ω C := by
+    change (pullback.fst (C.Xbar ↘ Spec (.of K)) (specAlgebraMap K Ω)) y ∉ C.U
+    rw [hy.1]
+    exact hxU
+  have hzU : z ∉ geomOpen Ω C := fun hz' ↦ hz (baseChangeOpen_mono K Ω h hz')
+  rw [Nat.card_coe_set_eq, Set.one_lt_ncard_iff hfin]
+  exact ⟨y, z, hyU, hzU, fun hyz ↦ hz (hyz ▸ hyU')⟩
 
 include hc' hxU' hxU hx in
 lemma exists_fillCusp : ∃ I ∈ arithCusps Ω C hc, (fillMap Ω C hc h).toMonoidHom.ker =
@@ -208,16 +239,16 @@ lemma ker_fillMap_eq_fillCusp : (fillMap Ω C hc h).toMonoidHom.ker =
       Set (arithmeticExt Ω C hc).Pi)).topologicalClosure :=
   (exists_fillCusp Ω C hc h hc' hxU' hxU hx).choose_spec.2
 
-include h3 in
 /-- `fillCusp` is a cuspidal decomposition group in `Δ_U` ([AbsTopI] Definition 4.2 (iii),
 (3Π)). -/
 lemma isCuspidal_fillCusp :
     (ChainObj.base (arithmeticExt Ω C hc)).IsCuspidal (fillCusp Ω C hc h hc' hxU' hxU hx) := by
   refine ⟨fillCusp Ω C hc h hc' hxU' hxU hx, fillCusp_mem Ω C hc h hc' hxU' hxU hx, ?_, ?_⟩
   · rw [ChainObj.image_base]
-    exact arithCusps_ne_bot Ω C hc h3 (fillCusp_mem Ω C hc h hc' hxU' hxU hx)
+    exact arithCusps_ne_bot Ω C hc (one_lt_card_geomOpen_compl Ω C h hc' hxU' hxU)
+      (fillCusp_mem Ω C hc h hc' hxU' hxU hx)
   · rw [ChainObj.image_base]
-    exact (commensurator_inf_of_mem_arithCusps Ω C hc h3
+    exact (commensurator_inf_of_mem_arithCusps Ω C hc
       (fillCusp_mem Ω C hc h hc' hxU' hxU hx)).symm
 
 /-- `fillCusp` lies in a normal open torsion-free subgroup of `Δ_U`. -/
@@ -228,35 +259,16 @@ lemma inTorsionFreeNormalOpen_fillCusp :
     (arithCusps_le Ω C hc (fillCusp_mem Ω C hc h hc' hxU' hxU hx))
 
 /-- **Filling in a cusp is an elementary operation of type `•`** ([AbsTopI] Definition 4.2 (iii)
-(c)): for `U' = U ∪ {x}` (`x` a closed point of `X̄`) with `(X̄, U')` hyperbolic with a cusp, and
-`U_Ω` with at least three cusps, `fillMap : Π_U ↠ Π_{U'}` with the cuspidal decomposition group
-`fillCusp`. -/
+(c)): for `U' = U ∪ {x}` (`x` a closed point of `X̄`) with `(X̄, U')` hyperbolic with a cusp,
+`fillMap : Π_U ↠ Π_{U'}` with the cuspidal decomposition group `fillCusp`. -/
 def fillElemOp :
     ElemOp (ChainObj.base (arithmeticExt Ω C hc)) (fillChainObj Ω C hc h hc' hyp) :=
   .decusp (fillMap Ω C hc h) (fillMap_surjective Ω C hc h hc')
-    (fillCusp Ω C hc h hc' hxU' hxU hx) (isCuspidal_fillCusp Ω C hc h3 h hc' hxU' hxU hx)
+    (fillCusp Ω C hc h hc' hxU' hxU hx) (isCuspidal_fillCusp Ω C hc h hc' hxU' hxU hx)
     (inTorsionFreeNormalOpen_fillCusp Ω C hc h hc' hxU' hxU hx)
     (ker_fillMap_eq_fillCusp Ω C hc h hc' hxU' hxU hx) (fillMap_compat Ω C hc h hc' hyp)
 
-lemma fillElemOp_kind : (fillElemOp Ω C hc h3 h hc' hyp hxU' hxU hx).kind = .decusp := rfl
-
-omit h3
-
-omit [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
-/-- `U_Ω` has at least three cusps if `Σ_{c ∉ U} [κ(c) : K] > 2`. -/
-lemma two_lt_card_geomOpen_compl (h3' : 2 < cuspDegree K C.Xbar C.U) :
-    2 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)) := by
-  rw [card_compl_eq_cuspDegree_of_isCurveOver K Ω C.U C.nonempty]
-  exact h3'
-
-/-- `fillElemOp` under the hypothesis `2 < Σ_{c ∉ U} [κ(c) : K]` (`U` has cusps of total degree
-at least three). -/
-def fillElemOp' (h3' : 2 < cuspDegree K C.Xbar C.U) :
-    ElemOp (ChainObj.base (arithmeticExt Ω C hc)) (fillChainObj Ω C hc h hc' hyp) :=
-  fillElemOp Ω C hc (two_lt_card_geomOpen_compl Ω C h3') h hc' hyp hxU' hxU hx
-
-lemma fillElemOp'_kind (h3' : 2 < cuspDegree K C.Xbar C.U) :
-    (fillElemOp' Ω C hc h hc' hyp hxU' hxU hx h3').kind = .decusp := rfl
+lemma fillElemOp_kind : (fillElemOp Ω C hc h hc' hyp hxU' hxU hx).kind = .decusp := rfl
 
 end Arith
 
