@@ -257,8 +257,9 @@ set_option maxHeartbeats 1000000 in
 set_option synthInstance.maxHeartbeats 100000 in
 -- unification of `ContH1` terms over `Gal(κ(A)/k_x)` is slow (coercion of `k_x` to a type)
 /-- **[AbsTopIII] Prop. 1.8(i), "if", for NF-curves**: if `η ∈ P_U` restricts trivially to an
-NF-point `x₁` and nontrivially to a closed point `x₂` (`[k_{x_i} : k] < ∞`), then `η` is the Kummer class of a nonconstant
-NF-rational function. Applied to a positive multiple `η†` of a class this is (i). -/
+NF-point `x₁` and nontrivially to a closed point `x₂` (`[k_{x_i} : k] < ∞`), then `η` is the
+Kummer class of a nonconstant NF-rational function. Applied to a positive multiple `η†` of a
+class this is (i). -/
 theorem exists_eq_kummerMapZHat_of_restrictClosed
     (htf : IsTorallyKummerFaithful k) (hJ : IsKummerFaithfulJac D)
     (hkF : ∀ x : F D, IsAlgebraic k x → x ∈ Set.range (algebraMap k (F D))) (hHL : D.HL = D.H)
