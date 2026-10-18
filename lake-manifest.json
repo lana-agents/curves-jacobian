@@ -19,10 +19,10 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "dabc152114e6091a4c786bb8ec8651314de09d54",
+   "rev": "11be7fe8c0748b63df4ff2b5fc58f6686e17a57f",
    "name": "\u00abcontinuous-kummer-theory\u00bb",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "dabc152114e6091a4c786bb8ec8651314de09d54",
+   "inputRev": "11be7fe8c0748b63df4ff2b5fc58f6686e17a57f",
    "inherited": false,
    "configFile": "lakefile.toml"
   },

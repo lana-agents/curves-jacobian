@@ -91,9 +91,11 @@ import CurvesJacobian.Galois.PicTorsionCount
 import CurvesJacobian.Galois.SmoothDescent
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.MiddleExact
+import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PointRestriction
 import CurvesJacobian.Kummer.RationalCharacterization
