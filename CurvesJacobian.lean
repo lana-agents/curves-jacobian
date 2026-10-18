@@ -118,11 +118,13 @@ import CurvesJacobian.Picard.ModulesGlue
 import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OpenSubfunctorLocal
 import CurvesJacobian.Picard.OverSigma
+import CurvesJacobian.Picard.OverSigmaRep
 import CurvesJacobian.Picard.OverSigmaSheaf
 import CurvesJacobian.Picard.OverSigmaSheafSmall
 import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PerfectOpen
 import CurvesJacobian.Picard.PicDegree
+import CurvesJacobian.Picard.PicDegreeAdd
 import CurvesJacobian.Picard.PicDegreeDivisor
 import CurvesJacobian.Picard.PicDegreeTranslate
 import CurvesJacobian.Picard.PicDegreeZero
@@ -137,6 +139,7 @@ import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicLocTriv
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
+import CurvesJacobian.Picard.PicScheme
 import CurvesJacobian.Picard.PicSigma
 import CurvesJacobian.Picard.PicSigmaCurve
 import CurvesJacobian.Picard.PicSigmaCurveOpen

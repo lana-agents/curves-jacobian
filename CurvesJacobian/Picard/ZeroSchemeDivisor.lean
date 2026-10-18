@@ -257,6 +257,20 @@ theorem one_tmul_res_ne_zero (L : (XT).Modules) [L.IsInvertible] (hL : FCond π 
   rw [TensorProduct.prodRight_tmul, map_zero]
   exact Prod.ext (key i hi 0) (key i hi 1)
 
+omit [PerfectField k] [IsCurveOver k C] [IsFinite π] [IsAffine T] in
+/-- `s₀` does not vanish in any fibre on any chart: `1 ⊗ s₀|_{U_i} ≠ 0` in
+`K ⊗_{Γ(T)} Γ(L, U_i)` for every field `K` over `Γ(T)`. This is the hypothesis under which the
+zero scheme of `s₀` is a relative effective Cartier divisor (`zeroSchemeDivisor`). -/
+def FibreNonzero (L : (XT).Modules) (s₀ : Γ(L, ⊤)) : Prop :=
+  ∀ (K : Type u) [Field K] [Algebra Γ(T, ⊤) K] (i : Fin 2),
+    (1 : K) ⊗ₜ[Γ(T, ⊤)] rs L (le_top : 𝒰 i ≤ ⊤) s₀ ≠ 0
+
+/-- A generating section of `Ȟ⁰(L)` for `L` in the `F`-locus is nonzero in every fibre. -/
+theorem fibreNonzero_of_span (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
+    (s₀ : Γ(L, ⊤))
+    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤) :
+    FibreNonzero π L s₀ := fun K _ _ i ↦ one_tmul_res_ne_zero π L hL s₀ hs K i
+
 section Chart
 
 attribute [local instance] chartAlgebra
@@ -266,31 +280,28 @@ lemma isScalarTower_chart (i : Fin 2) : IsScalarTower Γ(T, ⊤) Γ(T, ⊤)[X] �
   IsScalarTower.of_algebraMap_eq fun _ ↦ (Polynomial.aeval_C _ _).symm
 
 /-- The fibre hypothesis of `FibreFlat` for `s₀|_{U_i}`. -/
-theorem injective_lTensor_chart (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
-    (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤)
+theorem injective_lTensor_chart (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀)
     (i : Fin 2) (p : Ideal Γ(T, ⊤)) [p.IsPrime] :
     Function.Injective ((FibreFlat.smulS (A := Γ(T, ⊤)) (R := Γ(XT, 𝒰 i))
       (rs L (le_top : 𝒰 i ≤ ⊤) s₀)).lTensor p.ResidueField) := by
   haveI := Scheme.Modules.projective_sections L (isAffineOpen_chart (T₀ := T) π i)
   haveI := isDomain_tensor_chart (T₀ := T) π i p.ResidueField
-  exact FibreFlat.injective_lTensor_of_isDomain _ _ (one_tmul_res_ne_zero π L hL s₀ hs _ i)
+  exact FibreFlat.injective_lTensor_of_isDomain _ _ (hne _ i)
 
 /-- `s₀|_{U_i}` is a nonzerodivisor. -/
-theorem smul_injective_chart (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
-    (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤)
+theorem smul_injective_chart (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀)
     (i : Fin 2) : Function.Injective fun r : Γ(XT, 𝒰 i) ↦ r • rs L (le_top : 𝒰 i ≤ ⊤) s₀ := by
   haveI := isScalarTower_chart (T := T) π i
   haveI := finite_sections_chart (T₀ := T) π i
   haveI := projective_sections_chart (T₀ := T) π i
   haveI := invertible_sections L (isAffineOpen_chart (T₀ := T) π i)
-  exact FibreFlat.smul_injective_of_fibres _ (injective_lTensor_chart π L hL s₀ hs i)
+  exact FibreFlat.smul_injective_of_fibres _ (injective_lTensor_chart π L s₀ hne i)
 
 /-- `Γ(U_i) / c(s₀|_{U_i})` is flat over `Γ(T)`. -/
-theorem flat_quotient_chart (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
-    (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤)
+theorem flat_quotient_chart (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀)
     (i : Fin 2) : Module.Flat Γ(T, ⊤)
       (Γ(XT, 𝒰 i) ⧸ contentIdeal (R := Γ(XT, 𝒰 i)) (rs L (le_top : 𝒰 i ≤ ⊤) s₀)) := by
   haveI := isScalarTower_chart (T := T) π i
@@ -298,16 +309,15 @@ theorem flat_quotient_chart (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (
   haveI := projective_sections_chart (T₀ := T) π i
   haveI := invertible_sections L (isAffineOpen_chart (T₀ := T) π i)
   exact flat_quotient_contentIdeal _
-    (FibreFlat.flat_quotient_of_fibres _ (injective_lTensor_chart π L hL s₀ hs i))
+    (FibreFlat.flat_quotient_of_fibres _ (injective_lTensor_chart π L s₀ hne i))
 
 end Chart
 
 open Scheme.Modules in
 /-- **`s₀` is a nonzerodivisor on every open** of `C ×_k T`: this is local, and on a basic open
 inside a chart it follows from `smul_injective_chart` by localization. -/
-theorem eq_zero_of_smul_eq_zero (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
-    (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤)
+theorem eq_zero_of_smul_eq_zero (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀)
     (V : (XT).Opens) (r : Γ(XT, V)) (h : r • rs L (le_top : V ≤ ⊤) s₀ = 0) : r = 0 := by
   refine sheaf_eq_of_locally_eq (XT).sheaf r 0 fun x hx ↦ ?_
   obtain ⟨i, hi⟩ : ∃ i : Fin 2, x ∈ 𝒰 i := by
@@ -322,7 +332,7 @@ theorem eq_zero_of_smul_eq_zero (L : (XT).Modules) [L.IsInvertible] (hL : FCond 
   haveI := isQuasicoherent_of_isInvertible L
   haveI := L.isLocalizedModule_resBasicOpen hU f
   have hreg : ∀ r : Γ(XT, 𝒰 i), r • rs L (le_top : 𝒰 i ≤ ⊤) s₀ = 0 → r = 0 := fun r hr ↦
-    smul_injective_chart π L hL s₀ hs i (by simp only [hr, zero_smul])
+    smul_injective_chart π L s₀ hne i (by simp only [hr, zero_smul])
   change (XT).presheaf.map (homOfLE hfV).op r = (XT).presheaf.map (homOfLE hfV).op 0
   rw [map_zero]
   refine smul_eq_zero_of_isLocalizedModule (f := f) (L.resBasicOpen f) hreg _ ?_
@@ -344,9 +354,8 @@ lemma exists_mem_chart (x : ↥(XT)) : ∃ i : Fin 2, x ∈ 𝒰 i := by
 (Stacks, Lemma 44.6.4, Tag 0B9X): if `L` satisfies the `F`-condition and `Ȟ⁰(L)` is generated
 by the image of `s₀ ∈ Γ(X_T, L)`, the zero scheme of `s₀` is a relative effective Cartier
 divisor on `X_T = C ×_k T` over `T`. -/
-def zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ Sk) L)
-    (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤) :
+def zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀) :
     RelEffCartier (pullback.snd (C ↘ Sk) (T ↘ Sk)) where
   ideal := Scheme.Modules.zeroIdeal L s₀
   locally_principal x := by
@@ -362,7 +371,7 @@ def zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ 
     have hab' : t * a = t * b := hab
     have h0 : (a - b) • rs L (le_top : W.1 ≤ ⊤) s₀ = 0 := by
       rw [← ht, smul_smul, sub_mul, mul_comm a t, mul_comm b t, hab', sub_self, zero_smul]
-    exact sub_eq_zero.mp (eq_zero_of_smul_eq_zero π L hL s₀ hs W.1 (a - b) h0)
+    exact sub_eq_zero.mp (eq_zero_of_smul_eq_zero π L s₀ hne W.1 (a - b) h0)
   flat := by
     apply Scheme.IdealSheafData.flat_of_flat_quotient
     intro x _
@@ -374,7 +383,7 @@ def zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (hL : FCond π (T ↘ 
         algebraMap Γ(T, ⊤) (Γ(XT, 𝒰 i) ⧸
           contentIdeal (R := Γ(XT, 𝒰 i)) (rs L (le_top : 𝒰 i ≤ ⊤) s₀)) := rfl
     rw [key]
-    exact RingHom.flat_algebraMap_iff.mpr (flat_quotient_chart π L hL s₀ hs i)
+    exact RingHom.flat_algebraMap_iff.mpr (flat_quotient_chart π L s₀ hne i)
 
 omit [PerfectField k] [IsCurveOver k C] [IsFinite π] [IsAffine T] in
 lemma injective_smul_of_eq_zero {L : (XT).Modules} {s₀ : Γ(L, ⊤)} {V : (XT).Opens}
@@ -390,20 +399,21 @@ theorem degree_zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (hL : FCond
     (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤)
     (t : ↥T) :
     haveI := IsCurveOver.isIntegral k C
-    ((zeroSchemeDivisor π L hL s₀ hs).degree t : ℤ) = curveGenus k C := by
+    ((zeroSchemeDivisor π L s₀ (fibreNonzero_of_span π L hL s₀ hs)).degree t : ℤ) =
+      curveGenus k C := by
   refine degree_zeroScheme_eq_curveGenus π (T ↘ Sk) L s₀ _
-    (injective_smul_of_eq_zero (eq_zero_of_smul_eq_zero π L hL s₀ hs _)) hL.1 (fun x ↦ ?_)
+    (injective_smul_of_eq_zero (eq_zero_of_smul_eq_zero π L s₀
+      (fibreNonzero_of_span π L hL s₀ hs) _)) hL.1 (fun x ↦ ?_)
     (fun _ _ _ ↦ rfl) t
   obtain ⟨a, ha⟩ := Submodule.mem_span_singleton.mp (hs ▸ Submodule.mem_top : x ∈ _)
   exact ⟨a, by rw [← ha]; rfl⟩
 
 /-- The zero scheme of a generating section of `L` has class `[L]`. -/
-theorem picClass_zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible]
-    (hL : FCond π (T ↘ Sk) L) (s₀ : Γ(L, ⊤))
-    (hs : Submodule.span Γ(T, ⊤) {globalSectionsEquivH0 T L (chartOf_sup π (T ↘ Sk)) s₀} = ⊤) :
-    (zeroSchemeDivisor π L hL s₀ hs).picClass = Scheme.Pic.mk L :=
+theorem picClass_zeroSchemeDivisor (L : (XT).Modules) [L.IsInvertible] (s₀ : Γ(L, ⊤))
+    (hne : FibreNonzero π L s₀) :
+    (zeroSchemeDivisor π L s₀ hne).picClass = Scheme.Pic.mk L :=
   RelEffCartier.picClass_eq_of_ideal_eq_zeroIdeal _ L s₀
-    (fun U ↦ injective_smul_of_eq_zero (eq_zero_of_smul_eq_zero π L hL s₀ hs U.1)) rfl
+    (fun U ↦ injective_smul_of_eq_zero (eq_zero_of_smul_eq_zero π L s₀ hne U.1)) rfl
 
 end Curve
 
@@ -437,8 +447,8 @@ theorem exists_relEffCartier_of_cyclic (g : T ⟶ Sk) (L : (pullback (C ↘ Sk) 
   have hs₀ : Submodule.span Γ(T, ⊤) {E (E.symm s)} = ⊤ := by
     rw [LinearEquiv.apply_symm_apply]
     exact hs
-  exact ⟨zeroSchemeDivisor π L' hL' (E.symm s) hs₀, degree_zeroSchemeDivisor π L' hL' _ hs₀,
-    picClass_zeroSchemeDivisor π L' hL' _ hs₀⟩
+  exact ⟨zeroSchemeDivisor π L' (E.symm s) (fibreNonzero_of_span π L' hL' _ hs₀),
+    degree_zeroSchemeDivisor π L' hL' _ hs₀, picClass_zeroSchemeDivisor π L' _ _⟩
 
 end Main
 
