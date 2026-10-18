@@ -22,6 +22,7 @@ import CurvesJacobian.Cusp.ChainPush
 import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
+import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37c
 import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
@@ -90,6 +91,7 @@ import CurvesJacobian.Cusp.P1Curve
 import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
 import CurvesJacobian.Cusp.PlaceTransitivity
+import CurvesJacobian.Cusp.PullbackCover
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Cusp.SingleCusp
