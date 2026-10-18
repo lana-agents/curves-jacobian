@@ -124,6 +124,7 @@ import CurvesJacobian.Kummer.CompletionDescent
 import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
+import CurvesJacobian.Kummer.JacobianTorsion
 import CurvesJacobian.Kummer.MiddleExact
 import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.NFCharacterization
