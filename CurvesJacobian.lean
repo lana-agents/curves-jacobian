@@ -131,6 +131,7 @@ import CurvesJacobian.Picard.HilbAffineScheme
 import CurvesJacobian.Picard.HilbAffineUniv
 import CurvesJacobian.Picard.HilbCurve
 import CurvesJacobian.Picard.HilbGlue
+import CurvesJacobian.Picard.HilbLft
 import CurvesJacobian.Picard.HilbSch
 import CurvesJacobian.Picard.HilbSheaf
 import CurvesJacobian.Picard.IdealSheaf
@@ -140,6 +141,7 @@ import CurvesJacobian.Picard.LocIso
 import CurvesJacobian.Picard.LocIsoOpen
 import CurvesJacobian.Picard.ModulesGlue
 import CurvesJacobian.Picard.OpenSubfunctor
+import CurvesJacobian.Picard.OpenSubfunctorIso
 import CurvesJacobian.Picard.OpenSubfunctorLocal
 import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.OverSigmaRep
@@ -147,6 +149,7 @@ import CurvesJacobian.Picard.OverSigmaSheaf
 import CurvesJacobian.Picard.OverSigmaSheafSmall
 import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PerfectOpen
+import CurvesJacobian.Picard.PicDegScheme
 import CurvesJacobian.Picard.PicDegree
 import CurvesJacobian.Picard.PicDegreeAdd
 import CurvesJacobian.Picard.PicDegreeDivisor
@@ -160,6 +163,7 @@ import CurvesJacobian.Picard.PicFOpen
 import CurvesJacobian.Picard.PicFRep
 import CurvesJacobian.Picard.PicFSub
 import CurvesJacobian.Picard.PicGroup
+import CurvesJacobian.Picard.PicLft
 import CurvesJacobian.Picard.PicLocTriv
 import CurvesJacobian.Picard.PicMap
 import CurvesJacobian.Picard.PicRigid
