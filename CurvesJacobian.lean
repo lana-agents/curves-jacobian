@@ -72,6 +72,9 @@ import CurvesJacobian.Galois.PicTorsionCount
 import CurvesJacobian.Galois.SmoothDescent
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Kummer.ConstantExtension
+import CurvesJacobian.Kummer.MiddleExact
+import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap
