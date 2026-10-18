@@ -29,6 +29,7 @@ import CurvesJacobian.Galois.MaxSpecBaseChange
 import CurvesJacobian.Galois.NewCoordinate
 import CurvesJacobian.Galois.PiCharacters
 import CurvesJacobian.Galois.PicTorsion
+import CurvesJacobian.Galois.PicTorsionCount
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Picard.AbelMap
