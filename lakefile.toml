@@ -39,7 +39,7 @@ rev = "1f01e28501d2a0a5fd6851ac26f25fd0c7783cdd"
 [[require]]
 name = "continuous-kummer-theory"
 git = "https://github.com/lana-agents/continuous-kummer-theory"
-rev = "f85f126242dba33abc6dcd8372b44cf826845be0"
+rev = "dabc152114e6091a4c786bb8ec8651314de09d54"
 
 # Two-set Čech complexes (`TwoCech`, `SchemeTwoCech`) for cohomology of curves.
 [[require]]
