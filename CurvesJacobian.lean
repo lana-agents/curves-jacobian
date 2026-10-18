@@ -19,6 +19,7 @@ import CurvesJacobian.Cusp.InertiaNontrivial
 import CurvesJacobian.Cusp.KaehlerLocal
 import CurvesJacobian.Cusp.PlaceTransitivity
 import CurvesJacobian.Cusp.RationalPlace
+import CurvesJacobian.Cusp.SingleCusp
 import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
