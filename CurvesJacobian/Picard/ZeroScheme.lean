@@ -24,6 +24,9 @@ it is compatible with restriction to basic opens since `Γ(L, U)` is finitely pr
 * `Scheme.Modules.zeroIdeal_iso`, `Scheme.Modules.zeroIdeal_smul`.
 * `RelEffCartier.zeroIdeal_canonicalSection`: the zero scheme of the canonical section of
   `𝒪_X(D)` is `D` (used in Stacks, Lemma 44.6.4, Tag 0B9X).
+* `Scheme.Modules.zeroIdealSheafIsoDual`: if `s` is a nonzerodivisor on every affine open, the
+  ideal sheaf of `Z(s)` is `L^∨` (via `φ ↦ φ(s)`); hence a relative effective Cartier divisor
+  with ideal `Z(s)` has class `[L]` (`RelEffCartier.picClass_eq_of_ideal_eq_zeroIdeal`).
 -/
 
 open CategoryTheory MonoidalCategory Limits Opposite TopologicalSpace
@@ -171,6 +174,132 @@ theorem zeroIdeal_canonicalSection :
   exact D.zeroIdeal_canonicalSection_ideal (hI x) (hg x)
 
 end RelEffCartier
+
+namespace Scheme.Modules
+
+variable {X : Scheme.{u}} (L : X.Modules) [L.IsInvertible] (s : Γ(L, ⊤))
+
+open Scheme.PresheafOfModules in
+/-- A dual section `φ` over `V`, as a linear form on `Γ(L, V)`. -/
+def dualSecForm {U V : X.Opens} (φ : DualSec (toPre L) U) (h : V ≤ U) :
+    Module.Dual Γ(X, V) Γ(L, V) where
+  toFun := φ.toFun V h
+  map_add' := φ.map_add' V h
+  map_smul' := φ.map_smul' V h
+
+open Scheme.PresheafOfModules in
+lemma dualSec_apply_mem_zeroIdeal {U : X.Opens} (φ : DualSec (toPre L) U) (V : X.affineOpens)
+    (h : V.1 ≤ U) :
+    X.presheaf.map (homOfLE h).op (φ.toFun U le_rfl (L.presheaf.map (homOfLE le_top).op s)) ∈
+      (zeroIdeal L s).ideal V := by
+  have := φ.natural' U V.1 le_rfl h (L.presheaf.map (homOfLE le_top).op s)
+  change _ = X.presheaf.map (homOfLE h).op _ at this
+  rw [← this, zeroIdeal_ideal]
+  refine ⟨dualSecForm L φ (h.trans le_rfl), ?_⟩
+  change φ.toFun V.1 _ (L.presheaf.map (homOfLE le_top).op s) =
+    φ.toFun V.1 _ (L.presheaf.map (homOfLE h).op (L.presheaf.map (homOfLE le_top).op s))
+  exact congrArg _ (ModulesGlue.rs_rs L le_top h s).symm
+
+open Scheme.PresheafOfModules in
+/-- Evaluation at `s`, `L^∨ ⟶ I_{Z(s)}`, `φ ↦ φ(s)`, on presheaves. -/
+def dualEval : dualPre (toPre L) ⟶ (zeroIdeal L s).idealPre where
+  app U := ModuleCat.ofHom
+    { toFun := fun φ ↦ ⟨(φ : DualSec (toPre L) U.unop).toFun U.unop le_rfl
+          (L.presheaf.map (homOfLE le_top).op s),
+        fun V h ↦ dualSec_apply_mem_zeroIdeal L s φ V h⟩
+      map_add' := fun _ _ ↦ rfl
+      map_smul' := fun r φ ↦ Subtype.ext (by
+        change rres le_rfl r * _ = r * _
+        rw [rres_self]) }
+  naturality {U U'} g := by
+    ext φ
+    refine Subtype.ext ?_
+    change (φ : DualSec (toPre L) U.unop).toFun U'.unop (le_rfl.trans g.unop.le)
+        (L.presheaf.map (homOfLE le_top).op s) =
+      X.presheaf.map g (φ.toFun U.unop le_rfl (L.presheaf.map (homOfLE le_top).op s))
+    have hn := φ.natural' U.unop U'.unop le_rfl g.unop.le (L.presheaf.map (homOfLE le_top).op s)
+    refine Eq.trans ?_ hn
+    exact congrArg _ (ModulesGlue.rs_rs L le_top g.unop.le s).symm
+
+lemma dualEval_app_coe {U : X.Opens}
+    (φ : (Scheme.PresheafOfModules.dualPre (toPre L)).obj (op U)) :
+    (show (zeroIdeal L s).idealSub.obj (op U) from (dualEval L s).app (op U) φ).1 =
+      (φ : Scheme.PresheafOfModules.DualSec (toPre L) U).toFun U le_rfl
+        (L.presheaf.map (homOfLE le_top).op s) :=
+  rfl
+
+/-- If `s` is a nonzerodivisor on every affine open, the evaluation `L^∨ ⟶ I_{Z(s)}` at `s`
+is an isomorphism after sheafification. -/
+lemma isIso_sheafify_dualEval
+    (hs : ∀ U : X.affineOpens, Function.Injective fun r : Γ(X, U.1) ↦
+      r • L.presheaf.map (homOfLE (le_top : U.1 ≤ ⊤)).op s) :
+    IsIso ((sheafify X).map (dualEval L s)) := by
+  apply isIso_of_isBasisOn
+  intro x
+  obtain ⟨W, e, hxW, he⟩ := IsInvertible.exists_basis (L := L) x
+  obtain ⟨_, ⟨U, hU, rfl⟩, hxU, hUW⟩ :=
+    X.isBasis_affineOpens.exists_subset_of_mem_open hxW W.2
+  let U' : X.affineOpens := ⟨U, hU⟩
+  have he' : L.IsBasisOn U (ModulesGlue.rs L hUW e) := ModulesGlue.isBasisOn_rs he hUW
+  set e' := ModulesGlue.rs L hUW e
+  obtain ⟨t, ht⟩ := ModulesGlue.exists_smul_eq_of_isBasisOn he'
+    (L.presheaf.map (homOfLE le_top).op s)
+  have hI : (zeroIdeal L s).ideal U' = Ideal.span {t} :=
+    zeroIdeal_ideal_of_isBasisOn L s (U := U') he' ht.symm
+  have htreg : IsSMulRegular Γ(X, U) t := by
+    intro r₁ r₂ h
+    apply hs U'
+    change r₁ • L.presheaf.map (homOfLE le_top).op s = r₂ • L.presheaf.map (homOfLE le_top).op s
+    rw [← ht, smul_smul, smul_smul, mul_comm r₁, mul_comm r₂]
+    exact congrArg (· • e') h
+  have hb := isBasisOn_sheafify _ (Scheme.PresheafOfModules.isBasisOn_dualBasis he'.toPre)
+  refine ⟨U, _, hxU, hb, ?_⟩
+  have hev : (dualEval L s).app (op U) (Scheme.PresheafOfModules.dualBasis he'.toPre) =
+      ⟨t, ((zeroIdeal L s).mem_idealSub_iff_of_isAffine U' t).mpr
+        (hI ▸ Ideal.mem_span_singleton_self t)⟩ := by
+    refine Subtype.ext ?_
+    rw [dualEval_app_coe]
+    exact Scheme.PresheafOfModules.coord_eq he'.toPre le_rfl _ _ (by
+      rw [Scheme.PresheafOfModules.res_self]
+      exact ht)
+  have hnat := congr_arg (fun η ↦ η.app (op U) (Scheme.PresheafOfModules.dualBasis he'.toPre))
+    ((PresheafOfModules.sheafificationAdjunction.{u} (𝟙 X.ringCatSheaf.obj)).unit.naturality
+      (dualEval L s))
+  have hB := IdealSheafData.isBasisOn_idealSheaf (I := zeroIdeal L s) hI htreg
+  have h3 : ((sheafify X).map (dualEval L s)).app U
+      ((toSheafify (Scheme.PresheafOfModules.dualPre (toPre L))).app (op U)
+        (Scheme.PresheafOfModules.dualBasis he'.toPre)) =
+      (toSheafify (zeroIdeal L s).idealPre).app (op U)
+        ⟨t, ((zeroIdeal L s).mem_idealSub_iff_of_isAffine U' t).mpr
+          (hI ▸ Ideal.mem_span_singleton_self t)⟩ := by
+    refine hnat.symm.trans ?_
+    change (toSheafify _).app (op U) ((dualEval L s).app (op U) _) = _
+    rw [hev]
+  rw [h3]
+  exact hB
+
+/-- If `s` is a nonzerodivisor on every affine open, the ideal sheaf of the zero scheme of `s`
+is isomorphic to `L^∨`. -/
+def zeroIdealSheafIsoDual
+    (hs : ∀ U : X.affineOpens, Function.Injective fun r : Γ(X, U.1) ↦
+      r • L.presheaf.map (homOfLE (le_top : U.1 ≤ ⊤)).op s) :
+    (zeroIdeal L s).idealSheaf ≅ dual L :=
+  haveI := isIso_sheafify_dualEval L s hs
+  (asIso ((sheafify X).map (dualEval L s))).symm
+
+end Scheme.Modules
+
+/-- A relative effective Cartier divisor which is the zero scheme of a section `s` of an
+invertible sheaf `L` (with `s` a nonzerodivisor on affine opens) has class `[L]`. -/
+theorem RelEffCartier.picClass_eq_of_ideal_eq_zeroIdeal {X S : Scheme.{u}} {f : X ⟶ S}
+    (D : RelEffCartier f) (L : X.Modules) [L.IsInvertible] (s : Γ(L, ⊤))
+    (hs : ∀ U : X.affineOpens, Function.Injective fun r : Γ(X, U.1) ↦
+      r • L.presheaf.map (homOfLE (le_top : U.1 ≤ ⊤)).op s)
+    (hD : D.ideal = Modules.zeroIdeal L s) : D.picClass = Pic.mk L := by
+  have h : D.idealSheaf = (Modules.zeroIdeal L s).idealSheaf := by
+    rw [RelEffCartier.idealSheaf, hD]
+  rw [RelEffCartier.picClass_eq_neg,
+    Pic.mk_eq_of_iso (eqToIso h ≪≫ Modules.zeroIdealSheafIsoDual L s hs), Pic.mk_dual, neg_neg]
 
 end AlgebraicGeometry
 
