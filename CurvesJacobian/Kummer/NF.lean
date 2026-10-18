@@ -20,9 +20,11 @@ In `pi1`'s Galois model (`k̄ = kbar k Ω`, `F k̄ = F (baseChange D)` the funct
 * `CurvesJacobian.Kummer.NFModel D`: a **descent of `X_{k̄}` to `k̄_NF`**, i.e. a subfield
   `F_NF ⊆ F k̄` (the function field `k̄_NF(X_NF)`) containing `k̄_NF`, with `F_NF ∩ k̄ = k̄_NF` and
   `F_NF · k̄ = F k̄`, such that the cusps of `U = Spec R` (the places `W ⊇ k` with `t ∉ W`) descend
-  (`U` is an NF-curve). Since `k̄_NF` is algebraically closed, `F_NF` and `k̄` are linearly disjoint
-  over `k̄_NF`, so `F_NF ⊗_{k̄_NF} k̄ ≅ F k̄`: this is `X_{k̄} ≅ X_NF ×_{k̄_NF} k̄` on function
-  fields.
+  (`U` is an NF-curve), and `F_NF` has transcendence degree `≤ 1` (`X_NF` is a curve over
+  `k̄_NF`; this is what makes the restriction of an NF-point to `F_NF` a `k̄_NF`-rational point,
+  `NFModel.isAlgebraic_residue`). Since `k̄_NF` is algebraically closed, `F_NF` and `k̄` are
+  linearly disjoint over `k̄_NF`, so `F_NF ⊗_{k̄_NF} k̄ ≅ F k̄`: this is
+  `X_{k̄} ≅ X_NF ×_{k̄_NF} k̄` on function fields.
 * `CurvesJacobian.Kummer.NFModel.IsNFPoint`: a place `W` of `Ω` (a point of `X(k̄)`) is an NF-point
   if its restriction to `F_NF` is nontrivial, i.e. `W ∩ F k̄` lies over a (`k̄_NF`-rational) point
   of `X_NF`;
@@ -59,6 +61,9 @@ structure NFModel where
   /-- The cusps of `U` (places `W ⊇ k` with `t ∉ W`) are NF-points. -/
   cusp_nf : ∀ W : ValuationSubring Ω, (∀ c : k, algebraMap k Ω c ∈ W) → t ∉ W →
     ∃ g ∈ FNF, g ∉ W
+  /-- `X_NF` is a curve over `k̄_NF`: `F_NF` has transcendence degree `≤ 1` over `ℚ` (equivalently
+  over the algebraic extension `k̄_NF` of `ℚ`). -/
+  trdeg_le_one : Algebra.trdeg ℚ FNF ≤ 1
 
 namespace NFModel
 

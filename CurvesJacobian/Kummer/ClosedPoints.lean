@@ -174,7 +174,7 @@ section Residue
 
 universe u
 
-variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] (W : ValuationSubring Ω)
+variable {k : Type*} {Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] (W : ValuationSubring Ω)
   (hk : ∀ c : k, algebraMap k Ω c ∈ W) [Algebra k (ResidueField W)]
   (hkres : ∀ c : k, residue W ⟨algebraMap k Ω c, hk c⟩ = algebraMap k (ResidueField W) c)
 
