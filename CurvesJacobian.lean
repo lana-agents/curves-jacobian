@@ -44,10 +44,14 @@ import CurvesJacobian.Picard.CartierCriterion
 import CurvesJacobian.Picard.CartierCurve
 import CurvesJacobian.Picard.CechBaseChange
 import CurvesJacobian.Picard.CechLineBundle
+import CurvesJacobian.Picard.ChartBaseChange
+import CurvesJacobian.Picard.ChartDescent
+import CurvesJacobian.Picard.ChartMatrix
 import CurvesJacobian.Picard.ChartSheaf
 import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
+import CurvesJacobian.Picard.CurvePerfect
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
 import CurvesJacobian.Picard.FinrankFibre
@@ -72,6 +76,7 @@ import CurvesJacobian.Picard.OpenSubfunctor
 import CurvesJacobian.Picard.OverSigma
 import CurvesJacobian.Picard.OverSigmaSheaf
 import CurvesJacobian.Picard.OverSigmaSheafSmall
+import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicMap
