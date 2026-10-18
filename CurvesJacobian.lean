@@ -28,6 +28,7 @@ import CurvesJacobian.Cusp.Hyperbolic
 import CurvesJacobian.Cusp.Inertia
 import CurvesJacobian.Cusp.InertiaNontrivial
 import CurvesJacobian.Cusp.KaehlerLocal
+import CurvesJacobian.Cusp.NonRationalFill
 import CurvesJacobian.Cusp.PlaceTransitivity
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
