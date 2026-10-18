@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.ArithmeticSlim
+import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.CurveGaloisData
 import CurvesJacobian.Cusp.Hyperbolic
 import Belyi.Anabelian.Chain
@@ -82,13 +83,23 @@ def geomCusps : Set (Subgroup π₁ᵉᵗ(specPoint (geomData Ω C).L (FFClosure
   cusps (geomData Ω C) (geomCurve Ω C) (curveEquivL Ω (transcendental_geomCoord Ω C))
     (curveGaloisData_H_le Ω (transcendental_geomCoord Ω C)) (geomOpen Ω C)
 
-/-- A change of base point `π₁ᵉᵗ(U_Ω, generic point) ≃ₜ* π₁ᵉᵗ(U_Ω, x)` (canonical up to inner
-automorphisms). -/
+/-- An isomorphism of fibre functors of `U_Ω` from the generic geometric point to `x`
+(any two fibre functors of a Galois category are isomorphic). -/
+def basePointIso : fiber (specPoint (geomData Ω C).L (FFClosure (geomCurve Ω C)) ≫
+    genericL (geomData Ω C) (geomCurve Ω C) (curveEquivL Ω (transcendental_geomCoord Ω C))
+      (geomOpen Ω C)) ≅
+    fiber (basePoint Ω C hc ≫ (specTensorIsoBaseChangeOpen K Ω (isAffineOpen_U C hc)).hom) :=
+  (PreGaloisCategory.nonempty_iso_of_fiberFunctor _ _).some
+
+/-- The change of base point `π₁ᵉᵗ(U_Ω, generic point) ≃ₜ* π₁ᵉᵗ(U_Ω, x)` given by the
+isomorphism of fibre functors `basePointIso` (canonical up to inner automorphisms; it is
+compatible with the maps induced by morphisms of schemes,
+`AlgebraicGeometry.FiniteEtale.fundamentalGroupMap_autContinuousMulEquivOfIso`). -/
 def basePointEquiv : π₁ᵉᵗ(specPoint (geomData Ω C).L (FFClosure (geomCurve Ω C)) ≫
     genericL (geomData Ω C) (geomCurve Ω C) (curveEquivL Ω (transcendental_geomCoord Ω C))
       (geomOpen Ω C)) ≃ₜ*
     π₁ᵉᵗ(basePoint Ω C hc ≫ (specTensorIsoBaseChangeOpen K Ω (isAffineOpen_U C hc)).hom) :=
-  (nonempty_fundamentalGroup_continuousMulEquiv _ _).some
+  PreGaloisCategory.autContinuousMulEquivOfIso (basePointIso Ω C hc)
 
 /-- `π₁ᵉᵗ(U_Ω, generic point) → Δ ⊆ Π`: change of base point to `x`, then `Δ ≅ π₁ᵉᵗ(U_Ω, x)`. -/
 def geomToPi : π₁ᵉᵗ(specPoint (geomData Ω C).L (FFClosure (geomCurve Ω C)) ≫

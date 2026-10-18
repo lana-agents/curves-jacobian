@@ -5,7 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
-import CurvesJacobian.Galois.FiberFunctorIso
+import Pi1.FundamentalGroup.FiberFunctorIso
 import CurvesJacobian.Galois.ChartOfOpen
 import Belyi.Anabelian.LocAn
 

@@ -7,6 +7,7 @@ import CurvesJacobian.Cusp.ArithmeticExt
 import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
+import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.CurveGaloisData
 import CurvesJacobian.Cusp.CuspConj
 import CurvesJacobian.Cusp.CuspCount
@@ -39,7 +40,6 @@ import CurvesJacobian.Galois.CurveCharts
 import CurvesJacobian.Galois.CurveGaloisData
 import CurvesJacobian.Galois.EtalePi1
 import CurvesJacobian.Galois.EtalePi1Open
-import CurvesJacobian.Galois.FiberFunctorIso
 import CurvesJacobian.Galois.FunctionFieldF
 import CurvesJacobian.Galois.MaxSpecBaseChange
 import CurvesJacobian.Galois.NewCoordinate
