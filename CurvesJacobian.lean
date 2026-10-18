@@ -48,6 +48,7 @@ import CurvesJacobian.Galois.PicTorsion
 import CurvesJacobian.Galois.PicTorsionCount
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
+import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap
 import CurvesJacobian.Picard.BaseChangeSquare
@@ -98,6 +99,7 @@ import CurvesJacobian.Picard.PerfectOpen
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicFH0
 import CurvesJacobian.Picard.PicFOpen
+import CurvesJacobian.Picard.PicFRep
 import CurvesJacobian.Picard.PicFSub
 import CurvesJacobian.Picard.PicGroup
 import CurvesJacobian.Picard.PicLocTriv
