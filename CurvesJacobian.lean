@@ -43,6 +43,7 @@ import CurvesJacobian.Cusp.InertiaNontrivial
 import CurvesJacobian.Cusp.KaehlerLocal
 import CurvesJacobian.Cusp.LineAnalytic
 import CurvesJacobian.Cusp.LineBranch
+import CurvesJacobian.Cusp.LineCuspInertia
 import CurvesJacobian.Cusp.LineInertiaIso
 import CurvesJacobian.Cusp.LoopLift
 import CurvesJacobian.Cusp.NonRationalFill
