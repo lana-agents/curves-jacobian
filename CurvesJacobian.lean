@@ -11,8 +11,10 @@ import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BasePointChange
+import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
+import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
@@ -24,11 +26,13 @@ import CurvesJacobian.Cusp.CoverInstance
 import CurvesJacobian.Cusp.CoverNormalization
 import CurvesJacobian.Cusp.CoverOpen
 import CurvesJacobian.Cusp.CurveGaloisData
+import CurvesJacobian.Cusp.CurveInertiaIso
 import CurvesJacobian.Cusp.CuspCommensurable
 import CurvesJacobian.Cusp.CuspConj
 import CurvesJacobian.Cusp.CuspCount
 import CurvesJacobian.Cusp.CuspDegreeEq
 import CurvesJacobian.Cusp.CuspInertiaFacts
+import CurvesJacobian.Cusp.CuspSchreier
 import CurvesJacobian.Cusp.CuspTerminal
 import CurvesJacobian.Cusp.CuspTerminalFew
 import CurvesJacobian.Cusp.DecompositionInertia
