@@ -97,6 +97,7 @@ import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Cusp.SingleCusp
 import CurvesJacobian.Cusp.TorsionFree
+import CurvesJacobian.Cusp.TwistDGC
 import CurvesJacobian.Descent.GaloisAffine
 import CurvesJacobian.Descent.GaloisAlgebra
 import CurvesJacobian.Descent.GaloisHom
