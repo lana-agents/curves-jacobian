@@ -17,8 +17,10 @@ import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
 import CurvesJacobian.Cusp.CoverCuspDegree
+import CurvesJacobian.Cusp.CoverGaloisData
 import CurvesJacobian.Cusp.CoverGenus
 import CurvesJacobian.Cusp.CoverHypCurve
+import CurvesJacobian.Cusp.CoverInstance
 import CurvesJacobian.Cusp.CoverNormalization
 import CurvesJacobian.Cusp.CoverOpen
 import CurvesJacobian.Cusp.CurveGaloisData
