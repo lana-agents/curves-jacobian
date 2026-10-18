@@ -3,6 +3,11 @@ import CurvesJacobian.CommAlg.Depth
 import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
+import CurvesJacobian.Cusp.ArithmeticExt
+import CurvesJacobian.Cusp.ArithmeticPi1
+import CurvesJacobian.Cusp.ArithmeticSlim
+import CurvesJacobian.Cusp.BaseChange
+import CurvesJacobian.Cusp.CurveGaloisData
 import CurvesJacobian.Cusp.Inertia
 import CurvesJacobian.Cusp.InertiaNontrivial
 import CurvesJacobian.Etale.Gm

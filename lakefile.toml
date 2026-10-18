@@ -46,3 +46,10 @@ rev = "e3fc64c0b432779995121e138b6f65fc377242c8"
 name = "formal-schemes"
 git = "https://github.com/lana-agents/formal-schemes"
 rev = "e58ecf04554f14c8d1cc2753136f9d785525df5a"
+
+# Slimness of absolute Galois groups of number fields (`NumberField.centralizer_eq_bot_of_isOpen`,
+# Mathlib-only module; cj's continuous-kummer-theory pin takes precedence over LCFT's).
+[[require]]
+name = "local-class-field-theory"
+git = "https://github.com/lana-agents/local-class-field-theory"
+rev = "a6655a871f92138e486362f08f7df48204f3e985"
