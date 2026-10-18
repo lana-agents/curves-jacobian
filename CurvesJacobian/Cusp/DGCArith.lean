@@ -425,6 +425,31 @@ theorem eq_refl_of_isConjInduced_conj (hDGC : RelIsomDGC K)
       rfl⟩
   exact eq_of_isConjInduced_of_relIsomDGC Ω hDGC (conjCMEquiv t) ht hF (by simp) H Hid
 
+/-- **The rel-isom-DGC for isomorphisms lying over an inner automorphism of `G_K` coming from
+`Π_{U₂}`** (the semilinear case needed for conjugations inside chain objects): if
+`projGk ∘ φ = conj(projGk t) ∘ projGk` for some `t ∈ Π_{U₂}`, then `φ` is induced, up to a
+change of base point, by a `K`-isomorphism `Spec Γ(U₁) ≅ Spec Γ(U₂)` (apply the DGC to
+`conj(t)⁻¹ ∘ φ`). -/
+theorem exists_isConjInduced_of_relIsomDGC_conj {C₁ C₂ : HypCurve K}
+    {hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty} {hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty}
+    (hDGC : RelIsomDGC K)
+    (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
+      π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
+    (t : π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
+    (hφ : ∀ σ, projGk Ω C₂ hc₂ (φ σ) =
+      projGk Ω C₂ hc₂ t * projGk Ω C₁ hc₁ σ * (projGk Ω C₂ hc₂ t)⁻¹) :
+    ∃ F : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U),
+      F.hom ≫ sKU C₂ = sKU C₁ ∧ IsConjInduced F.hom φ := by
+  have hφ' : ∀ σ, projGk Ω C₂ hc₂ ((φ.trans (conjCMEquiv t⁻¹)) σ) = projGk Ω C₁ hc₁ σ :=
+    fun σ ↦ by
+      change projGk Ω C₂ hc₂ (t⁻¹ * φ σ * t⁻¹⁻¹) = _
+      rw [map_mul, map_mul, hφ, map_inv, inv_inv]
+      group
+  obtain ⟨F, hF, H⟩ := exists_isConjInduced_of_relIsomDGC Ω hDGC _ hφ'
+  refine ⟨F, hF, (H.conj t).congr_fun fun σ ↦ ?_⟩
+  change φ σ = t * (t⁻¹ * φ σ * t⁻¹⁻¹) * t⁻¹
+  group
+
 end Arith
 
 end CurvesJacobian.Cusp
