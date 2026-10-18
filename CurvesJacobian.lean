@@ -124,6 +124,7 @@ import CurvesJacobian.Picard.PushoutAlgebra
 import CurvesJacobian.Picard.QcohBaseChange
 import CurvesJacobian.Picard.QcohLocal
 import CurvesJacobian.Picard.QuasiFiniteCriterion
+import CurvesJacobian.Picard.RationalPointAlgebra
 import CurvesJacobian.Picard.RelEffCartier
 import CurvesJacobian.Picard.RelEffCartierBaseChange
 import CurvesJacobian.Picard.RelEffCartierCurve
@@ -138,7 +139,10 @@ import CurvesJacobian.Picard.RigidUnique
 import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.Tensor
+import CurvesJacobian.Picard.TensorSections
 import CurvesJacobian.Picard.TranslateRep
+import CurvesJacobian.Picard.TwistCech
+import CurvesJacobian.Picard.TwistCechAlgebra
 import CurvesJacobian.Picard.TwoCechInvertible
 import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Picard.ZeroScheme
