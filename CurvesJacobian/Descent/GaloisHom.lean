@@ -20,7 +20,8 @@ Let `L / k` be a finite Galois extension with group `G`, `A` an `L`-algebra with
 * `CurvesJacobian.GaloisDescent.mem_fixedAlg_pushout_iff`: `B^G = R`.
 * `CurvesJacobian.GaloisDescent.algebraMap_pushout_injective`: `R ⟶ B` is injective.
 * **`CurvesJacobian.GaloisDescent.equivariantHomEquiv`**: `G`-equivariant `L`-algebra maps
-  `A ⟶ B` correspond to `k`-algebra maps `A^G ⟶ R` (restriction to the invariants).
+  `A ⟶ B` correspond to `k`-algebra maps `A^G ⟶ R` (restriction to the invariants);
+  `bijective_extendInv`: the extension of a bijective `A^G ⟶ R` is bijective.
 * `CurvesJacobian.GaloisDescent.exists_comap_eq_of_comap_eq`: `G` acts transitively on the
   primes of `B` above a given prime of `R` (the fibres of `Spec B ⟶ Spec R` are `G`-orbits).
 -/

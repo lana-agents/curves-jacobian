@@ -22,8 +22,10 @@ semilinear action on `A` (`GalAction.ringAct`).
 * **`CurvesJacobian.GaloisDescent.affineDescentEquiv`**: for an affine `k`-scheme `T`, the
   `G`-equivariant `L`-morphisms `T_L ⟶ U` (`EqMor`) correspond to the `k`-morphisms
   `T ⟶ Spec A^G` (`descAff`); i.e. `Spec A^G` is the Galois descent of `U`.
-* `CurvesJacobian.GaloisDescent.eqMor_comp_eq`: the correspondence is induced by the universal
-  equivariant morphism `(Spec A^G)_L ⟶ U` (pull it back along `T ⟶ Spec A^G`).
+* `CurvesJacobian.GaloisDescent.affineDescentEquiv_pull`, `eq_pull_univEqMor`: the
+  correspondence is induced by the universal equivariant morphism `(Spec A^G)_L ⟶ U`
+  (`univEqMor`; pull it back along `T ⟶ Spec A^G`), which is an isomorphism
+  (`isIso_univEqMor`, Speiser).
 -/
 
 open CategoryTheory Limits Opposite AlgebraicGeometry
