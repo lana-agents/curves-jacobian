@@ -56,6 +56,7 @@ import CurvesJacobian.Picard.CechBaseChange
 import CurvesJacobian.Picard.CechLineBundle
 import CurvesJacobian.Picard.ChartBaseChange
 import CurvesJacobian.Picard.ChartDescent
+import CurvesJacobian.Picard.ChartFibre
 import CurvesJacobian.Picard.ChartMatrix
 import CurvesJacobian.Picard.ChartSheaf
 import CurvesJacobian.Picard.ContentIdeal
