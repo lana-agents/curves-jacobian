@@ -111,16 +111,16 @@ variable {k : Type u} [Field k] [IsAlgClosed k] [CharZero k] {X : Scheme.{u}} [I
   [X.Over (Spec (CommRingCat.of k))] [IsCurveOver k X] {f : X ⟶ P1 k} [IsFinite f]
 
 /-- The fibre count of `ℂ ⊗ B` over `a ∈ k` is the number of zeros of `x - a`. -/
-lemma fiberCard_algebraMap [Algebra k (ULift.{u} ℂ)] (hf : IsBelyiMap k f)
+lemma fiberCard_algebraMap [Algebra k (ULift.{u} ℂ)]
     (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k)) (a : k) :
-    fiberCard (ULift.{u} ℂ ⊗[k] lineCoverRing f) (1 ⊗ₜ hf.branchedData.t)
+    fiberCard (ULift.{u} ℂ ⊗[k] lineCoverRing f) (1 ⊗ₜ (lineCoverCoord f).t)
         (algebraMap k (ULift.{u} ℂ) a).down =
       Nat.card {Q : Place k X.functionField //
         0 < Q.ord (coordFun f hη - algebraMap k X.functionField a)} := by
-  rw [← card_maximalSpectrum_lineCover_eq hf hη hfk a]
-  exact card_maximalSpectrum_baseChange (Ω := ULift.{u} ℂ) hf.branchedData.t
-    hf.branchedData.finite a
+  rw [← card_maximalSpectrum_lineCover_eq hη hfk a]
+  exact card_maximalSpectrum_baseChange (Ω := ULift.{u} ℂ) (lineCoverCoord f).t
+    (lineCoverCoord f).finite a
 
 /-- **`π₁ᵉᵗ(X ∖ f⁻¹(∞))` is the completion of a free group of rank `2g + r - 1`** for a Belyi map
 `f` with `f⁻¹(∞) = D`, `r = |D|`. -/
@@ -152,8 +152,9 @@ theorem exists_etaleFundamentalGroup_lineCover_equiv [Algebra.IsAlgebraic ℚ k]
   refine ⟨ι, hι, hπ, ?_⟩
   have e0 : (0 : ℂ) = (algebraMap k (ULift.{u} ℂ) 0).down := by simp
   have e1 : (1 : ℂ) = (algebraMap k (ULift.{u} ℂ) 1).down := by simp
-  rw [e0, e1, fiberCard_algebraMap hf hη hfk, fiberCard_algebraMap hf hη hfk,
-    fiberCard_algebraMap hf hη hfk] at hcard
+  have ht : hf.branchedData.t = (lineCoverCoord f).t := rfl
+  rw [ht, e0, e1, fiberCard_algebraMap hη hfk, fiberCard_algebraMap hη hfk,
+    fiberCard_algebraMap hη hfk] at hcard
   have hunr : ∀ (Q : Place k X.functionField) (a : k), a ≠ 0 → a ≠ 1 →
       Q.ord (coordFun f hη - algebraMap k X.functionField a) ≤ 1 :=
     fun Q a ha0 ha1 ↦ ord_coordFun_sub_le_one hf hη hfk Q a ha0 ha1

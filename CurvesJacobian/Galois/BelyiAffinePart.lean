@@ -126,14 +126,40 @@ lemma top_le_preimage_fst_lineι :
   rw [← Scheme.Hom.comp_apply, pullback.condition, Scheme.Hom.comp_apply]
   exact ⟨_, rfl⟩
 
+omit [X.Over (Spec (CommRingCat.of k))] in
+/-- **The affine part of `f` is integral** if the generic point does not go to `∞`: its ring `B`
+is a domain. -/
+theorem isDomain_lineCoverRing_of (hη : f.base (genericPoint X) ≠ P1.infty k) :
+    IsDomain (lineCoverRing f) := by
+  haveI : Nonempty (lineCover f) :=
+    ⟨(lineCoverGeneric f hη).base (IsLocalRing.closedPoint X.functionField)⟩
+  haveI := isIntegral_of_isOpenImmersion (pullback.fst f (lineι k))
+  infer_instance
+
+omit [IsIntegral X] [X.Over (Spec (CommRingCat.of k))] in
+variable (f) in
+/-- **The coordinate `t` of `𝔸¹` on the affine part `B` of a finite `f : X ⟶ ℙ¹`**, as a finite
+coordinate (`k[t] → B` is finite). -/
+def lineCoverCoord [IsFinite f] : Converse.FiniteCoord k (lineCoverRing f) where
+  t := algebraMap (Polynomial k) (lineCoverRing f) Polynomial.X
+  finite := by
+    haveI := lineCoverRing_finite (f := f)
+    have e : (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦
+        algebraMap (Polynomial k) (lineCoverRing f) Polynomial.X) =
+        (IsScalarTower.toAlgHom k (Polynomial k) (lineCoverRing f)).comp
+          (finOnePolyEquiv k : MvPolynomial (Fin 1) k →ₐ[k] Polynomial k) :=
+      MvPolynomial.algHom_ext fun i ↦ by simp [finOnePolyEquiv_eq]
+    rw [AlgHom.Finite, e]
+    exact RingHom.Finite.comp (RingHom.finite_algebraMap.2 inferInstance)
+      (RingHom.Finite.of_surjective _ (finOnePolyEquiv k).surjective)
+
 variable [CharZero k] [IsCurveOver k X] [IsFinite f]
 
 /-- **`ρ : B → K(X)` is injective.** -/
-theorem lineCoverToFunctionField_injective (hf : IsBelyiMap k f)
-    (hη : f.base (genericPoint X) ≠ P1.infty k)
+theorem lineCoverToFunctionField_injective (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k)) :
     Function.Injective (lineCoverToFunctionField f hη) := by
-  haveI := isDomain_lineCoverRing hf
+  haveI := isDomain_lineCoverRing_of hη
   haveI := lineCoverRing_finite (f := f)
   haveI := isDominant_of_isFinite f
   have hx := transcendental_coordFun hη hfk
@@ -178,22 +204,22 @@ theorem mem_range_lineCoverToFunctionField_iff (hη : f.base (genericPoint X) �
     exact ⟨_, (lineCoverToFunctionField_appLE hη hgen top_le_preimage_fst_lineι s).trans hs⟩
 
 /-- **`B ≅ A_x`**: the ring of the affine part of `f` is weil-curves' chart ring of `x`. -/
-def lineCoverChartEquiv (hf : IsBelyiMap k f) (hη : f.base (genericPoint X) ≠ P1.infty k)
+def lineCoverChartEquiv (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k)) :
     lineCoverRing f ≃+* chartRing k (coordFun f hη) :=
   RingEquiv.ofBijective ((lineCoverToFunctionField f hη).codRestrict
       (chartRing k (coordFun f hη)) fun b ↦ (mem_integralClosure_iff _ _).2
         ((mem_range_lineCoverToFunctionField_iff hη hfk _).1 ⟨b, rfl⟩))
-    ⟨fun _ _ h ↦ lineCoverToFunctionField_injective hf hη hfk (congrArg Subtype.val h),
+    ⟨fun _ _ h ↦ lineCoverToFunctionField_injective hη hfk (congrArg Subtype.val h),
       fun z ↦ by
         obtain ⟨b, hb⟩ := (mem_range_lineCoverToFunctionField_iff hη hfk _).2
           ((mem_integralClosure_iff _ _).1 z.2)
         exact ⟨b, Subtype.ext hb⟩⟩
 
-lemma lineCoverChartEquiv_apply (hf : IsBelyiMap k f) (hη : f.base (genericPoint X) ≠ P1.infty k)
+lemma lineCoverChartEquiv_apply (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k))
     (b : lineCoverRing f) :
-    (lineCoverChartEquiv hf hη hfk b : X.functionField) = lineCoverToFunctionField f hη b :=
+    (lineCoverChartEquiv hη hfk b : X.functionField) = lineCoverToFunctionField f hη b :=
   rfl
 
 end Curve
@@ -253,22 +279,25 @@ open Belyi.Converse
 variable {k : Type u} [Field k] [IsAlgClosed k] {B : Type u} [CommRing B] [IsDomain B]
   [Algebra k B] [Algebra.FiniteType k B]
 
-/-- **Over `a ≠ 0, 1` the coordinate `t - a` is a uniformizer**: if `k[t] → B[(t(t-1))⁻¹]` is
-étale and `M` is a maximal ideal of `B` containing `t - a ≠ 0`, then `t - a ∉ M²`. Otherwise the
-two `k[t]`-algebra maps `B[(t(t-1))⁻¹] → B/M²` (the quotient map, and the residue map
+/-- **Where `t` is étale, `t - a` is a uniformizer**: if `k[t] → B[P(t)⁻¹]` is étale, `P(a) ≠ 0`
+and `M` is a maximal ideal of `B` containing `t - a ≠ 0`, then `t - a ∉ M²`. Otherwise the
+two `k[t]`-algebra maps `B[P(t)⁻¹] → B/M²` (the quotient map, and the residue map
 `B → B/M = k ⊆ B/M²`) agree modulo the square-zero ideal `M/M²`, so they are equal (formal
 unramifiedness), whence `M ⊆ M²` and `M = 0` by Krull's intersection theorem. -/
-theorem branchedData_sub_notMem_sq (D : BranchedData k B) {a : k} (ha0 : a ≠ 0) (ha1 : a ≠ 1)
-    (M : Ideal B) [hM : M.IsMaximal] (hmem : D.t - algebraMap k B a ∈ M)
-    (hne : D.t - algebraMap k B a ≠ 0) : D.t - algebraMap k B a ∉ M ^ 2 := by
+theorem sub_notMem_sq_of_etale (t : B) (P : MvPolynomial (Fin 1) k)
+    (het : ((algebraMap B (Localization.Away
+      (MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ t) P))).comp
+        (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ t).toRingHom).Etale)
+    {a : k} (ha : MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ a) P ≠ 0)
+    (M : Ideal B) [hM : M.IsMaximal] (hmem : t - algebraMap k B a ∈ M)
+    (hne : t - algebraMap k B a ≠ 0) : t - algebraMap k B a ∉ M ^ 2 := by
   intro hsq
-  set t := D.t with ht
-  set h : B := MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ t) (branchPolyZeroOne k) with hh
+  set h : B := MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ t) P with hh
   let R₀ := MvPolynomial (Fin 1) k
   let ev : R₀ →ₐ[k] B := MvPolynomial.aeval fun _ : Fin 1 ↦ t
   let A := Localization.Away h
   letI : Algebra R₀ A := ((algebraMap B A).comp ev.toRingHom).toAlgebra
-  haveI : Algebra.Etale R₀ A := RingHom.etale_algebraMap.1 D.etale
+  haveI : Algebra.Etale R₀ A := RingHom.etale_algebraMap.1 het
   let C := B ⧸ M ^ 2
   letI : Algebra R₀ C := ((Ideal.Quotient.mk (M ^ 2)).comp ev.toRingHom).toAlgebra
   let I : Ideal C := M.map (Ideal.Quotient.mk (M ^ 2))
@@ -292,13 +321,13 @@ theorem branchedData_sub_notMem_sq (D : BranchedData k B) {a : k} (ha0 : a ≠ 0
     change Ideal.Quotient.mk (M ^ 2) b - algebraMap k C (res b) ∈ I
     rw [← Ideal.Quotient.mk_algebraMap, ← map_sub]
     exact Ideal.mem_map_of_mem _ (hres_mem b)
-  have hres_h : res h = a * (a - 1) := by
+  have hres_h : res h = MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ a) P := by
     rw [hh, ← AlgHom.comp_apply, MvPolynomial.comp_aeval]
-    simp [branchPolyZeroOne, hres_t]
+    simp [hres_t]
   have hrB : IsUnit (rB h) := by
     change IsUnit (algebraMap k C (res h))
     rw [hres_h]
-    exact (Ne.isUnit (mul_ne_zero ha0 (sub_ne_zero.2 ha1))).map _
+    exact (Ne.isUnit ha).map _
   have hqB : IsUnit (qB h) := by
     have hnil : IsNilpotent (qB h - rB h) := ⟨2, by
       have := Ideal.pow_mem_pow (hdiff h) 2
@@ -359,6 +388,14 @@ theorem branchedData_sub_notMem_sq (D : BranchedData k B) {a : k} (ha0 : a ≠ 0
     | succ n => exact hpow n hmem
   rwa [hbot, Ideal.mem_bot] at hin
 
+/-- **Over `a ≠ 0, 1` the coordinate `t - a` is a uniformizer** (`sub_notMem_sq_of_etale` for
+`P = X (X - 1)`). -/
+theorem branchedData_sub_notMem_sq (D : BranchedData k B) {a : k} (ha0 : a ≠ 0) (ha1 : a ≠ 1)
+    (M : Ideal B) [M.IsMaximal] (hmem : D.t - algebraMap k B a ∈ M)
+    (hne : D.t - algebraMap k B a ≠ 0) : D.t - algebraMap k B a ∉ M ^ 2 :=
+  sub_notMem_sq_of_etale D.t (branchPolyZeroOne k) D.etale
+    (by simpa [branchPolyZeroOne] using mul_ne_zero ha0 (sub_ne_zero.2 ha1)) M hmem hne
+
 end Unramified
 
 section Count
@@ -374,26 +411,27 @@ lemma lineCoverToFunctionField_algebraMap_base (hη : f.base (genericPoint X) �
   rw [IsScalarTower.algebraMap_apply k (Polynomial k) (lineCoverRing f),
     lineCoverToFunctionField_algebraMap, Polynomial.algebraMap_eq, coordHom_C hη hfk]
 
-lemma lineCoverChartEquiv_sub (hf : IsBelyiMap k f) (hη : f.base (genericPoint X) ≠ P1.infty k)
+omit [IsAlgClosed k] in
+lemma lineCoverChartEquiv_sub (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k)) (a : k) :
     haveI : Fact (Transcendental k (coordFun f hη)) :=
       haveI := isDominant_of_isFinite f
       ⟨transcendental_coordFun hη hfk⟩
-    lineCoverChartEquiv hf hη hfk (hf.branchedData.t - algebraMap k (lineCoverRing f) a) =
+    lineCoverChartEquiv hη hfk ((lineCoverCoord f).t - algebraMap k (lineCoverRing f) a) =
       chartSub (coordFun f hη) a := by
   apply Subtype.ext
   rw [lineCoverChartEquiv_apply, map_sub, lineCoverToFunctionField_algebraMap_base hη hfk]
   congr 1
   exact lineCoverToFunctionField_t hη
 
+omit [IsAlgClosed k] in
 /-- **Fibre counts on `B` are zero counts of `x - a`**: the maximal ideals of
 `B = Γ(X ×_{ℙ¹} 𝔸¹)` containing `t - a` correspond to the places `Q` of `K(X)` with
 `ord_Q (x - a) > 0`. -/
-theorem card_maximalSpectrum_lineCover_eq (hf : IsBelyiMap k f)
-    (hη : f.base (genericPoint X) ≠ P1.infty k)
+theorem card_maximalSpectrum_lineCover_eq (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k)) (a : k) :
     Nat.card {M : MaximalSpectrum (lineCoverRing f) //
-        hf.branchedData.t - algebraMap k (lineCoverRing f) a ∈ M.asIdeal} =
+        (lineCoverCoord f).t - algebraMap k (lineCoverRing f) a ∈ M.asIdeal} =
       Nat.card {Q : Place k X.functionField //
         0 < Q.ord (coordFun f hη - algebraMap k X.functionField a)} := by
   haveI := isDominant_of_isFinite f
@@ -406,21 +444,25 @@ theorem card_maximalSpectrum_lineCover_eq (hf : IsBelyiMap k f)
       rw [h']
       exact isAlgebraic_zero)
   refine Nat.card_congr ((ComplexAnalytic.maximalSpectrumMemEquiv
-    (lineCoverChartEquiv hf hη hfk) _).trans ?_)
+    (lineCoverChartEquiv hη hfk) _).trans ?_)
   refine (Equiv.subtypeEquivRight fun M ↦ ?_).trans
     ((maximalSpectrumMemEquivHeightOne hne).trans (heightOneMemEquivPlace _ a))
-  rw [lineCoverChartEquiv_sub hf hη hfk a]
+  rw [lineCoverChartEquiv_sub hη hfk a]
 
-/-- **The Belyi coordinate is unramified over `a ≠ 0, 1`**: `ord_Q (x - a) ≤ 1` for every place
-`Q` of `K(X)` (`CurvesJacobian.branchedData_sub_notMem_sq` through `B ≅ A_x`). -/
-theorem ord_coordFun_sub_le_one (hf : IsBelyiMap k f) (hη : f.base (genericPoint X) ≠ P1.infty k)
+omit [IsAlgClosed k] in
+/-- **A criterion for `x` to be unramified over `a`**: if `B ≅ R'` and `t - a ∈ B` corresponds to
+`r' ∈ R'` with `r' ∉ M²` for every maximal ideal `M ∋ r'` of `R'` (when `r' ≠ 0`), then
+`ord_Q (x - a) ≤ 1` for every place `Q` of `K(X)` (through `B ≅ A_x`). -/
+theorem ord_coordFun_sub_le_one_of_ringEquiv (hη : f.base (genericPoint X) ≠ P1.infty k)
     (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k))
-    (Q : Place k X.functionField) (a : k) (ha0 : a ≠ 0) (ha1 : a ≠ 1) :
+    {R' : Type*} [CommRing R'] (ψ : R' ≃+* lineCoverRing f) (a : k) (r' : R')
+    (hr' : ψ r' = (lineCoverCoord f).t - algebraMap k (lineCoverRing f) a)
+    (h : ∀ M : Ideal R', M.IsMaximal → r' ∈ M → r' ≠ 0 → r' ∉ M ^ 2)
+    (Q : Place k X.functionField) :
     Q.ord (coordFun f hη - algebraMap k X.functionField a) ≤ 1 := by
   haveI := isDominant_of_isFinite f
   have hx := transcendental_coordFun hη hfk
   haveI : Fact (Transcendental k (coordFun f hη)) := ⟨hx⟩
-  haveI := isDomain_lineCoverRing hf
   by_contra hlt
   replace hlt := not_le.mp hlt
   have hpos : 0 < Q.ord (coordFun f hη - algebraMap k X.functionField a) := by omega
@@ -443,21 +485,46 @@ theorem ord_coordFun_sub_le_one (hf : IsBelyiMap k f) (hη : f.base (genericPoin
   rw [Ideal.dvd_iff_le] at hdvd
   have hrv2 : r ∈ v.asIdeal ^ 2 := hdvd (Ideal.mem_span_singleton_self r)
   have hrv : r ∈ v.asIdeal := Ideal.pow_le_self two_ne_zero hrv2
-  set φ := lineCoverChartEquiv hf hη hfk
-  have hφ : φ.symm r = hf.branchedData.t - algebraMap k (lineCoverRing f) a := by
-    rw [RingEquiv.symm_apply_eq, lineCoverChartEquiv_sub hf hη hfk a]
+  set φ := ψ.trans (lineCoverChartEquiv hη hfk)
+  have hφ : φ.symm r = r' := by
+    rw [RingEquiv.symm_apply_eq, RingEquiv.trans_apply, hr', lineCoverChartEquiv_sub hη hfk a]
   let M := v.asIdeal.map φ.symm
   haveI : M.IsMaximal := Ideal.map_isMaximal_of_equiv φ.symm (p := v.asIdeal)
-  have hM : hf.branchedData.t - algebraMap k (lineCoverRing f) a ∈ M := by
+  have hM : r' ∈ M := by
     rw [← hφ]
     exact Ideal.mem_map_of_mem _ hrv
-  have hM2 : hf.branchedData.t - algebraMap k (lineCoverRing f) a ∈ M ^ 2 := by
+  have hM2 : r' ∈ M ^ 2 := by
     rw [← hφ, ← Ideal.map_pow]
     exact Ideal.mem_map_of_mem _ hrv2
-  have hne : hf.branchedData.t - algebraMap k (lineCoverRing f) a ≠ 0 := by
+  have hne : r' ≠ 0 := by
     rw [← hφ]
     exact (map_ne_zero_iff _ φ.symm.injective).2 hr0
-  exact branchedData_sub_notMem_sq hf.branchedData ha0 ha1 M hM hne hM2
+  exact h M inferInstance hM hne hM2
+
+/-- **The coordinate is unramified where it is étale**: if `k[t] → B[P(t)⁻¹]` is étale and
+`P(a) ≠ 0`, then `ord_Q (x - a) ≤ 1` for every place `Q` of `K(X)`
+(`CurvesJacobian.sub_notMem_sq_of_etale` through `B ≅ A_x`). -/
+theorem ord_coordFun_sub_le_one_of_etale (hη : f.base (genericPoint X) ≠ P1.infty k)
+    (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k))
+    (P : MvPolynomial (Fin 1) k)
+    (het : ((algebraMap (lineCoverRing f) (Localization.Away
+      (MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ (lineCoverCoord f).t) P))).comp
+        (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ (lineCoverCoord f).t).toRingHom).Etale)
+    (Q : Place k X.functionField) (a : k)
+    (ha : MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ a) P ≠ 0) :
+    Q.ord (coordFun f hη - algebraMap k X.functionField a) ≤ 1 := by
+  haveI := isDomain_lineCoverRing_of hη
+  exact ord_coordFun_sub_le_one_of_ringEquiv hη hfk (RingEquiv.refl _) a _ rfl
+    (fun M _ hM hne ↦ sub_notMem_sq_of_etale _ P het ha M hM hne) Q
+
+/-- **The Belyi coordinate is unramified over `a ≠ 0, 1`**: `ord_Q (x - a) ≤ 1` for every place
+`Q` of `K(X)` (`CurvesJacobian.branchedData_sub_notMem_sq` through `B ≅ A_x`). -/
+theorem ord_coordFun_sub_le_one (hf : IsBelyiMap k f) (hη : f.base (genericPoint X) ≠ P1.infty k)
+    (hfk : f ≫ (P1 k ↘ Spec (CommRingCat.of k)) = X ↘ Spec (CommRingCat.of k))
+    (Q : Place k X.functionField) (a : k) (ha0 : a ≠ 0) (ha1 : a ≠ 1) :
+    Q.ord (coordFun f hη - algebraMap k X.functionField a) ≤ 1 :=
+  ord_coordFun_sub_le_one_of_etale hη hfk (Converse.branchPolyZeroOne k) hf.branchedData.etale Q a
+    (by simpa [Converse.branchPolyZeroOne] using mul_ne_zero ha0 (sub_ne_zero.2 ha1))
 
 omit [IsAlgClosed k] in
 /-- **Poles of `x` are the points over `∞`.** -/

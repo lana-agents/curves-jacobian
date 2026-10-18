@@ -21,7 +21,7 @@ name = "CurvesJacobian"
 [[require]]
 name = "belyi"
 git = "https://github.com/lana-agents/belyi"
-rev = "e00c309b826590ab71a32e37afb5fbb6ad6e24cf"
+rev = "f0d1a5c3308227f58356290f571d1c6ee43299c0"
 
 # Function fields over perfect fields: places, divisors, Riemann–Roch, genus, Pic (W1–W6).
 [[require]]
