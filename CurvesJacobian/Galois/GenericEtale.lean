@@ -54,10 +54,10 @@ variable [IsDomain B] [IsAlgClosed k] [CharZero k]
 
 /-- **Generic étaleness**: a finite injective coordinate `t` on a domain `B` over an
 algebraically closed field of characteristic zero is étale over `𝔸¹ ∖ S` for a finite `S ⊆ k`:
-`k[X] → B[P_S(t)⁻¹]` is étale. -/
-theorem FiniteCoord.exists_etale_branchPolyOf (D : FiniteCoord k B)
+`k[X] → B[P_S(t)⁻¹]` is étale; `S` can be taken nonempty. -/
+theorem FiniteCoord.exists_etale_branchPolyOf_nonempty (D : FiniteCoord k B)
     (hinj : Function.Injective (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ D.t)) :
-    ∃ S : Finset k, ((algebraMap B (Localization.Away
+    ∃ S : Finset k, S.Nonempty ∧ ((algebraMap B (Localization.Away
       (MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ D.t) (branchPolyOf S)))).comp
         (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ D.t).toRingHom).Etale := by
   classical
@@ -79,8 +79,8 @@ theorem FiniteCoord.exists_etale_branchPolyOf (D : FiniteCoord k B)
   have hP0 : P ≠ 0 := by
     rw [hP, Ne, map_eq_zero_iff _ (finOnePolyEquiv k).injective]
     exact hp0
-  set S := P.roots.toFinset
-  refine ⟨S, ?_⟩
+  set S := insert 0 P.roots.toFinset
+  refine ⟨S, Finset.insert_nonempty _ _, ?_⟩
   set q : B := MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ D.t) (branchPolyOf S) with hq
   have hpP : algebraMap R B p = Polynomial.aeval D.t P := mvAeval_eq_aeval_finOnePolyEquiv D.t p
   -- `D(q) ⊆ D(b)`
@@ -104,7 +104,7 @@ theorem FiniteCoord.exists_etale_branchPolyOf (D : FiniteCoord k B)
     · rw [map_multiset_prod, Multiset.map_map] at h
       obtain ⟨y, hy, hy𝔭⟩ := (𝔭.isPrime.multiset_prod_mem_iff_exists_mem _).1 h
       obtain ⟨a, ha, rfl⟩ := Multiset.mem_map.1 hy
-      have haS : a ∈ S := Multiset.mem_toFinset.2 ha
+      have haS : a ∈ S := Finset.mem_insert_of_mem (Multiset.mem_toFinset.2 ha)
       rw [hq, aeval_branchPolyOf]
       rw [← Finset.mul_prod_erase S _ haS]
       exact Ideal.mul_mem_right _ _ (by simpa using hy𝔭)
@@ -139,6 +139,17 @@ theorem FiniteCoord.exists_etale_branchPolyOf (D : FiniteCoord k B)
   rw [e, RingHom.Etale.iff_flat_and_formallyUnramified, RingHom.flat_algebraMap_iff,
     RingHom.formallyUnramified_algebraMap, RingHom.finitePresentation_algebraMap]
   exact ⟨inferInstance, hUq, inferInstance⟩
+
+/-- **Generic étaleness**: a finite injective coordinate `t` on a domain `B` over an
+algebraically closed field of characteristic zero is étale over `𝔸¹ ∖ S` for a finite `S ⊆ k`:
+`k[X] → B[P_S(t)⁻¹]` is étale. -/
+theorem FiniteCoord.exists_etale_branchPolyOf (D : FiniteCoord k B)
+    (hinj : Function.Injective (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ D.t)) :
+    ∃ S : Finset k, ((algebraMap B (Localization.Away
+      (MvPolynomial.aeval (R := k) (fun _ : Fin 1 ↦ D.t) (branchPolyOf S)))).comp
+        (MvPolynomial.aeval (R := k) fun _ : Fin 1 ↦ D.t).toRingHom).Etale :=
+  let ⟨S, _, hS⟩ := FiniteCoord.exists_etale_branchPolyOf_nonempty D hinj
+  ⟨S, hS⟩
 
 end
 
