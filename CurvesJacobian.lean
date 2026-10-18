@@ -135,6 +135,7 @@ import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Picard.ZeroScheme
 import CurvesJacobian.Picard.ZeroSchemeAlgebra
 import CurvesJacobian.Picard.ZeroSchemeDegree
+import CurvesJacobian.Picard.ZeroSchemeDivisor
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
