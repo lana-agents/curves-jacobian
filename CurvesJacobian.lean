@@ -58,6 +58,7 @@ import CurvesJacobian.Picard.ChartBaseChange
 import CurvesJacobian.Picard.ChartDescent
 import CurvesJacobian.Picard.ChartMatrix
 import CurvesJacobian.Picard.ChartSheaf
+import CurvesJacobian.Picard.ContentIdeal
 import CurvesJacobian.Picard.CurveCohomology
 import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
@@ -122,6 +123,7 @@ import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TranslateRep
 import CurvesJacobian.Picard.TwoCechInvertible
 import CurvesJacobian.Picard.TwoTermPerfect
+import CurvesJacobian.Picard.ZeroScheme
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
