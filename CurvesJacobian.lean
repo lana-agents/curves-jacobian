@@ -119,6 +119,7 @@ import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap
 import CurvesJacobian.Picard.BaseChangeSquare
+import CurvesJacobian.Picard.BasisLift
 import CurvesJacobian.Picard.CartierChart
 import CurvesJacobian.Picard.CartierCriterion
 import CurvesJacobian.Picard.CartierCurve
@@ -139,6 +140,7 @@ import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.CurvePerfect
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
+import CurvesJacobian.Picard.EpsDecomp
 import CurvesJacobian.Picard.EulerChar
 import CurvesJacobian.Picard.EulerCharAdd
 import CurvesJacobian.Picard.EulerCharDivisor
@@ -202,6 +204,8 @@ import CurvesJacobian.Picard.PicSigmaSheafCurve
 import CurvesJacobian.Picard.PicSmooth
 import CurvesJacobian.Picard.PicSpec
 import CurvesJacobian.Picard.PicSpecEquiv
+import CurvesJacobian.Picard.PicTangentSetup
+import CurvesJacobian.Picard.PicTangentTwist
 import CurvesJacobian.Picard.Pullback
 import CurvesJacobian.Picard.PushoutAlgebra
 import CurvesJacobian.Picard.QcohBaseChange
@@ -223,6 +227,7 @@ import CurvesJacobian.Picard.RigidUnique
 import CurvesJacobian.Picard.SchemeGeneric
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.SmoothLift
+import CurvesJacobian.Picard.TangentAlg
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TensorSections
 import CurvesJacobian.Picard.TranslateRep
@@ -230,6 +235,7 @@ import CurvesJacobian.Picard.TwistCech
 import CurvesJacobian.Picard.TwistCechAlgebra
 import CurvesJacobian.Picard.TwistInfinity
 import CurvesJacobian.Picard.TwoCechInvertible
+import CurvesJacobian.Picard.TwoChartTwist
 import CurvesJacobian.Picard.TwoTermPerfect
 import CurvesJacobian.Picard.ZeroScheme
 import CurvesJacobian.Picard.ZeroSchemeAlgebra
