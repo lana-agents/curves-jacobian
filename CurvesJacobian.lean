@@ -97,6 +97,7 @@ import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Descent.GaloisAffine
 import CurvesJacobian.Descent.GaloisAlgebra
 import CurvesJacobian.Descent.GaloisHom
+import CurvesJacobian.Descent.GaloisScheme
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology

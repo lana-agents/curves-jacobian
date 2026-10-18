@@ -255,8 +255,6 @@ lemma homOfΓ_appTop (X : Scheme.{u}) {Y : Scheme.{u}} [IsAffine Y] (φ : Γ(Y, 
   rw [homOfΓ, Scheme.Hom.comp_appTop, Scheme.Hom.comp_appTop, h, Scheme.toSpecΓ_appTop,
     Category.assoc, Scheme.ΓSpecIso_naturality, Iso.inv_hom_id_assoc]
 
-variable [FiniteDimensional k L] [IsGalois k L]
-
 /-- The `G`-equivariant `L`-morphisms `T_L ⟶ U`. -/
 def EqMor {T : Scheme.{u}} (t : T ⟶ Spec (CommRingCat.of k)) {U : Scheme.{u}}
     {qU : U ⟶ Spec (CommRingCat.of L)} (aU : GalAction (k := k) U qU) : Type u :=
@@ -305,19 +303,16 @@ def bcL {T' : Scheme.{u}} {t' : T' ⟶ Spec (CommRingCat.of k)} (h : T' ⟶ T) (
   pullback.lift (pullback.fst t' (sL k L) ≫ h) (pullback.snd t' (sL k L))
     (by rw [Category.assoc, ht, pullback.condition])
 
-omit [FiniteDimensional k L] [IsGalois k L] in
 @[reassoc (attr := simp)]
 lemma bcL_fst {T' : Scheme.{u}} {t' : T' ⟶ Spec (CommRingCat.of k)} (h : T' ⟶ T)
     (ht : h ≫ t = t') : bcL t h ht ≫ pullback.fst t (sL k L) = pullback.fst t' (sL k L) ≫ h :=
   pullback.lift_fst _ _ _
 
-omit [FiniteDimensional k L] [IsGalois k L] in
 @[reassoc (attr := simp)]
 lemma bcL_snd {T' : Scheme.{u}} {t' : T' ⟶ Spec (CommRingCat.of k)} (h : T' ⟶ T)
     (ht : h ≫ t = t') : bcL t h ht ≫ pullback.snd t (sL k L) = pullback.snd t' (sL k L) :=
   pullback.lift_snd _ _ _
 
-omit [FiniteDimensional k L] [IsGalois k L] in
 @[reassoc]
 lemma baseAct_bcL {T' : Scheme.{u}} {t' : T' ⟶ Spec (CommRingCat.of k)} (h : T' ⟶ T)
     (ht : h ≫ t = t') (g : Gal(L/k)) :
@@ -337,6 +332,8 @@ def EqMor.pull {T' : Scheme.{u}} {t' : T' ⟶ Spec (CommRingCat.of k)} (h : T' �
     (ht : h ≫ t = t') (f : EqMor t aU) : EqMor t' aU :=
   ⟨bcL t h ht ≫ f.1, by rw [Category.assoc, f.2.1, bcL_snd], fun g ↦ by
     rw [baseAct_bcL_assoc, f.2.2 g, Category.assoc]⟩
+
+variable [FiniteDimensional k L] [IsGalois k L]
 
 /-- The invariants `Γ(U)^G`. -/
 abbrev invAlg : Subalgebra k (SecU qU) := fixedAlg aU.secAct aU.secAct_algebraMap
