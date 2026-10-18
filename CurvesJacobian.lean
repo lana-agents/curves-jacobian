@@ -167,6 +167,7 @@ import CurvesJacobian.Picard.RelEffCartierDegree
 import CurvesJacobian.Picard.RelEffCartierFinite
 import CurvesJacobian.Picard.RelEffCartierPullback
 import CurvesJacobian.Picard.RelEffCartierSection
+import CurvesJacobian.Picard.RelEffCartierSub
 import CurvesJacobian.Picard.RelEffCartierUnit
 import CurvesJacobian.Picard.RigidGlue
 import CurvesJacobian.Picard.RigidIso
