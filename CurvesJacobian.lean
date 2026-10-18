@@ -117,6 +117,7 @@ import CurvesJacobian.Picard.PerfectModel
 import CurvesJacobian.Picard.PerfectOpen
 import CurvesJacobian.Picard.PicDegree
 import CurvesJacobian.Picard.PicDegreeTranslate
+import CurvesJacobian.Picard.PicDegreeZero
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicFField
 import CurvesJacobian.Picard.PicFFieldPoint
