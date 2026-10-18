@@ -203,6 +203,7 @@ import CurvesJacobian.Picard.PicDegreeAdd
 import CurvesJacobian.Picard.PicDegreeDivisor
 import CurvesJacobian.Picard.PicDegreeTranslate
 import CurvesJacobian.Picard.PicDegreeZero
+import CurvesJacobian.Picard.PicDescent
 import CurvesJacobian.Picard.PicDimension
 import CurvesJacobian.Picard.PicEffective
 import CurvesJacobian.Picard.PicF
@@ -251,6 +252,7 @@ import CurvesJacobian.Picard.RigidGlue
 import CurvesJacobian.Picard.RigidIso
 import CurvesJacobian.Picard.RigidUnique
 import CurvesJacobian.Picard.SchemeGeneric
+import CurvesJacobian.Picard.SectionDrop
 import CurvesJacobian.Picard.Small
 import CurvesJacobian.Picard.SmoothLift
 import CurvesJacobian.Picard.TangentAlg
