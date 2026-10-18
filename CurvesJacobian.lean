@@ -169,5 +169,6 @@ import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurvePic
 import CurvesJacobian.Scheme.CurvePlaces
+import CurvesJacobian.Scheme.GeomIntegralAlgClosed
 import CurvesJacobian.Scheme.PointDegree
 import CurvesJacobian.Scheme.ValuationPoints
