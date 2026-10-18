@@ -11,6 +11,7 @@ import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BasePointChange
+import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
 import CurvesJacobian.Cusp.CoverNormalization
 import CurvesJacobian.Cusp.CoverOpen
