@@ -14,6 +14,7 @@ import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.BelyiArithChain
 import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.BelyiCover
+import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
 import CurvesJacobian.Cusp.ChainPush
@@ -47,12 +48,14 @@ import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.FieldChange
 import CurvesJacobian.Cusp.FillChain
 import CurvesJacobian.Cusp.FillElemOp
+import CurvesJacobian.Cusp.FillSeq
 import CurvesJacobian.Cusp.FillStep
 import CurvesJacobian.Cusp.FiniteCover
 import CurvesJacobian.Cusp.FixedPointConj
 import CurvesJacobian.Cusp.GalInertia
 import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
+import CurvesJacobian.Cusp.HypBaseChange
 import CurvesJacobian.Cusp.Hyperbolic
 import CurvesJacobian.Cusp.Inertia
 import CurvesJacobian.Cusp.InertiaComm
@@ -73,6 +76,7 @@ import CurvesJacobian.Cusp.LineTopS
 import CurvesJacobian.Cusp.LoopLift
 import CurvesJacobian.Cusp.NonRationalFill
 import CurvesJacobian.Cusp.OpPathRun
+import CurvesJacobian.Cusp.P1Curve
 import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
 import CurvesJacobian.Cusp.PlaceTransitivity
