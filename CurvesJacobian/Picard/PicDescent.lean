@@ -37,7 +37,8 @@ the divisor of the base change of `σ` (`sigmaDiv`) and `deg z = χ(z) − (1 �
 * **`CurvesJacobian.exists_jacPoints_picRes_eq`**: the same for the points of the Jacobian,
   `J(K) = Pic⁰_{C/k,σ}(K) ⟶ J(Ω)^{Gal(Ω/K)}` is surjective.
 
-Injectivity of `J(K) ⟶ J(Ω)` (flat base change of `H⁰`) is not proved here.
+Injectivity of `J(K) ⟶ J(Ω)` (flat base change of `H⁰`) and the resulting isomorphism
+`J(K) ≅ J(Ω)^{Gal(Ω/K)}` are in `CurvesJacobian.Picard.PicDescentInj`.
 -/
 
 open CategoryTheory Limits TopologicalSpace AlgebraicGeometry Opposite

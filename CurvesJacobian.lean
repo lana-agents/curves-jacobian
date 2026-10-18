@@ -167,6 +167,7 @@ import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.GaloisPoints
 import CurvesJacobian.Picard.GrpSeparated
+import CurvesJacobian.Picard.H0BaseChange
 import CurvesJacobian.Picard.Hilb
 import CurvesJacobian.Picard.HilbAdd
 import CurvesJacobian.Picard.HilbAffineData
@@ -204,6 +205,7 @@ import CurvesJacobian.Picard.PicDegreeDivisor
 import CurvesJacobian.Picard.PicDegreeTranslate
 import CurvesJacobian.Picard.PicDegreeZero
 import CurvesJacobian.Picard.PicDescent
+import CurvesJacobian.Picard.PicDescentInj
 import CurvesJacobian.Picard.PicDimension
 import CurvesJacobian.Picard.PicEffective
 import CurvesJacobian.Picard.PicF
