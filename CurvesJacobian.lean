@@ -162,6 +162,7 @@ import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.GrpSeparated
 import CurvesJacobian.Picard.Hilb
+import CurvesJacobian.Picard.HilbAdd
 import CurvesJacobian.Picard.HilbAffineData
 import CurvesJacobian.Picard.HilbAffineOpen
 import CurvesJacobian.Picard.HilbAffineRep
@@ -209,6 +210,7 @@ import CurvesJacobian.Picard.PicLft
 import CurvesJacobian.Picard.PicLift
 import CurvesJacobian.Picard.PicLocTriv
 import CurvesJacobian.Picard.PicMap
+import CurvesJacobian.Picard.PicProper
 import CurvesJacobian.Picard.PicRigid
 import CurvesJacobian.Picard.PicScheme
 import CurvesJacobian.Picard.PicSeparated
