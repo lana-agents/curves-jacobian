@@ -264,6 +264,7 @@ variable [CharZero k] [IsAlgClosed Ω]
 
 attribute [local instance] isFunctionField_F
 
+omit [IsAlgClosed Ω] in
 /-- `picAct` maps `J(k̄)[n]` to itself. -/
 lemma picAct_mem_picTorsion {n : ℕ} (h : D.H) {x : Pic (kbar k Ω) (F (baseChange D))}
     (hx : x ∈ picTorsion (kbar k Ω) (F (baseChange D)) n) :
