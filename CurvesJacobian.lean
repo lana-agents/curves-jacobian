@@ -94,6 +94,8 @@ import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.MiddleExact
 import CurvesJacobian.Kummer.PicAction
+import CurvesJacobian.Kummer.PointRestriction
+import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
