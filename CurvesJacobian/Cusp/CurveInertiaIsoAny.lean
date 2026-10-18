@@ -6,6 +6,7 @@ Authors: LANA Project
 import CurvesJacobian.Cusp.CurveInertiaIso
 import CurvesJacobian.Cusp.FiniteCover
 import CurvesJacobian.Cusp.LineTopS
+import CurvesJacobian.Cusp.LineInertiaS
 import CurvesJacobian.Galois.CountableSurfaceGroup
 
 /-!
@@ -785,6 +786,27 @@ theorem exists_continuousMulEquiv_cuspInertia_curve_of_line
     change κ⁻¹ * (κ * x * κ⁻¹) * κ⁻¹⁻¹ = x
     group
   rw [h1, ← Subgroup.map_map, hEq, Subgroup.map_map, h2, Subgroup.map_id]
+
+include hk hτ in
+/-- **`π₁ᵉᵗ(X ∖ D) ≅ Π̂_{g,r}` with the cuspidal inertia groups going to conjugates of the
+`Iⱼ`, for every algebraically closed field `k` of characteristic `0`.** For `U ⊆ X` open with
+finite nonempty complement, `g` the genus of `X` and `r = |X ∖ U|`, there is
+`Θ : π₁ᵉᵗ(U) ≃ₜ* Π̂_{g,r}` such that for every place `W ⊇ k` of `Ω` not centred on `U`, some
+conjugate of `cuspInertia U W` is mapped by `Θ` onto some `Iⱼ = ⟨cⱼ⟩‾`. The input on the line
+`ℙ¹ ∖ (S ∪ {∞})` is `CurvesJacobian.Cusp.exists_continuousMulEquiv_lineInertiaS`. -/
+theorem exists_continuousMulEquiv_cuspInertia_curve_of_isAlgClosed (U : X.Opens) [Nonempty U]
+    (hUfin : (U : Set X)ᶜ.Finite) (hUne : (U : Set X)ᶜ.Nonempty) :
+    ∃ Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
+        Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat (Nat.card ((U : Set X)ᶜ : Set X)),
+      ∀ W : ValuationSubring Ω, (∀ c : k, algebraMap k Ω c ∈ W) → ¬ IsCentredOn D X eL U W →
+        ∃ (j : Fin (Nat.card ((U : Set X)ᶜ : Set X)))
+          (σ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)),
+          (cuspInertia D X eL hH U W).map ((Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) →*
+            Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat (Nat.card ((U : Set X)ᶜ : Set X))).comp
+              (MulAut.conj σ).toMonoidHom) =
+            Pi1.SurfaceGroup.inertia j :=
+  exists_continuousMulEquiv_cuspInertia_curve_of_line D eL hH hk hτ
+    (fun S _ hS hs ↦ exists_continuousMulEquiv_lineInertiaS S hS hs) U hUfin hUne
 
 end Main
 
