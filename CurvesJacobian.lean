@@ -52,6 +52,7 @@ import CurvesJacobian.Cusp.CuspTerminalFew
 import CurvesJacobian.Cusp.CuspTransport
 import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
+import CurvesJacobian.Cusp.DecuspNormalizer
 import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
