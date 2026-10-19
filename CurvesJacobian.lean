@@ -112,7 +112,9 @@ import CurvesJacobian.Cusp.ModelCover
 import CurvesJacobian.Cusp.ModelCusps
 import CurvesJacobian.Cusp.ModelEnlargeCore
 import CurvesJacobian.Cusp.ModelEnlargeExt
+import CurvesJacobian.Cusp.ModelEnlargeFill
 import CurvesJacobian.Cusp.ModelEnlargeSetup
+import CurvesJacobian.Cusp.ModelEnlargeToG
 import CurvesJacobian.Cusp.ModelFaithful
 import CurvesJacobian.Cusp.ModelStep
 import CurvesJacobian.Cusp.NonRationalFill
