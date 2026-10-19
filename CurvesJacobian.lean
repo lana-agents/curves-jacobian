@@ -88,6 +88,7 @@ import CurvesJacobian.Cusp.FixedPointConj
 import CurvesJacobian.Cusp.GalInertia
 import CurvesJacobian.Cusp.GaloisDescentOpen
 import CurvesJacobian.Cusp.GaloisFibreTransitive
+import CurvesJacobian.Cusp.GaloisOfNormal
 import CurvesJacobian.Cusp.GaloisQuotient
 import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
