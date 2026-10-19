@@ -127,6 +127,7 @@ import CurvesJacobian.Cusp.ModelAction
 import CurvesJacobian.Cusp.ModelAutRing
 import CurvesJacobian.Cusp.ModelChain
 import CurvesJacobian.Cusp.ModelCover
+import CurvesJacobian.Cusp.ModelCuspIndep
 import CurvesJacobian.Cusp.ModelCusps
 import CurvesJacobian.Cusp.ModelDecusp
 import CurvesJacobian.Cusp.ModelEnlarge

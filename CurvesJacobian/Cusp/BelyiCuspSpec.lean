@@ -3,7 +3,7 @@ Copyright (c) 2026 LANA Project. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
-import CurvesJacobian.Cusp.BelyiChainHV
+import CurvesJacobian.Cusp.ModelCuspIndep
 import CurvesJacobian.Cusp.Cor38Exists
 import CurvesJacobian.Cusp.Cor38Elliptic
 import CurvesJacobian.Cusp.CandidateCover
@@ -30,8 +30,8 @@ with a Galois cover `V → X` (`S : GaloisBelyiInput CX M`), we show
   cuspidalisations (`cor38_exists`), uniquely up to inner automorphisms from the kernel
   (`cor38_unique`).
 
-The inputs are the rel-isom-DGC over all number fields (`hDGC`) and, for (a) only, the model
-independence of cusps `hMI : ModelCuspIndep₂ Ω CX hcX` (`BelyiChainHV.lean`).
+The only input is the rel-isom-DGC over all number fields (`hDGC`); (a) uses it also through the
+model independence of cusps (`modelCuspIndep₂`, ModelCuspIndep.lean).
 `belyiCusp_spec_oncePunctured` is the case `X = E ∖ {O}` with `K`-rational `E[2]`.
 -/
 
@@ -75,14 +75,13 @@ def IsGeomCandidate₂ (x : CuspCandidate (arithmeticExt Ω CX hcX)) : Prop :=
           Spec.map (CommRingCat.ofHom (algebraMap K M'))
 
 /-- **[AbsTopII] Cor 3.7 (a), soundness of `belyiCusp`**: every Belyi cuspidalisation candidate
-of `Π_X` is geometric. Inputs: the rel-isom-DGC over number fields (`hDGC`) and the model
-independence of cusps (`hMI`). -/
+of `Π_X` is geometric. The only input is the rel-isom-DGC over number fields (`hDGC`). -/
 theorem belyiCusp_sound (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
-    (hMI : ModelCuspIndep₂ Ω CX hcX) {x : CuspCandidate (arithmeticExt Ω CX hcX)}
+    {x : CuspCandidate (arithmeticExt Ω CX hcX)}
     (hx : x ∈ belyiCusp (arithmeticExt Ω CX hcX)) : IsGeomCandidate₂ Ω CX hcX x := by
   obtain ⟨c, l, r, hc, t, m, hm, rfl⟩ := hx
   obtain ⟨D, hD, U', h, hc', hyp, ε, hε, q, hqfe, hq, hqK⟩ :=
-    hc.exists_cover_fill t hDGC (hc.hasInfCusp_V₃ t hDGC hMI) m hm
+    hc.exists_cover_fill' t hDGC m hm
   exact ⟨D.M, inferInstance, inferInstance, inferInstance, inferInstance, inferInstance,
     inferInstance, inferInstance, D.Y, D.hY, continuousMulEquivOfBijective D.ι ⟨D.inj, hD⟩,
     U', h, hc', hyp, ε, hε, q, hqfe, hq, hqK⟩
@@ -120,8 +119,7 @@ theorem belyiCusp_complete (hDGC : ∀ (k : Type u) [Field k] [NumberField k], R
   exact ⟨PiChain.belyiCandidate hc t m hm, ⟨c, l, r, hc, t, m, hm, rfl⟩, hN, hL, H⟩
 
 /-- **`belyiCusp` of `Π_X`** ([AbsTopII] Cor 3.7 (a), (b), Cor 3.8): for `X` of strictly Belyi
-type with a Galois cover `V → X` (`S`), assuming the rel-isom-DGC over number fields (`hDGC`) and
-the model independence of cusps (`hMI`, used for (a) only):
+type with a Galois cover `V → X` (`S`), assuming the rel-isom-DGC over number fields (`hDGC`):
 (a) every candidate in `belyiCusp (Π_X)` is geometric, `Π_Y ↠ Π_{Y'} ↪ Π_X`;
 (b) for every nonempty open `U_X ⊆ X` some candidate recovers `Π_V ×_{Π_X} Π_{U_X} ↠ Π_V` (normal
 `Π_V`, lifting property, `Π_U ≅ Π_V ×_{Π_X} Π_{U_X}` over `Π_X` up to conjugation);
@@ -131,7 +129,7 @@ to `φ_U : Π_{U_X} ≅ Π_{U_{X₂}}` for some nonempty open `U_{X₂} ⊆ X₂
 (e) such lifts are unique up to inner automorphisms from `ker(Π_{U_X} ↠ Π_X)` (Cor 3.8,
 uniqueness). -/
 theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
-    (S : GaloisBelyiInput CX M) (hMI : ModelCuspIndep₂ Ω CX hcX) :
+    (S : GaloisBelyiInput CX M) :
     (∀ x ∈ belyiCusp (arithmeticExt Ω CX hcX), IsGeomCandidate₂ Ω CX hcX x) ∧
     (∀ (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U) (hne : (UX : Set CX.Xbar).Nonempty)
       (α₀ : fiber (basePoint Ω CX hcX) ≅
@@ -168,7 +166,7 @@ theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIs
       (φ₁ φ₂ : P ≃ₜ* (arithmeticExt Ω (subCurve CX UX hUX hne) (compl_nonempty_of_le hUX hcX)).Pi),
       (∀ p, cor38Fill Ω CX hcX UX hUX hne α₀ (φ₂ p) = cor38Fill Ω CX hcX UX hUX hne α₀ (φ₁ p)) →
       ∃ n ∈ (cor38Fill Ω CX hcX UX hUX hne α₀).ker, ∀ p, φ₂ p = n * φ₁ p * n⁻¹) := by
-  refine ⟨fun x hx ↦ belyiCusp_sound Ω CX hcX hDGC hMI hx, fun UX hUX hne α₀ ↦ ?_,
+  refine ⟨fun x hx ↦ belyiCusp_sound Ω CX hcX hDGC hx, fun UX hUX hne α₀ ↦ ?_,
     fun Φ x hx ↦ belyiCusp_transport Φ hx, ?_, ?_⟩
   · obtain ⟨x, hx, hN, hL, k, J, hJ, -⟩ := belyiCusp_complete Ω CX hcX hDGC S UX hUX hne α₀
     exact ⟨x, hx, hN, hL, k, J, hJ⟩
@@ -181,8 +179,7 @@ theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIs
 assumes the `2·3`-torsion rational), via its Galois Belyi input `nonempty_galoisBelyiInput`. -/
 theorem belyiCusp_spec_oncePunctured
     (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
-    {E : WeierstrassCurve K} [E.IsElliptic] (hE : E.Ψ₂Sq.Splits)
-    (hMI : ModelCuspIndep₂ Ω (hypCurveX E) (compl_XE_nonempty E)) :
+    {E : WeierstrassCurve K} [E.IsElliptic] (hE : E.Ψ₂Sq.Splits) :
     (∀ x ∈ belyiCusp (arithmeticExt Ω (hypCurveX E) (compl_XE_nonempty E)),
       IsGeomCandidate₂ Ω (hypCurveX E) (compl_XE_nonempty E) x) ∧
     (∀ (UX : (hypCurveX E).Xbar.Opens) (hUX : UX ≤ (hypCurveX E).U)
@@ -207,7 +204,7 @@ theorem belyiCusp_spec_oncePunctured
         x.transport Φ ∈ belyiCusp E') := by
   haveI : CharZero K := inferInstance
   obtain ⟨S⟩ := nonempty_galoisBelyiInput E hE
-  obtain ⟨h1, h2, h3, -⟩ := belyiCusp_spec (M := K) Ω (hypCurveX E) (compl_XE_nonempty E) hDGC S hMI
+  obtain ⟨h1, h2, h3, -⟩ := belyiCusp_spec (M := K) Ω (hypCurveX E) (compl_XE_nonempty E) hDGC S
   exact ⟨h1, h2, h3⟩
 
 end CurvesJacobian.Cusp
