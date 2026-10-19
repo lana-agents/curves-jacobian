@@ -74,6 +74,30 @@ theorem PiChain.compat_objCongr (c : PiChain E) {a b : ℕ} (hab : a = b) (ha : 
   subst hab
   exact ⟨_, le_rfl, le_rfl, fun _ _ ↦ rfl⟩
 
+/-- The operation homomorphism of a `⋎` is compatible with the rigidifying homomorphisms. -/
+theorem ElemOp.compat_quotHom {A B : ChainObj E} :
+    ∀ (o : ElemOp A B) (h : o.kind = .quot), ChainObj.Compat A B (o.quotHom h)
+  | .quot _ _ _ compat, _ => compat
+  | .cover .., h => absurd h (by simp [ElemOp.kind])
+  | .decusp .., h => absurd h (by simp [ElemOp.kind])
+  | .deorb .., h => absurd h (by simp [ElemOp.kind])
+
+/-- **The embedding `Π_V ↪ Π` of a Belyi-type chain lies over `G` up to conjugation.** -/
+theorem PiChain.exists_pr_belyiEmb {c : PiChain E} {l r : ℕ} (hc : c.IsBelyiType l r)
+    (t : c.TerminalIso (PiChain.trivial E)) :
+    ∃ g : E.G, ∀ y, E.pr (PiChain.belyiEmb hc t y) =
+      g * (c.objN (l + r + 3) (by have := hc.len_eq; omega)).toG y * g⁻¹ := by
+  have hlen := hc.len_eq
+  obtain ⟨g, hg⟩ := t.over
+  refine ⟨g, fun y ↦ ?_⟩
+  have h1 := ChainObj.toG_apply_of_compat (ElemOp.compat_quotHom
+    (c.opN (l + r + 3) (by omega)) hc.2.2.2.2.2.2) y
+  have h2 := ChainObj.toG_apply_of_compat (c.compat_objCongr (a := l + r + 3 + 1) (b := c.len)
+    (by omega) (by omega) le_rfl) ((c.opN (l + r + 3) (by omega)).quotHom hc.2.2.2.2.2.2 y)
+  have h3 := hg (c.objCongr (a := l + r + 3 + 1) (b := c.len) (by omega) (by omega) le_rfl
+    ((c.opN (l + r + 3) (by omega)).quotHom hc.2.2.2.2.2.2 y))
+  exact h3.trans (congrArg (fun z ↦ g * z * g⁻¹) (h2.trans h1))
+
 end Belyi.Anabelian
 
 namespace CurvesJacobian.Cusp
@@ -337,5 +361,38 @@ theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_candidate_fill (hc : c
     (congrArg ι' (hu σ)).symm.trans (ι'.apply_symm_apply _)
   exact congrArg (c.objCongr (a := l + 3 + (r - m) + m) (b := l + r + 3) (by omega) (by omega)
     (by omega)) e.symm
+
+/-- **The candidate is a filling of curves, with the projections to `G_K`**: as
+`PiChain.IsBelyiType.exists_candidate_fill`, and moreover `ε : Π_{(X̄_Y, U')} ≅ Π_V` lies over
+`res : G_M → G_K` up to conjugation. -/
+theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_candidate_fill_toG
+    (hc : c.IsBelyiType l r) (t : c.TerminalIso (PiChain.trivial _))
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (m : ℕ) (hm : m ≤ r) :
+    ∃ D : GeomModel Ω CX hcX (c.objN (l + 3 + (r - m)) (by have := hc.len_eq; omega)),
+      Function.Surjective D.ι ∧
+      ∃ (U' : D.Y.Xbar.Opens) (h : D.Y.U ≤ U') (hc' : (U' : Set D.Y.Xbar)ᶜ.Nonempty)
+        (hyp : haveI := IsCurveOver.isIntegral D.M D.Y.Xbar
+          2 < 2 * Anabelian.curveGenus D.M D.Y.Xbar + cuspDegree D.M D.Y.Xbar U')
+        (ε : π₁ᵉᵗ(basePoint Ω (fillCurve D.Y h hyp) hc' ≫
+          baseChangeSpec D.M Ω Γ(D.Y.Xbar, U')) ≃ₜ* (PiChain.belyiCandidate hc t m hm).PiV),
+        (∀ σ, (PiChain.belyiCandidate hc t m hm).surj (D.ι σ) =
+          ε (fillPiHom Ω D.Y D.hY h hc' hyp σ)) ∧
+        ∃ g₀ : π₁ᵉᵗ(sK), ∀ τ, toGk (c.objN (l + r + 3) (by have := hc.len_eq; omega)) (ε τ) =
+          g₀ * resGal K Ω D.M (projGk Ω (fillCurve D.Y h hyp) hc' τ) * g₀⁻¹ := by
+  have hlen := hc.len_eq
+  have h1 := hc.exists_candidate_fill t hDGC hV m hm
+  obtain ⟨D, hD, U', h, hc', hyp, ε, hε⟩ := h1
+  have hf : ChainObj.Compat (c.objN (l + 3 + (r - m)) (by omega)) (c.objN (l + r + 3) (by omega))
+      (PiChain.belyiCandidate hc t m hm).surj :=
+    (c.compat_runHom (l + 3 + (r - m)) m (by omega) (hc.isDecuspRun m hm)).comp
+      (c.compat_objCongr (a := l + 3 + (r - m) + m) (b := l + r + 3) (by omega) (by omega)
+        (by omega))
+  have hrel : IsConjInduced (Spec.map (CommRingCat.ofHom (resAlg D.M h).toRingHom))
+      (fun σ ↦ ε.symm ((PiChain.belyiCandidate hc t m hm).surj (D.ι σ))) :=
+    (isConjInduced_fillPiHom Ω D.Y D.hY h hc' hyp).congr_fun fun σ ↦
+      (congrArg ε.symm (hε σ)).trans (ε.symm_apply_apply _)
+  have hG := D.exists_toGk_ofFill _ hf h hc' hyp ε hrel
+  exact ⟨D, hD, U', h, hc', hyp, ε, hε, hG⟩
 
 end CurvesJacobian.Cusp
