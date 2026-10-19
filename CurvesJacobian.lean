@@ -110,6 +110,7 @@ import CurvesJacobian.Descent.GaloisAlgebra
 import CurvesJacobian.Descent.GaloisHom
 import CurvesJacobian.Descent.GaloisScheme
 import CurvesJacobian.Descent.GaloisSplit
+import CurvesJacobian.Descent.GaloisStable
 import CurvesJacobian.Descent.GaloisTwist
 import CurvesJacobian.Etale.Gm
 import CurvesJacobian.Etale.Kummer
