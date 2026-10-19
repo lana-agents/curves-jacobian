@@ -70,6 +70,7 @@ import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
+import CurvesJacobian.Cusp.FieldTwistDGC
 import CurvesJacobian.Cusp.FillAutExt
 import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.FillByKernel
