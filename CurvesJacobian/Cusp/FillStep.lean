@@ -431,16 +431,17 @@ lemma fillStepMap_fillTransport (γ) :
   fundamentalGroupMap_autContinuousMulEquivOfIso _ _ _ _ γ
 
 variable {x : C.Xbar} (hxU₂ : x ∈ U₂) (hxU₁ : x ∉ U₁) (hx : (U₂ : Set C.Xbar) \ U₁ ⊆ {x})
+  (hxr : IsIso ((C.Xbar ↘ Spec (.of K)).residueFieldMap x))
 
 /-- The cuspidal decomposition group of `Δ_{U₁}` whose normal closure is `ker(Π_{U₁} ↠ Π_{U₂})`
 (the inertia group of the cusp `x`, at the base point `fillPoint`). -/
 def fillStepCusp : Subgroup π₁ᵉᵗ(fillPoint Ω C hc h₁ ≫ baseChangeSpec K Ω Γ(C.Xbar, U₁)) :=
-  (fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx).map
+  (fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx hxr).map
     (fillTransport Ω C hc h₁ hc₁ hyp₁).toMulEquiv.toMonoidHom
 
 lemma ker_fillStepMap : (fillStepMap Ω C hc h₁ h₂).toMonoidHom.ker =
-    (Subgroup.normalClosure (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx :
-      Set _)).topologicalClosure := by
+    (fillChainObj Ω C hc h₁ hc₁ hyp₁).deltaNormalClosure
+      (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr) := by
   let T := fillTransport Ω C hc h₁ hc₁ hyp₁
   have hker : (fillStepMap Ω C hc h₁ h₂).toMonoidHom.ker =
       (fillMap Ω (fillCurve C h₁ hyp₁) hc₁ h₂).toMonoidHom.ker.map T.toMulEquiv.toMonoidHom := by
@@ -459,19 +460,19 @@ lemma ker_fillStepMap : (fillStepMap Ω C hc h₁ h₂).toMonoidHom.ker =
     · intro h1
       have h3 := (congrArg _ e1).symm.trans h1
       exact e2.trans ((congrArg _ h3).trans (map_one _))
-  rw [hker, ker_fillMap_eq_fillCusp, map_topologicalClosure_normalClosure, fillStepCusp,
-    Subgroup.coe_map]
-  rfl
+  rw [hker, ker_fillMap_eq_fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx hxr]
+  exact (map_conjClosureIn_equiv T _ _).trans
+    (congrArg (conjClosureIn · _) (ker_projGkFill_eq_map Ω C hc h₁ hc₁ hyp₁).symm)
 
 /-- `fillStepCusp` is a cuspidal decomposition group of `Δ_{U₁}` in the sense of [AbsTopI]
 Definition 4.2 (iii), (3Π): the commensurator in `Δ_{U₁}` of the (nontrivial) image of a
 cuspidal inertia group of `Π_U`. -/
 lemma isCuspidal_fillStepCusp :
     (fillChainObj Ω C hc h₁ hc₁ hyp₁).IsCuspidal
-      (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx) := by
+      (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr) := by
   haveI : Nonempty (baseChangeOpen K Ω U₁) := nonempty_fillOpen Ω C h₁
   let T := fillTransport Ω C hc h₁ hc₁ hyp₁
-  have hJ := fillCusp_mem Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx
+  have hJ := fillCusp_mem Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx hxr
   obtain ⟨I, hI, hIJ⟩ := exists_mem_arithCusps_map_fillMap Ω C hc h₁ hc₁ hyp₁
     (fillAlpha Ω C hc h₁ hc₁ hyp₁) hJ
   refine ⟨I, hI, ?_, ?_⟩
@@ -480,9 +481,9 @@ lemma isCuspidal_fillStepCusp :
       (one_lt_card_geomOpen_compl Ω (fillCurve C h₁ hyp₁) h₂ hc₂ hxU₂ hxU₁) hJ
   · have hcomm := commensurator_inf_of_mem_arithCusps Ω (fillCurve C h₁ hyp₁) hc₁ hJ
     have k : Subgroup.Commensurable.commensurator ((fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂
-        hxU₂ hxU₁ hx).map T.toMulEquiv.toMonoidHom) ⊓
+        hxU₂ hxU₁ hx hxr).map T.toMulEquiv.toMonoidHom) ⊓
           (projGk Ω (fillCurve C h₁ hyp₁) hc₁).toMonoidHom.ker.map T.toMulEquiv.toMonoidHom =
-        (fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx).map
+        (fillCusp Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx hxr).map
           T.toMulEquiv.toMonoidHom := by
       rw [← commensurator_map_mulEquiv, ← Subgroup.map_inf_eq _ _ _ T.injective, hcomm]
     rw [image_fillChainObj, hIJ]
@@ -492,7 +493,7 @@ lemma isCuspidal_fillStepCusp :
 which is torsion-free). -/
 lemma inTorsionFreeNormalOpen_fillStepCusp :
     (fillChainObj Ω C hc h₁ hc₁ hyp₁).InTorsionFreeNormalOpen
-      (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx) := by
+      (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr) := by
   let T := fillTransport Ω C hc h₁ hc₁ hyp₁
   have hD : (fillChainObj Ω C hc h₁ hc₁ hyp₁).Delta =
       (projGk Ω (fillCurve C h₁ hyp₁) hc₁).toMonoidHom.ker.map T.toMulEquiv.toMonoidHom :=
@@ -509,7 +510,7 @@ lemma inTorsionFreeNormalOpen_fillStepCusp :
     exact map_one _
   · rw [hD]
     exact Subgroup.map_mono (arithCusps_le Ω (fillCurve C h₁ hyp₁) hc₁
-      (fillCusp_mem Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx))
+      (fillCusp_mem Ω (fillCurve C h₁ hyp₁) hc₁ h₂ hc₂ hxU₂ hxU₁ hx hxr))
 
 /-- `fillStepMap` is compatible with the rigidifying homomorphisms `fillMap`. -/
 lemma fillStepMap_compat :
@@ -524,14 +525,14 @@ lemma fillStepMap_compat :
 def fillStepElemOp :
     ElemOp (fillChainObj Ω C hc h₁ hc₁ hyp₁) (fillChainObj Ω C hc (h₁.trans h₂) hc₂ hyp₂) :=
   .decusp (fillStepMap Ω C hc h₁ h₂) (fillStepMap_surjective Ω C hc h₁ h₂ hc₂)
-    (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
-    (isCuspidal_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
-    (inTorsionFreeNormalOpen_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
-    (ker_fillStepMap Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx)
+    (fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr)
+    (isCuspidal_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr)
+    (inTorsionFreeNormalOpen_fillStepCusp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr)
+    (ker_fillStepMap Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hxU₂ hxU₁ hx hxr)
     (fillStepMap_compat Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂)
 
 lemma fillStepElemOp_kind :
-    (fillStepElemOp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂ hxU₂ hxU₁ hx).kind = .decusp := rfl
+    (fillStepElemOp Ω C hc h₁ h₂ hc₁ hc₂ hyp₁ hyp₂ hxU₂ hxU₁ hx hxr).kind = .decusp := rfl
 
 end Step
 

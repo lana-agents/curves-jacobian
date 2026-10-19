@@ -31,10 +31,10 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "f0d1a5c3308227f58356290f571d1c6ee43299c0",
+   "rev": "5f3a88ec79f35dbf1a25e0e80548d8aab72deac5",
    "name": "belyi",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "f0d1a5c3308227f58356290f571d1c6ee43299c0",
+   "inputRev": "5f3a88ec79f35dbf1a25e0e80548d8aab72deac5",
    "inherited": false,
    "configFile": "lakefile.toml"
   },

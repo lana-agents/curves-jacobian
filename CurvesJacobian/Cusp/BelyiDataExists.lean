@@ -7,6 +7,7 @@ import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.FillSeq
 import CurvesJacobian.Cusp.HypBaseChange
 import CurvesJacobian.Cusp.P1Curve
+import CurvesJacobian.Cusp.RationalBaseChange
 import Belyi.Anabelian.BelyiInputNumberField
 
 /-!
@@ -204,8 +205,16 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
       D.UW ⟨j, Nat.lt_succ_of_le hj⟩ =
         hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) := by
   classical
-  obtain ⟨M', f, hfo, -, hWU, hWne, hfinP, hetP⟩ :=
-    exists_belyi_open_le_finSub M Ω S.CV.Xbar (S.U₀ hcX UX) (S.U₀_nonempty hcX UX hUX hUXne)
+  -- the field over which the cusps to be filled become rational ([AbsTopII] Example 3.6,
+  -- l.4634–4635, l.4667–4668): the cusps of `Q` lie over `ℙ¹_M ∖ Q`, those of `W` over `S₀`
+  let PQ : FinSub M Ω := ratFinSub M Ω ((S.Q : Set (P1 M))ᶜ)
+  let P : Set S.CV.Xbar → FinSub M Ω := fun T ↦
+    haveI := (ratFinSub M Ω T).2
+    haveI := PQ.2
+    ⟨(ratFinSub M Ω T).1 ⊔ PQ.1, IntermediateField.finiteDimensional_sup _ _⟩
+  obtain ⟨S₀, M', f, hS₀fin, hPM', hfo, -, hWU, hWne, hfinP, hetP, hS₀⟩ :=
+    exists_belyi_open_le_finSub_ge M Ω S.CV.Xbar (S.U₀ hcX UX) (S.U₀_nonempty hcX UX hUX hUXne) P
+  have hPM : (P S₀).1 ≤ M'.1 := hPM'
   haveI := M'.2
   -- the curve `V̄_L` and its opens
   set Xw := bcX M M'.1 S.CV.Xbar with hXw
@@ -233,6 +242,23 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
   obtain ⟨r, j, hj, UW, xW, hW0, hWlast, hWmid, hleW, hleWV, hmonoW, hxW1, hxW2, hxW3⟩ :=
     exists_fillSeq W Ub Vb hWUb hUbVb (hWfin.subset fun _ hx ↦ hx.2)
       (fun _ hx ↦ isClosed_singleton_of_not_mem (k := M'.1) Xw W hWne hx.2)
+  -- the filled points of `V̄_{M'}` are `M'`-rational
+  haveI : IsFinite (specAlgebraMap M M'.1) := by
+    rw [specAlgebraMap, IsFinite.SpecMap_iff]
+    exact RingHom.finite_algebraMap.mpr inferInstance
+  haveI : IsFinite π := MorphismProperty.pullback_snd (P := @IsFinite) _ _ inferInstance
+  have hratW : ∀ i, IsIso ((Xw ↘ Spec (.of M'.1)).residueFieldMap (xW i)) := by
+    intro i
+    have hxWW : xW i ∉ W := fun h ↦ hxW2 i (hleW i.castSucc h)
+    have hcl : IsClosed {xW i} := isClosed_singleton_of_not_mem (k := M'.1) Xw W hWne hxWW
+    letI := Anabelian.residueFieldAlgebra M'.1 Xw (xW i)
+    haveI := finite_residueField M'.1 hcl
+    refine isIso_residueFieldMap_bcX M M'.1 Ω (xW i) inferInstance fun σ a ↦ ?_
+    have hclπ : IsClosed {π (xW i)} := by
+      have := π.isClosedMap _ hcl
+      rwa [Set.image_singleton] at this
+    have hmem := mem_ratFinSub M Ω hS₀fin (hS₀ _ hxWW) hclπ σ a
+    exact ⟨⟨σ a, hPM (le_sup_left (a := (ratFinSub M Ω S₀).1) hmem)⟩, rfl⟩
   let CW : HypCurve M'.1 :=
     { Xbar := Xw, U := W, nonempty := hWne, cusps_finite := hWfin
       hyperbolic := hypW W le_rfl (hWUb.trans hUbVb) }
@@ -263,6 +289,35 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     exists_fillSeq Q' (puncturedLine M'.1) (puncturedLine M'.1) hQ'P le_rfl
       (hQ'fin.subset fun _ hx ↦ hx.2)
       (fun _ hx ↦ isClosed_singleton_of_not_mem (k := M'.1) (P1 M'.1) Q' hQ'ne hx.2)
+  -- the filled points of `ℙ¹_{M'}` are `M'`-rational
+  have hQrat : ∀ y ∈ (S.Q : Set (P1 M))ᶜ, ∀ (σ : ResEmb M Ω (P1 M) y) a,
+      σ a ∈ Set.range (algebraMap M'.1 Ω) := fun y hy σ a ↦ by
+    have hmem := mem_ratFinSub M Ω (finite_compl_of_isCurveOver (k := M) (P1 M) S.Q S.hQne) hy
+      (isClosed_singleton_of_not_mem (k := M) (P1 M) S.Q S.hQne hy) σ a
+    exact ⟨⟨σ a, hPM (le_sup_right (b := PQ.1) hmem)⟩, rfl⟩
+  have hratQ : ∀ i, IsIso ((P1 M'.1 ↘ Spec (.of M'.1)).residueFieldMap (xQ i)) := by
+    intro i
+    have hxQQ : xQ i ∉ Q' := fun h ↦ hxQ2 i (hleQ i.castSucc h)
+    have hcl : IsClosed {xQ i} :=
+      isClosed_singleton_of_not_mem (k := M'.1) (P1 M'.1) Q' hQ'ne hxQQ
+    let e := hPsq.flip.isoPullback
+    have he1 : e.hom ≫ pullback.fst _ _ = (P1 M'.1 ↘ Spec (.of M'.1)) :=
+      hPsq.flip.isoPullback_hom_fst
+    have he2 : e.hom ≫ pullback.snd _ _ = Pm := hPsq.flip.isoPullback_hom_snd
+    have hcl' : IsClosed {e.hom (xQ i)} := by
+      have := (Scheme.homeoOfIso e).isClosedMap _ hcl
+      rwa [Set.image_singleton] at this
+    letI := Anabelian.residueFieldAlgebra M'.1 (bcX M M'.1 (P1 M)) (e.hom (xQ i))
+    haveI := finite_residueField M'.1 hcl'
+    have hy : bcπ M M'.1 (P1 M) (e.hom (xQ i)) ∈ (S.Q : Set (P1 M))ᶜ := by
+      change (e.hom ≫ pullback.snd _ _) (xQ i) ∉ (S.Q : Set (P1 M))
+      rw [he2]
+      exact hxQQ
+    haveI key : IsIso ((pullback.fst (specAlgebraMap M M'.1) (P1 M ↘ Spec (.of M))).residueFieldMap
+        (e.hom (xQ i))) :=
+      isIso_residueFieldMap_bcX M M'.1 Ω (X := P1 M) _ inferInstance (hQrat _ hy)
+    rw [← he1, Scheme.residueFieldMap_comp]
+    infer_instance
   let CQ : HypCurve M'.1 :=
     { Xbar := P1 M'.1, U := Q', nonempty := hQ'ne, cusps_finite := hQ'fin
       hyperbolic := hypQ Q' le_rfl hQ'P }
@@ -309,12 +364,12 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
       hleQ := hleQ, hmonoQ := hmonoQ
       hcUQ := fun i ↦ compl_nonempty_of_le (hleQP i) hcP
       hypQ := fun i ↦ hypQ _ (hleQ i) (hleQP i)
-      xQ := xQ, hxUQ := hxQ1, hxUQ' := hxQ2, hxQ := hxQ3
+      xQ := xQ, hxUQ := hxQ1, hxUQ' := hxQ2, hxQ := hxQ3, ratQ := hratQ
       CW := CW, hcW := compl_nonempty_of_le (hWUb.trans hUbVb) hcVb, r := r, UW := UW
       hUW0 := hW0, hleW := hleW, hmonoW := hmonoW
       hcUW := fun i ↦ compl_nonempty_of_le (hleWV i) hcVb
       hypW := fun i ↦ hypW _ (hleW i) (hleWV i)
-      xW := xW, hxUW := hxW1, hxUW' := hxW2, hxW := hxW3
+      xW := xW, hxUW := hxW1, hxUW' := hxW2, hxW := hxW3, ratW := hratW
       FV := aV ≫ S.FV
       hFV := by
         rw [Category.assoc, S.hFV, ← Category.assoc, hsqVΓ.w, Category.assoc]

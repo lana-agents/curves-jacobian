@@ -17,12 +17,14 @@ Corollary 3.7 (a) (l.4743–4753): for `X` of strictly Belyi type, the `Π`-chai
 
 **Scope.** Following the MR8 decision (IUT only needs affine hyperbolic curves: the
 once-punctured elliptic curve and its quotients), all curves are *affine* hyperbolic curves, i.e.
-`HypCurve`s with at least one cusp; every `•` fills one closed point of a curve which keeps a cusp.
+`HypCurve`s with at least one cusp; every `•` fills one rational point of a curve which keeps a
+cusp.
 
 `BelyiData CX` (over a number field `M ⊇ K`, `CX` over `K`) consists of
 * hyperbolic curves `CQ = (Q̄, Q)` and `CW = (V̄, W)` over `M` with a cusp;
 * runs of fillings `Q = UQ₀ ⊆ … ⊆ UQ_l = P` in `Q̄` and `W = UW₀ ⊆ … ⊆ UW_r = V` in `V̄`, one
-  closed point at a time, all hyperbolic with a cusp (the hypotheses of `fillChain`);
+  `M`-rational point at a time ([AbsTopII] Example 3.6, l.4634–4635, l.4667–4668), all
+  hyperbolic with a cusp (the hypotheses of `fillChain`);
 * finite étale maps `FV : V ⟶ U_X` (over `Spec M ⟶ Spec K`), `FQ : V ⟶ Q` and `β : W ⟶ P`
   (over `Spec M`), on the affine schemes `Spec Γ(·)`.
 
@@ -102,8 +104,8 @@ variable {K : Type u} [Field K] [NumberField K] {M : Type u} [Field M] [NumberFi
 
 /-- **Belyi data** for an affine hyperbolic curve `CX` over `K` ([AbsTopII] Example 3.6): curves
 `CQ = (Q̄, Q)`, `CW = (V̄, W)` over a number field `M ⊇ K` with runs of fillings
-`Q ⊆ … ⊆ P` and `W ⊆ … ⊆ V` (one closed point at a time, all hyperbolic with a cusp) and finite
-étale maps `V ⟶ U_X`, `V ⟶ Q`, `β : W ⟶ P`. -/
+`Q ⊆ … ⊆ P` and `W ⊆ … ⊆ V` (one rational point at a time, all hyperbolic with a cusp) and
+finite étale maps `V ⟶ U_X`, `V ⟶ Q`, `β : W ⟶ P`. -/
 structure BelyiData (CX : HypCurve K) where
   /-- The curve `(Q̄, Q)`. -/
   CQ : HypCurve M
@@ -121,6 +123,8 @@ structure BelyiData (CX : HypCurve K) where
   hxUQ : ∀ i, xQ i ∈ UQ i.succ
   hxUQ' : ∀ i, xQ i ∉ UQ i.castSucc
   hxQ : ∀ i, (UQ i.succ : Set CQ.Xbar) \ UQ i.castSucc ⊆ {xQ i}
+  /-- The filled points are `M`-rational (operations of type `•` fill rational cusps). -/
+  ratQ : ∀ i, IsIso ((CQ.Xbar ↘ Spec (.of M)).residueFieldMap (xQ i))
   /-- The curve `(V̄, W)`. -/
   CW : HypCurve M
   hcW : (CW.U : Set CW.Xbar)ᶜ.Nonempty
@@ -137,6 +141,7 @@ structure BelyiData (CX : HypCurve K) where
   hxUW : ∀ i, xW i ∈ UW i.succ
   hxUW' : ∀ i, xW i ∉ UW i.castSucc
   hxW : ∀ i, (UW i.succ : Set CW.Xbar) \ UW i.castSucc ⊆ {xW i}
+  ratW : ∀ i, IsIso ((CW.Xbar ↘ Spec (.of M)).residueFieldMap (xW i))
   /-- `V ⟶ U_X`. -/
   FV : Spec Γ(CW.Xbar, UW (Fin.last r)) ⟶ Spec Γ(CX.Xbar, CX.U)
   [finFV : IsFiniteEtale FV]
@@ -339,10 +344,12 @@ lemma isOpen_range_ιW : IsOpen (Set.range (D.ιW Ω hcX)) := by
 /-- The run of fillings `Q ⊆ … ⊆ P`. -/
 abbrev cQ : PiChain (arithmeticExt Ω D.CQ D.hcQ) :=
   fillChain Ω D.CQ D.hcQ D.l D.UQ D.hUQ0 D.hleQ D.hmonoQ D.hcUQ D.hypQ D.xQ D.hxUQ D.hxUQ' D.hxQ
+    D.ratQ
 
 /-- The run of fillings `W ⊆ … ⊆ V`. -/
 abbrev cW : PiChain (arithmeticExt Ω D.CW D.hcW) :=
   fillChain Ω D.CW D.hcW D.r D.UW D.hUW0 D.hleW D.hmonoW D.hcUW D.hypW D.xW D.hxUW D.hxUW' D.hxW
+    D.ratW
 
 lemma j₂_injective : Function.Injective (D.j₂ Ω) := coverPiHom_injective _ _ _ _ _ _
 

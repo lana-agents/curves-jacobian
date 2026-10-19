@@ -127,6 +127,7 @@ import CurvesJacobian.Cusp.PlaceTransitivity
 import CurvesJacobian.Cusp.PullbackCover
 import CurvesJacobian.Cusp.QuotConj
 import CurvesJacobian.Cusp.QuotientCurve
+import CurvesJacobian.Cusp.RationalBaseChange
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Cusp.SingleCusp

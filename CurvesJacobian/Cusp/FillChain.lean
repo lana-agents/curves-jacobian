@@ -12,7 +12,8 @@ import Belyi.Anabelian.BelyiChain
 [AbsTopII] Example 3.6 (ii) and Corollary 3.7 (a) (`Topics in Absolute Anabelian Geometry
 II.txt` l.4669–4680, l.4743–4753) use runs `•, …, •` of operations filling in one closed point at a
 time. For a hyperbolic curve `C = (X̄, U)` over a number field and opens
-`U = U₀ ⊆ U₁ ⊆ … ⊆ U_r` with `U_{i+1} = U_i ∪ {xᵢ}`, all hyperbolic with a cusp,
+`U = U₀ ⊆ U₁ ⊆ … ⊆ U_r` with `U_{i+1} = U_i ∪ {xᵢ}` (`xᵢ` a `K`-rational point, as the
+operations of type `•` require), all hyperbolic with a cusp,
 `CurvesJacobian.Cusp.fillChain` is the `Π`-chain (of the arithmetic cuspidal extension `Π_U ↠ G_K`)
 with objects `fillChainObj U_i` and operations `fillStepElemOp` (all of type `•`,
 `fillChain_isDecuspRun`).
@@ -75,10 +76,11 @@ variable (r : ℕ) (U : Fin (r + 1) → C.Xbar.Opens) (hU0 : U 0 = C.U) (hle : �
     2 < 2 * Anabelian.curveGenus K C.Xbar + cuspDegree K C.Xbar (U i))
   (x : Fin r → C.Xbar) (hxU : ∀ i, x i ∈ U i.succ) (hxU' : ∀ i, x i ∉ U i.castSucc)
   (hx : ∀ i, (U i.succ : Set C.Xbar) \ U i.castSucc ⊆ {x i})
+  (hxr : ∀ i, IsIso ((C.Xbar ↘ Spec (.of K)).residueFieldMap (x i)))
 
 /-- **The run of `•`'s of a sequence of fillings** `U = U₀ ⊆ U₁ ⊆ … ⊆ U_r`,
-`U_{i+1} = U_i ∪ {xᵢ}` ([AbsTopII] Example 3.6 (ii)): the `Π`-chain of `Π_U ↠ G_K` with objects
-`Π_{U_i}` (`fillChainObj`) and operations `Π_{U_i} ↠ Π_{U_{i+1}}` of type `•`
+`U_{i+1} = U_i ∪ {xᵢ}`, `xᵢ` rational ([AbsTopII] Example 3.6 (ii)): the `Π`-chain of `Π_U ↠ G_K`
+with objects `Π_{U_i}` (`fillChainObj`) and operations `Π_{U_i} ↠ Π_{U_{i+1}}` of type `•`
 (`fillStepElemOp`). -/
 def fillChain : PiChain (arithmeticExt Ω C hc) where
   len := r
@@ -86,13 +88,13 @@ def fillChain : PiChain (arithmeticExt Ω C hc) where
   obj_zero := ⟨(fillEquivOfEq Ω C hc (hle 0) hU0).symm, ⊤, le_rfl, le_rfl, fun γ _ ↦
     (fillEquivOfEq Ω C hc (hle 0) hU0).symm_apply_apply γ⟩
   op j := fillStepElemOp Ω C hc (hle j.castSucc) (hmono j) (hcU j.castSucc) (hcU j.succ)
-    (hyp j.castSucc) (hyp j.succ) (hxU j) (hxU' j) (hx j)
+    (hyp j.castSucc) (hyp j.succ) (hxU j) (hxU' j) (hx j) (hxr j)
 
-lemma fillChain_len : (fillChain Ω C hc r U hU0 hle hmono hcU hyp x hxU hxU' hx).len = r := rfl
+lemma fillChain_len : (fillChain Ω C hc r U hU0 hle hmono hcU hyp x hxU hxU' hx hxr).len = r := rfl
 
 /-- All operations of `fillChain` are of type `•`. -/
 lemma fillChain_isDecuspRun :
-    (fillChain Ω C hc r U hU0 hle hmono hcU hyp x hxU hxU' hx).IsDecuspRun 0 r
+    (fillChain Ω C hc r U hU0 hle hmono hcU hyp x hxU hxU' hx hxr).IsDecuspRun 0 r
       (by rw [fillChain_len, zero_add]) :=
   fun _ _ ↦ rfl
 
