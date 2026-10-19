@@ -18,6 +18,7 @@ import CurvesJacobian.Cusp.BasicSubCurve
 import CurvesJacobian.Cusp.BelyiArithChain
 import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.BelyiChainCusp
+import CurvesJacobian.Cusp.BelyiChainHV
 import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BelyiGaloisCover
@@ -35,6 +36,7 @@ import CurvesJacobian.Cusp.ConjInducedCusps
 import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
+import CurvesJacobian.Cusp.Cor38Elliptic
 import CurvesJacobian.Cusp.Cor38Exists
 import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
