@@ -1,5 +1,6 @@
 import CurvesJacobian.Basic
 import CurvesJacobian.CommAlg.Depth
+import CurvesJacobian.CommAlg.EtaleOfDerivation
 import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
@@ -173,6 +174,7 @@ import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.JacobianBridge
+import CurvesJacobian.Kummer.JacobianDivisible
 import CurvesJacobian.Kummer.JacobianH1Reduction
 import CurvesJacobian.Kummer.JacobianPi1
 import CurvesJacobian.Kummer.JacobianTate
@@ -223,6 +225,7 @@ import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.GaloisPoints
+import CurvesJacobian.Picard.GroupEtale
 import CurvesJacobian.Picard.GrpSeparated
 import CurvesJacobian.Picard.H0BaseChange
 import CurvesJacobian.Picard.Hilb
