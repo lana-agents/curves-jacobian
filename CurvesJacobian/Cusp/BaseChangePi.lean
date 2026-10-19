@@ -162,6 +162,55 @@ theorem index_range_bcPiHom :
   rw [e2, Subgroup.index_map_of_bijective (autContinuousMulEquivOfIso _).bijective]
   exact index_range_fundamentalGroupMap (specAlgebraMap M M') (specMap_algebraMap_tower M M' Ω)
 
+omit [NumberField M] [NumberField M'] [FiniteDimensional M M'] [IsAlgClosed Ω]
+  [Algebra.IsAlgebraic M Ω] [CharZero Ω] [IsScalarTower M M' Ω] [Algebra.IsAlgebraic M' Ω] in
+/-- Geometric points of `Spec M'` over `Spec Ω ⟶ Spec M` are `M`-embeddings `M' → Ω`. -/
+def overHomEquivAlgHom [IsFiniteEtale (specAlgebraMap M M')] :
+    (Over.mk (Spec.map (CommRingCat.ofHom (algebraMap M Ω))) ⟶
+        (coverObj (specAlgebraMap M M')).toComma) ≃ (M' →ₐ[M] Ω) where
+  toFun x :=
+    { toRingHom := (Spec.preimage x.left).hom
+      commutes' := fun c ↦ by
+        have h : x.left ≫ specAlgebraMap M M' = Spec.map (CommRingCat.ofHom (algebraMap M Ω)) :=
+          Over.w x
+        have h2 : Spec.map (CommRingCat.ofHom (algebraMap M M') ≫ Spec.preimage x.left) =
+            Spec.map (CommRingCat.ofHom (algebraMap M Ω)) := by
+          rw [Spec.map_comp, Spec.map_preimage]
+          exact h
+        exact congrArg (fun f : CommRingCat.of M ⟶ CommRingCat.of Ω ↦ f.hom c)
+          (Spec.map_injective h2) }
+  invFun φ := Over.homMk (Spec.map (CommRingCat.ofHom (φ : M' →+* Ω))) (by
+    change Spec.map _ ≫ Spec.map _ = _
+    rw [← Spec.map_comp, ← CommRingCat.ofHom_comp, AlgHom.comp_algebraMap]
+    rfl)
+  left_inv x := by
+    ext1
+    change Spec.map (CommRingCat.ofHom (Spec.preimage x.left).hom) = x.left
+    rw [CommRingCat.ofHom_hom, Spec.map_preimage]
+  right_inv φ := by
+    ext c
+    change (Spec.preimage (Spec.map (CommRingCat.ofHom (φ : M' →+* Ω)))).hom c = φ c
+    rw [Spec.preimage_map]
+    rfl
+
+omit [NumberField M'] [Algebra.IsAlgebraic M Ω] [CharZero Ω] [Algebra M' Ω]
+  [IsScalarTower M M' Ω] [Algebra.IsAlgebraic M' Ω] in
+/-- **`[G_M : G_{M'}] = [M' : M]`**: the geometric fibre of `Spec M' ⟶ Spec M` has `[M' : M]`
+points. -/
+theorem natCard_fiber_specAlgebraMap [IsFiniteEtale (specAlgebraMap M M')] :
+    Nat.card ((fiber (Spec.map (CommRingCat.ofHom (algebraMap M Ω)))).obj
+      (coverObj (specAlgebraMap M M'))) = Module.finrank M M' := by
+  rw [Nat.card_congr ((fiberObjEquivHom _ _).trans (overHomEquivAlgHom M' Ω))]
+  exact AlgHom.natCard_of_splits M M' Ω fun _ ↦ IsAlgClosed.splits _
+
+/-- **`[Π_U : Π_{U_{M'}}] = [M' : M]`.** -/
+theorem index_range_bcPiHom_eq_finrank :
+    haveI := isFiniteEtale_bcSpec M' C hc
+    (coverPiHom Ω C hc (C.bc M') (HypCurve.bc_cusp M' C hc)
+      (bcSpec M' C)).toMonoidHom.range.index = Module.finrank M M' := by
+  haveI : IsFiniteEtale (specAlgebraMap M M') := isFiniteEtale_specAlgebraMap (M := M) (M' := M')
+  exact (index_range_bcPiHom M' C hc Ω).trans (natCard_fiber_specAlgebraMap M' Ω)
+
 end BaseChangePi
 
 end CurvesJacobian.Cusp
