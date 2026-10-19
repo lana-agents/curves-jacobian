@@ -185,6 +185,7 @@ import CurvesJacobian.Kummer.NFDescent
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PointRestriction
 import CurvesJacobian.Kummer.RationalCharacterization
+import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
