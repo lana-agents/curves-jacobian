@@ -49,6 +49,8 @@ of the Jacobian or of the torsor `J¹` is used):
 `H¹(G_k, Δ_X^{ab}) ≅ J(k)^∧` from the Kummer sequences of `J`, mapping `η_D ↦ [D]`, i.e.
 divisibility of `J(k̄)` (MR5 plan JAC-4a) and the identification `Δ_X^{ab}/n ≅ J[n]` through the
 Weil pairing, compatible with `t_x t_y⁻¹ ↦` the Kummer cocycle of `[x − y]` (JAC-4b).
+The parts of that argument which need neither are in `Kummer/JacobianH1Reduction.lean`
+(`H¹(G_k, Δ_X^{ab})` is detected modulo `N`; Kummer injectivity `M^G/N ↪ H¹(G, M[N])`).
 Distinct `RatPoint`s above the same point of `F` are distinct indices of the divisor group; their
 sections `t_x` are `Δ_X^{ab}`-conjugate and have the same difference classes
 (`Kummer/TSectionPlace.lean`: `exists_tSection_conj`, `diffClass_tSection_eq_one`).
