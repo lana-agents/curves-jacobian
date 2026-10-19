@@ -11,6 +11,7 @@ import CurvesJacobian.Cusp.ArithmeticFillObj
 import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
+import CurvesJacobian.Cusp.BaseChangePi
 import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.BelyiArithChain
 import CurvesJacobian.Cusp.BelyiArithSpec
