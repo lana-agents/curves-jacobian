@@ -148,9 +148,14 @@ import CurvesJacobian.Etale.Kummer
 import CurvesJacobian.Etale.KummerCohomology
 import CurvesJacobian.Etale.KummerCover
 import CurvesJacobian.FunctionField.CechGenus
+import CurvesJacobian.FunctionField.DivisorEval
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
+import CurvesJacobian.FunctionField.WeilPairing
+import CurvesJacobian.FunctionField.WeilPairingNondeg
+import CurvesJacobian.FunctionField.WeilPairingTransport
+import CurvesJacobian.FunctionField.WeilReciprocity
 import CurvesJacobian.Galois.AbelianPi1
 import CurvesJacobian.Galois.AlgClosedSurfaceGroup
 import CurvesJacobian.Galois.BelyiAffinePart
@@ -189,6 +194,7 @@ import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.JacobianBridge
+import CurvesJacobian.Kummer.JacobianBridgeSurj
 import CurvesJacobian.Kummer.JacobianDivisible
 import CurvesJacobian.Kummer.JacobianH1Reduction
 import CurvesJacobian.Kummer.JacobianPi1
@@ -205,6 +211,9 @@ import CurvesJacobian.Kummer.PointRestriction
 import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.Values
+import CurvesJacobian.Kummer.WeilGenericPoint
+import CurvesJacobian.Kummer.WeilKummer
+import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap
@@ -229,6 +238,7 @@ import CurvesJacobian.Picard.CurveCover
 import CurvesJacobian.Picard.CurveGenus
 import CurvesJacobian.Picard.CurvePerfect
 import CurvesJacobian.Picard.DivisorPic
+import CurvesJacobian.Picard.DivisorPicSurj
 import CurvesJacobian.Picard.Dual
 import CurvesJacobian.Picard.EndInvertible
 import CurvesJacobian.Picard.EpsDecomp
