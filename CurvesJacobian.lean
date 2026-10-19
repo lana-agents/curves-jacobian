@@ -231,6 +231,8 @@ import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.Jacobian
 import CurvesJacobian.Picard.JacobianBaseChange
 import CurvesJacobian.Picard.JacobianChart
+import CurvesJacobian.Picard.JacobianDensity
+import CurvesJacobian.Picard.JacobianDescentField
 import CurvesJacobian.Picard.JacobianField
 import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
