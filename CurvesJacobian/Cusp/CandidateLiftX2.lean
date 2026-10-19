@@ -66,7 +66,7 @@ variable {M : Type u} [Field M] [NumberField M] [Algebra K M] [Algebra M Ω]
   {h : C.U ≤ U'} {hc' : (U' : Set C.Xbar)ᶜ.Nonempty}
   {hyp : haveI := IsCurveOver.isIntegral M C.Xbar
       2 < 2 * Anabelian.curveGenus M C.Xbar + cuspDegree M C.Xbar U'}
-  {PU PV : Type u} [Group PU] [Group PV] [TopologicalSpace PU] [TopologicalSpace PV]
+  {PU PV : Type*} [Group PU] [Group PV] [TopologicalSpace PU] [TopologicalSpace PV]
   [IsTopologicalGroup PU] [T2Space PU]
 
 omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] [NumberField M]

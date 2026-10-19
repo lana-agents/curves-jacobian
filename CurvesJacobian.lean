@@ -35,6 +35,7 @@ import CurvesJacobian.Cusp.ConjInducedCusps
 import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
+import CurvesJacobian.Cusp.Cor38Exists
 import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
