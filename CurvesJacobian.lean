@@ -48,6 +48,7 @@ import CurvesJacobian.Cusp.CuspInertiaFacts
 import CurvesJacobian.Cusp.CuspSchreier
 import CurvesJacobian.Cusp.CuspTerminal
 import CurvesJacobian.Cusp.CuspTerminalFew
+import CurvesJacobian.Cusp.CuspTransport
 import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DifferentialGenus
