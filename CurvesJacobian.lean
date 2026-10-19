@@ -30,6 +30,7 @@ import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
+import CurvesJacobian.Cusp.CoverCuspComap
 import CurvesJacobian.Cusp.CoverCuspDegree
 import CurvesJacobian.Cusp.CoverCusps
 import CurvesJacobian.Cusp.CoverGaloisData
