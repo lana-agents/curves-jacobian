@@ -10,9 +10,10 @@ import Mathlib.CategoryTheory.Monoidal.Cartesian.CommGrp_
 /-!
 # The Picard scheme and `Pic⁰` as commutative group schemes (JAC6)
 
-Let `k` be a separably closed perfect field and `C` a curve over `k` with a rational point `σ`.
-By `isRepresentable_picSigmaSch`, the rigidified Picard functor `Pic_{C/k,σ}` (viewed on all
-schemes) is representable. This file turns the representing scheme into
+Let `k` be a perfect field and `C` a curve over `k` with a rational point `σ` such that the
+rigidified Picard functor `Pic_{C/k,σ}` (viewed on all schemes) is representable (an instance
+argument; for `k` separably closed this is `isRepresentable_picSigmaSch`). This file turns the
+representing scheme into
 
 * `CurvesJacobian.picScheme C σ hσ : Over (Spec k)`, representing the presheaf of abelian groups
   `picSigma` on `(Sch/k)` (`picSchemeRepresentableBy`), hence a **commutative group object** in
@@ -38,9 +39,10 @@ namespace CurvesJacobian
 
 open Belyi Cech
 
-variable {k : Type u} [Field k] [PerfectField k] [IsSepClosed k] (C : Scheme.{u})
+variable {k : Type u} [Field k] [PerfectField k] (C : Scheme.{u})
   [C.Over (Spec (CommRingCat.of k))] [IsCurveOver k C] (σ : Spec (CommRingCat.of k) ⟶ C)
   (hσ : σ ≫ (C ↘ Spec (CommRingCat.of k)) = 𝟙 (Spec (CommRingCat.of k)))
+  [(picSigmaSch (C ↘ Spec (CommRingCat.of k)) σ hσ).IsRepresentable]
 
 local notation "Sk" => Spec (CommRingCat.of k)
 local notation "G" => picSigma (C ↘ Sk) σ hσ
@@ -49,11 +51,11 @@ section Pic
 
 /-- A scheme representing `Pic_{C/k,σ}` on all schemes. -/
 def picSchX : Scheme.{u} :=
-  (isRepresentable_picSigmaSch C σ hσ).has_representation.choose
+  (Functor.IsRepresentable.has_representation (F := picSigmaSch (C ↘ Sk) σ hσ)).choose
 
 /-- The representation of `Pic_{C/k,σ}` (on all schemes) by `picSchX`. -/
 def picSchRepr : (sigmaG G).RepresentableBy (picSchX C σ hσ) :=
-  (isRepresentable_picSigmaSch C σ hσ).has_representation.choose_spec.some
+  (Functor.IsRepresentable.has_representation (F := picSigmaSch (C ↘ Sk) σ hσ)).choose_spec.some
 
 /-- **The Picard scheme** `Pic_{C/k,σ}`, as a scheme over `k`. -/
 abbrev picScheme : Over Sk := OverSigmaRep.over (picSchRepr C σ hσ)
@@ -94,7 +96,7 @@ section PicZero
 
 variable (π : C ⟶ ProjectiveLine.scheme k) [IsFinite π]
 
-omit [IsSepClosed k] [IsFinite π] in
+omit [(picSigmaSch (C ↘ Spec (CommRingCat.of k)) σ hσ).IsRepresentable] [IsFinite π] in
 /-- `Pic^d` is stable under pullback along morphisms over `k`. -/
 lemma picDeg_map_over (d : ℤ) {T T' : Over Sk} (a : T' ⟶ T) (y : (G).obj (op T))
     (hy : picDeg σ hσ π d T.left ⟨T.hom, y⟩) :

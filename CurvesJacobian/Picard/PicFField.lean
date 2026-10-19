@@ -434,6 +434,9 @@ theorem isRepresentable_picSigmaSch [IsSepClosed k] :
     (injective_xiW C σ hσ π hG) (picF_iff_exists_xiW C σ hσ π hG)
     (exists_picF_translate C π σ hσ)
 
+instance [IsSepClosed k] : (picSigmaSch (C ↘ Sk) σ hσ).IsRepresentable :=
+  isRepresentable_picSigmaSch C σ hσ
+
 end Representable
 
 end CurvesJacobian

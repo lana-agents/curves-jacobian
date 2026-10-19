@@ -157,11 +157,13 @@ def curveToP1 : C ⟶ ProjectiveLine.scheme k :=
 instance : IsFinite (curveToP1 k C) :=
   (IsCurveOver.exists_finite_to_P1 k C).choose_spec
 
-variable [IsSepClosed k] {k} (σ : Spec (CommRingCat.of k) ⟶ C)
+variable {k} (σ : Spec (CommRingCat.of k) ⟶ C)
   (hσ : σ ≫ (C ↘ Spec (CommRingCat.of k)) = 𝟙 (Spec (CommRingCat.of k)))
+  [(picSigmaSch (C ↘ Spec (CommRingCat.of k)) σ hσ).IsRepresentable]
 
-/-- **The Jacobian** `J = Pic⁰_{C/k,σ}` of a curve `C` with a rational point `σ` over a separably
-closed perfect field `k`, as a scheme over `k`. -/
+/-- **The Jacobian** `J = Pic⁰_{C/k,σ}` of a curve `C` with a rational point `σ` over a perfect
+field `k` for which `Pic_{C/k,σ}` is representable (e.g. `k` separably closed,
+`isRepresentable_picSigmaSch`), as a scheme over `k`. -/
 abbrev Jacobian : Over (Spec (CommRingCat.of k)) :=
   picZeroScheme C σ hσ (curveToP1 k C)
 
@@ -176,6 +178,8 @@ instance : GrpObj (Jacobian C σ hσ) := inferInstanceAs (GrpObj (picZeroScheme 
 /-- The Jacobian is commutative. -/
 instance : IsCommMonObj (Jacobian C σ hσ) :=
   inferInstanceAs (IsCommMonObj (picZeroScheme C σ hσ _))
+
+variable [IsSepClosed k]
 
 /-- The Jacobian is proper over `k`. -/
 instance : IsProper (Jacobian C σ hσ).hom :=

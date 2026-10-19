@@ -222,6 +222,7 @@ import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.Jacobian
 import CurvesJacobian.Picard.JacobianBaseChange
+import CurvesJacobian.Picard.JacobianField
 import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
 import CurvesJacobian.Picard.JacobianPoints
@@ -305,6 +306,7 @@ import CurvesJacobian.Picard.TangentAlg
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TensorSections
 import CurvesJacobian.Picard.TranslateRep
+import CurvesJacobian.Picard.TranslateRestrict
 import CurvesJacobian.Picard.TwistCech
 import CurvesJacobian.Picard.TwistCechAlgebra
 import CurvesJacobian.Picard.TwistInfinity

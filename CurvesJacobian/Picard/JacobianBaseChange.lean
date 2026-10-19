@@ -20,8 +20,9 @@ Let `C` be a curve over a field `k` with a rational point `σ` and `Ω ⊇ k` a 
   choice of finite morphisms to `ℙ¹`) is compatible with base change (for `k`, `Ω` perfect): over a
   field every class is `[D] − [E]`, and `D`, `E` are transported along `bcHom` keeping degrees.
 * `CurvesJacobian.picZeroBC`: `Pic⁰_{C/k,σ}(T) ≃ Pic⁰_{C_Ω/Ω,σ_Ω}(T)`, natural in `T`.
-* **`CurvesJacobian.jacobianBCRepresentableBy`**: for `Ω` separably closed and perfect, the
-  Jacobian `J_Ω` of `C_Ω` represents the restriction of `Pic⁰_{C/k,σ}` to `(Sch/Ω)`:
+* **`CurvesJacobian.jacobianBCRepresentableBy`**: for `Ω` perfect with `Pic_{C_Ω/Ω,σ}`
+  representable (e.g. `Ω` separably closed), the Jacobian `J_Ω` of `C_Ω` represents the restriction
+  of `Pic⁰_{C/k,σ}` to `(Sch/Ω)`:
   `Hom_Ω(T, J_Ω) ≃ Pic⁰_{C/k,σ}(T)`.
 -/
 
@@ -305,10 +306,12 @@ lemma picZeroBC_symm_map {T T' : Over SΩ} (a : T' ⟶ T)
     ← Scheme.Pic.map_comp, ← bcMap_bcHom C Ω a.left T.hom T'.hom (Over.w a)
       (T.hom ≫ sA) (T'.hom ≫ sA) rfl rfl, Category.assoc, IsIso.hom_inv_id, Category.comp_id]
 
-variable [IsSepClosed Ω]
+variable [(picSigmaSch (pullback (C ↘ Spec (CommRingCat.of k)) (specAlgebraMap (k₀ := k) Ω) ↘
+  Spec (CommRingCat.of Ω)) (sigmaExt C σ hσ Ω) (sigmaExt_comp C σ hσ Ω)).IsRepresentable]
 
 /-- **The Jacobian of `C_Ω` represents `Pic⁰_{C/k,σ}` restricted to `(Sch/Ω)`**: for `T` over
-`Ω`, `Hom_Ω(T, J_Ω) ≃ Pic⁰_{C/k,σ}(T)`. -/
+`Ω`, `Hom_Ω(T, J_Ω) ≃ Pic⁰_{C/k,σ}(T)` (for `Ω` perfect with `Pic_{C_Ω/Ω,σ}` representable, e.g.
+`Ω` separably closed). -/
 def jacobianBCRepresentableBy :
     ((Over.map sA).op ⋙ picZero C σ hσ (curveToP1 k C) ⋙ forget AddCommGrpCat).RepresentableBy
       (Jacobian CΩ (sigmaExt C σ hσ Ω) (sigmaExt_comp C σ hσ Ω)) where
