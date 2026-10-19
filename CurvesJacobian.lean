@@ -205,6 +205,7 @@ import CurvesJacobian.Kummer.ClosedRestriction
 import CurvesJacobian.Kummer.CompletionDescent
 import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
+import CurvesJacobian.Kummer.CuspCentral
 import CurvesJacobian.Kummer.DeltaAbDuality
 import CurvesJacobian.Kummer.DeltaAbKummer
 import CurvesJacobian.Kummer.Image
