@@ -70,6 +70,7 @@ import CurvesJacobian.Cusp.FixedPointConj
 import CurvesJacobian.Cusp.GalInertia
 import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
+import CurvesJacobian.Cusp.GeomModel
 import CurvesJacobian.Cusp.HypBaseChange
 import CurvesJacobian.Cusp.Hyperbolic
 import CurvesJacobian.Cusp.Inertia
