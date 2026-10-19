@@ -196,6 +196,8 @@ import CurvesJacobian.Kummer.ClosedRestriction
 import CurvesJacobian.Kummer.CompletionDescent
 import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
+import CurvesJacobian.Kummer.DeltaAbDuality
+import CurvesJacobian.Kummer.DeltaAbKummer
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.JacobianBridge
 import CurvesJacobian.Kummer.JacobianBridgeSurj
@@ -212,6 +214,7 @@ import CurvesJacobian.Kummer.NFCharacterization
 import CurvesJacobian.Kummer.NFDescent
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PointRestriction
+import CurvesJacobian.Kummer.PrincipalEta
 import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.Values
