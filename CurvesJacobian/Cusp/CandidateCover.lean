@@ -47,6 +47,17 @@ variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebr
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
 
+omit [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+/-- `Spec α` over `Spec K` for a `K`-isomorphism `α : M₂ ≃ₐ[K] M₁`. -/
+lemma specRingEquiv₂_comp_specAlgebraMap {M₁ M₂ : Type u} [Field M₁] [Field M₂] [Algebra K M₁]
+    [Algebra K M₂] (α : M₂ ≃ₐ[K] M₁) :
+    specRingEquiv₂ α.toRingEquiv ≫ Spec.map (CommRingCat.ofHom (algebraMap K M₂)) =
+      Spec.map (CommRingCat.ofHom (algebraMap K M₁)) := by
+  rw [← Spec.map_comp, ← CommRingCat.ofHom_comp]
+  congr 2
+  ext x
+  exact α.commutes x
+
 /-- **A cover realising an open embedding** (the geometric step of (3b)): let `C₁` be a hyperbolic
 curve over a number field `M₁ ⊇ K` and `f : Π_{C₁} → Π_X` a continuous injective homomorphism
 lying over `res : G_{M₁} → G_K` up to conjugation, whose image is the image of `π₁ᵉᵗ` of a
@@ -65,7 +76,10 @@ theorem exists_isConjInduced_cover_of_range {M₁ : Type u} [Field M₁] [Number
     (g : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))))
     (hg : ∀ τ, projGk Ω CX hcX (f τ) = g * resGal K Ω M₁ (projGk Ω C₁ hc₁ τ) * g⁻¹) :
     ∃ (q : Spec Γ(C₁.Xbar, C₁.U) ⟶ Spec Γ(CX.Xbar, CX.U)) (_ : IsFiniteEtale q),
-      IsConjInduced q f := by
+      IsConjInduced q f ∧
+        q ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) =
+          Spec.map (CommRingCat.ofHom (algebraMap M₁ Γ(C₁.Xbar, C₁.U))) ≫
+            Spec.map (CommRingCat.ofHom (algebraMap K M₁)) := by
   haveI := isIntegral_specSections CX hcX
   letI := coverAlgebra Ω CX hcX p ζ
   haveI := isScalarTower_coverAlgebra Ω CX hcX p ζ hζ
@@ -113,7 +127,7 @@ theorem exists_isConjInduced_cover_of_range {M₁ : Type u} [Field M₁] [Number
             (((continuousMulEquivOfBijective w₀ hw₀).trans
               (coverCurvePiEquiv Ω CX hcX p ζ hζ).symm) τ)) * cc⁻¹) * cc := by group
       _ = _ := by rw [h3]; group
-  obtain ⟨α, F, -, HF⟩ := exists_isConjInduced_of_relIsomDGC_field hDGC
+  obtain ⟨α, F, hFα, HF⟩ := exists_isConjInduced_of_relIsomDGC_field hDGC
     ((continuousMulEquivOfBijective w₀ hw₀).trans (coverCurvePiEquiv Ω CX hcX p ζ hζ).symm)
     (cc⁻¹ * g) hφ
   haveI : IsFiniteEtale F.hom := MorphismProperty.of_isIso @IsFiniteEtale F.hom
@@ -125,7 +139,18 @@ theorem exists_isConjInduced_cover_of_range {M₁ : Type u} [Field M₁] [Number
     MorphismProperty.comp_mem _ _ _ inferInstance inferInstance, ?_⟩
   have Hc := isConjInduced_coverPiEquiv Ω CX hcX (coverCurve CX hcX p) (coverCurve_cusp CX hcX p)
     p ζ hζ (coverIso CX hcX p)
-  exact (HF.comp Hc).congr_fun fun τ ↦ (hφe τ).symm
+  refine ⟨(HF.comp Hc).congr_fun fun τ ↦ (hφe τ).symm, ?_⟩
+  have e1 := coverIso_spec CX hcX p
+  calc (F.hom ≫ (coverIso CX hcX p).hom ≫ p) ≫
+        Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) =
+      F.hom ≫ (coverIso CX hcX p).hom ≫ p ≫
+        Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) := by
+        simp only [Category.assoc]
+    _ = (F.hom ≫ sKU (coverCurve CX hcX p)) ≫
+        Spec.map (CommRingCat.ofHom (algebraMap K (coverField CX hcX p))) := by
+        rw [e1, Category.assoc]
+    _ = _ := by
+        rw [hFα, Category.assoc, specRingEquiv₂_comp_specAlgebraMap]
 
 /-- `exists_isConjInduced_cover_of_range` for a composite `emb ∘ ε` with `ε` an isomorphism. -/
 theorem exists_isConjInduced_cover_of_range' {M₁ : Type u} [Field M₁] [NumberField M₁]
@@ -141,7 +166,10 @@ theorem exists_isConjInduced_cover_of_range' {M₁ : Type u} [Field M₁] [Numbe
     (g : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))))
     (hg : ∀ τ, projGk Ω CX hcX (emb (ε τ)) = g * resGal K Ω M₁ (projGk Ω C₁ hc₁ τ) * g⁻¹) :
     ∃ (q : Spec Γ(C₁.Xbar, C₁.U) ⟶ Spec Γ(CX.Xbar, CX.U)) (_ : IsFiniteEtale q),
-      IsConjInduced q (fun τ ↦ emb (ε τ)) := by
+      IsConjInduced q (fun τ ↦ emb (ε τ)) ∧
+        q ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) =
+          Spec.map (CommRingCat.ofHom (algebraMap M₁ Γ(C₁.Xbar, C₁.U))) ≫
+            Spec.map (CommRingCat.ofHom (algebraMap K M₁)) := by
   have hR : (fundamentalGroupMap p hζ).toMonoidHom.range =
       (emb.comp (ContinuousMonoidHom.toContinuousMonoidHom ε)).toMonoidHom.range := by
     rw [hrange]
@@ -180,7 +208,10 @@ theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_cover_fill (hc : c.IsB
           IsConjInduced q (fun τ ↦ (PiChain.belyiCandidate hc t m hm).emb (ε τ) :
             π₁ᵉᵗ(basePoint Ω (fillCurve D.Y h hyp) hc' ≫
               baseChangeSpec D.M Ω Γ(D.Y.Xbar, U')) →
-              π₁ᵉᵗ(basePoint Ω CX hcX ≫ baseChangeSpec K Ω Γ(CX.Xbar, CX.U))) := by
+              π₁ᵉᵗ(basePoint Ω CX hcX ≫ baseChangeSpec K Ω Γ(CX.Xbar, CX.U))) ∧
+          q ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) =
+            Spec.map (CommRingCat.ofHom (algebraMap D.M Γ(D.Y.Xbar, U'))) ≫
+              Spec.map (CommRingCat.ofHom (algebraMap K D.M)) := by
   have hlen := hc.len_eq
   have h1 := hc.exists_candidate_fill_toG t hDGC hV m hm
   obtain ⟨D, hD, U', h, hc', hyp, ε, hε, g₀, hG⟩ := h1
