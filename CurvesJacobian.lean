@@ -243,6 +243,7 @@ import CurvesJacobian.Picard.JacobianField
 import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
 import CurvesJacobian.Picard.JacobianK
+import CurvesJacobian.Picard.JacobianKProps
 import CurvesJacobian.Picard.JacobianPoints
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.LocIso
