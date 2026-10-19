@@ -125,6 +125,8 @@ structure BelyiData (CX : HypCurve K) where
   hxQ : ∀ i, (UQ i.succ : Set CQ.Xbar) \ UQ i.castSucc ⊆ {xQ i}
   /-- The filled points are `M`-rational (operations of type `•` fill rational cusps). -/
   ratQ : ∀ i, IsIso ((CQ.Xbar ↘ Spec (.of M)).residueFieldMap (xQ i))
+  /-- `Q` has at least three geometric cusps (it lies in `ℙ¹ ∖ {0, 1, ∞}`). -/
+  h3Q : 3 ≤ cuspDegree M CQ.Xbar CQ.U
   /-- The curve `(V̄, W)`. -/
   CW : HypCurve M
   hcW : (CW.U : Set CW.Xbar)ᶜ.Nonempty

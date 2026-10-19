@@ -365,6 +365,7 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
       hcUQ := fun i ↦ compl_nonempty_of_le (hleQP i) hcP
       hypQ := fun i ↦ hypQ _ (hleQ i) (hleQP i)
       xQ := xQ, hxUQ := hxQ1, hxUQ' := hxQ2, hxQ := hxQ3, ratQ := hratQ
+      h3Q := (three_le_cuspDegree_puncturedLine M'.1).trans (cuspDegree_anti hQ'P hQ'fin)
       CW := CW, hcW := compl_nonempty_of_le (hWUb.trans hUbVb) hcVb, r := r, UW := UW
       hUW0 := hW0, hleW := hleW, hmonoW := hmonoW
       hcUW := fun i ↦ compl_nonempty_of_le (hleWV i) hcVb

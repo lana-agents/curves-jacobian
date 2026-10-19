@@ -17,6 +17,7 @@ import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.BasicSubCurve
 import CurvesJacobian.Cusp.BelyiArithChain
 import CurvesJacobian.Cusp.BelyiArithSpec
+import CurvesJacobian.Cusp.BelyiChainCusp
 import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BigLoops
