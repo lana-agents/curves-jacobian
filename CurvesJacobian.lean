@@ -23,6 +23,7 @@ import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
 import CurvesJacobian.Cusp.CandidateCover
+import CurvesJacobian.Cusp.CandidateDescent
 import CurvesJacobian.Cusp.ChainPush
 import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
