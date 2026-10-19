@@ -75,6 +75,7 @@ import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
 import CurvesJacobian.Cusp.FieldTwistDGC
 import CurvesJacobian.Cusp.FillAutExt
+import CurvesJacobian.Cusp.FillAutStable
 import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.FillByKernel
 import CurvesJacobian.Cusp.FillChain
