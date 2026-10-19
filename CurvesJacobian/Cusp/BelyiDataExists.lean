@@ -34,6 +34,13 @@ and an index `j ≤ D.r` such that the `j`-th open of the run of fillings `W ⊆
 the corresponding candidate of the Belyi chain is `Π_U ↠ Π_V ↪ Π_X` ([AbsTopII] Cor 3.7 (a);
 `CurvesJacobian.Cusp.exists_belyiCandidate`).
 
+**Normal field** (`CurvesJacobian.Cusp.exists_belyiData_normal`,
+`CurvesJacobian.Cusp.exists_belyiCandidate_normal`): `M'` can be taken stable under `Gal(Ω/K)` (the
+normal closure over `K` of the Belyi field, `CurvesJacobian.Cusp.normalFinSub`, via
+`CurvesJacobian.Cusp.exists_belyi_open_le_finSub_ge_up`), with `D.FV = (V_{M'} ⟶ V) ≫ FV` for a
+cartesian square `V_{M'} = V ×_M M'`; then `V_{M'} ⟶ X` is Galois when `V ⟶ X` is
+(`CurvesJacobian.Cusp.isGalois_coverObj_comp_of_normal`).
+
 Construction: `U₀ = V ×_X U_X ⊆ V`; belyi's `exists_belyi_open_le_finSub` gives a finite extension
 `M'` and a finite `f : V̄_{M'} ⟶ ℙ¹_{M'}` with `W = f⁻¹(ℙ¹ ∖ {0, 1, ∞}) ⊆ (U₀)_{M'}` and
 `f|_W` finite étale; `CW = (V̄_{M'}, W)`, `CQ = (ℙ¹_{M'}, Q_{M'})`, runs of fillings
@@ -51,6 +58,234 @@ noncomputable section
 set_option backward.isDefEq.respectTransparency false
 
 namespace CurvesJacobian.Cusp
+
+/-! ### The normal closure of a finite subextension -/
+
+section NormalClosure
+
+variable (K : Type u) [Field K] {M : Type u} [Field M] [Algebra K M] {Ω : Type u} [Field Ω]
+  [Algebra K Ω] [Algebra M Ω] [IsScalarTower K M Ω]
+
+/-- The normal closure over `K` of a finite subextension `L` of `Ω / M`, as an intermediate field
+of `Ω / K`. -/
+def normalClosureField (L : FinSub M Ω) : IntermediateField K Ω :=
+  normalClosure K (L.1.restrictScalars K) Ω
+
+lemma restrictScalars_le_normalClosureField (L : FinSub M Ω) :
+    L.1.restrictScalars K ≤ normalClosureField K L :=
+  IntermediateField.le_normalClosure _
+
+lemma algebraMap_mem_normalClosureField (L : FinSub M Ω) (m : M) :
+    algebraMap M Ω m ∈ normalClosureField K L :=
+  restrictScalars_le_normalClosureField K L (L.1.algebraMap_mem m)
+
+lemma finiteDimensional_normalClosureField [FiniteDimensional K M] (L : FinSub M Ω) :
+    FiniteDimensional K (normalClosureField K L) := by
+  haveI := L.2
+  haveI : FiniteDimensional K L.1 := Module.Finite.trans M L.1
+  haveI : FiniteDimensional K (L.1.restrictScalars K) := this
+  exact normalClosure.is_finiteDimensional K _ Ω
+
+/-- **The normal closure** over `K` of a finite subextension `L` of `Ω / M` (with `M / K`
+finite), as a finite subextension of `Ω / M`. -/
+def normalFinSub [FiniteDimensional K M] (L : FinSub M Ω) : FinSub M Ω :=
+  ⟨(normalClosureField K L).toSubfield.toIntermediateField
+      (algebraMap_mem_normalClosureField K L), by
+    haveI := finiteDimensional_normalClosureField K L
+    haveI : FiniteDimensional K ((normalClosureField K L).toSubfield.toIntermediateField
+      (K := M) (algebraMap_mem_normalClosureField K L)) := this
+    exact Module.Finite.of_restrictScalars_finite K M _⟩
+
+lemma mem_normalFinSub [FiniteDimensional K M] (L : FinSub M Ω) (x : Ω) :
+    x ∈ (normalFinSub K L).1 ↔ x ∈ normalClosureField K L := Iff.rfl
+
+lemma le_normalFinSub [FiniteDimensional K M] (L : FinSub M Ω) : L ≤ normalFinSub K L :=
+  fun _ hx ↦ restrictScalars_le_normalClosureField K L hx
+
+lemma normalClosureField_stable (L : FinSub M Ω) (σ : Ω ≃ₐ[K] Ω) {x : Ω}
+    (hx : x ∈ normalClosureField K L) : σ x ∈ normalClosureField K L := by
+  have hle : normalClosureField K L ≤ (normalClosureField K L).map σ.symm.toAlgHom := by
+    refine (normalClosure_le_iff).2 fun f y hy ↦ ?_
+    obtain ⟨a, rfl⟩ := hy
+    refine ⟨σ (f a), ?_, by simp⟩
+    exact AlgHom.fieldRange_le_normalClosure (σ.toAlgHom.comp f) ⟨a, rfl⟩
+  obtain ⟨y, hy, hxy⟩ := hle hx
+  have : σ x = y := by rw [← hxy]; simp
+  rw [this]; exact hy
+
+/-- **The normal closure is `Gal(Ω/K)`-stable.** -/
+lemma normalFinSub_stable [FiniteDimensional K M] (L : FinSub M Ω) :
+    ∀ σ : Ω ≃ₐ[K] Ω, ∀ x ∈ (normalFinSub K L).1, σ x ∈ (normalFinSub K L).1 :=
+  fun σ _ hx ↦ normalClosureField_stable K L σ hx
+
+end NormalClosure
+
+/-! ### The Belyi input over a finite extension of prescribed shape -/
+
+section BelyiUp
+
+/-- `Belyi.Anabelian.exists_baseChange_model_ge` with the subextension of the shape `R L₀`, for
+an inflationary `R` (move the model along the transition morphism `X_{R K} ⟶ X_K`). -/
+theorem exists_baseChange_model_up {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω]
+    [Algebra.IsAlgebraic k Ω] {X : Scheme.{u}} (f : X ⟶ Spec (.of k)) [CompactSpace X]
+    [QuasiSeparatedSpace X] {Z : Scheme.{u}} (g : Z ⟶ Spec (.of k))
+    [LocallyOfFinitePresentation g]
+    (φ : Limits.pullback (Spec.map (CommRingCat.ofHom (algebraMap k Ω))) f ⟶ Z)
+    (hφ : φ ≫ g = pullback.snd _ f ≫ f) (K₀ : FinSub k Ω) (R : FinSub k Ω → FinSub k Ω)
+    (hR : ∀ L, L ≤ R L) :
+    ∃ (K : (FinSub k Ω)ᵒᵖ) (ψ : (baseChangeDiagram (Ω := Ω) f).obj K ⟶ Z), K₀ ≤ K.unop ∧
+      (∃ L₀, K.unop = R L₀) ∧ (baseChangeCone (Ω := Ω) f).π.app K ≫ ψ = φ ∧
+      ψ ≫ g = (baseChangeDiagramπ (Ω := Ω) f).app K ≫ f := by
+  obtain ⟨K, ψ, hK₀, h1, h2⟩ := exists_baseChange_model_ge f g φ hφ K₀
+  let h : Opposite.op (R K.unop) ⟶ K := (homOfLE (hR K.unop)).op
+  refine ⟨Opposite.op (R K.unop), (baseChangeDiagram (Ω := Ω) f).map h ≫ ψ, hK₀.trans (hR _),
+    ⟨K.unop, rfl⟩, ?_, ?_⟩
+  · exact ((Category.assoc _ _ _).symm.trans
+      (congrArg (· ≫ ψ) ((baseChangeCone (Ω := Ω) f).w h))).trans h1
+  · rw [Category.assoc, h2, ← Category.assoc, (baseChangeDiagramπ (Ω := Ω) f).naturality h]
+    simp only [Functor.const_obj_map]
+    exact congrArg (· ≫ f) (Category.comp_id _)
+
+variable (F Ω : Type u) [Field F] [Field Ω] [Algebra F Ω] [Algebra.IsAlgebraic F Ω]
+  [IsAlgClosed Ω] [CharZero F] [Algebra.IsAlgebraic ℚ F]
+
+/-- **`Belyi.Anabelian.exists_belyi_open_le_finSub_ge` with the finite subextension of the shape
+`R L₀`** for an inflationary `R : FinSub F Ω → FinSub F Ω` (e.g. the normal closure over a
+subfield, `normalFinSub`). [AbsTopII] Example 3.6 (i), with the field as large as the cusps
+require. Let `X₀` be a curve over a field `F` algebraic over `ℚ`,
+`U₀ ⊆ X₀` a nonempty open subscheme, `Ω` an algebraic closure of `F` and `P` any rule assigning
+a finite subextension of `Ω / F` to a subset of `X₀`. Then there are a finite set `S₀ ⊆ X₀`, a
+finite subextension `K ⊇ P S₀` and a finite morphism `f : X_K ⟶ ℙ¹_K` over `K` such that
+`W = f⁻¹(ℙ¹_K ∖ {0, 1, ∞})` is a nonempty open subscheme of `U_K`, `f|_W` is finite étale, and
+every point of `X_K` outside `W` lies over `S₀`. (With `P S₀` a field over which the points over
+`S₀` become rational this is [AbsTopII] Example 3.6 (i), l.4634–4635: "by replacing `k′` by some
+finite extension of `k′`, … the cusps of `W` are all defined over `k′`".) -/
+theorem exists_belyi_open_le_finSub_ge_up (X₀ : Scheme.{u}) [X₀.Over (Spec (.of F))]
+    [IsCurveOver F X₀] (U₀ : X₀.Opens) (hU₀ : (U₀ : Set X₀).Nonempty)
+    (P : Set X₀ → FinSub F Ω) (R : FinSub F Ω → FinSub F Ω) (hR : ∀ L, L ≤ R L) :
+    ∃ (S₀ : Set X₀) (K : FinSub F Ω)
+      (f : pullback (specAlgebraMap F K.1) (X₀ ↘ Spec (.of F)) ⟶ P1 K.1),
+      S₀.Finite ∧ P S₀ ≤ K ∧
+      f ≫ (P1 K.1 ↘ Spec (.of K.1)) = pullback.fst _ _ ∧ IsFinite f ∧
+      f ⁻¹ᵁ puncturedLine K.1 ≤ pullback.snd (specAlgebraMap F K.1) (X₀ ↘ Spec (.of F)) ⁻¹ᵁ U₀ ∧
+      (SetLike.coe (f ⁻¹ᵁ puncturedLine K.1)).Nonempty ∧
+      IsFinite (f ∣_ puncturedLine K.1) ∧ Etale (f ∣_ puncturedLine K.1) ∧
+      (∀ x, x ∉ f ⁻¹ᵁ puncturedLine K.1 →
+        pullback.snd (specAlgebraMap F K.1) (X₀ ↘ Spec (.of F)) x ∈ S₀) ∧ ∃ L₀, K = R L₀ := by
+  haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap F Ω).injective
+  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ F Ω
+  set p₀ := X₀ ↘ Spec (.of F) with hp₀
+  haveI : CompactSpace X₀ := QuasiCompact.compactSpace_of_compactSpace p₀
+  haveI : QuasiSeparatedSpace X₀ := quasiSeparatedSpace_of_quasiSeparated p₀
+  -- The curve `X_Ω = Spec Ω ×_F X₀` over `Spec Ω`.
+  letI : (pullback (specAlgebraMap F Ω) p₀).Over (Spec (.of Ω)) := ⟨pullback.fst _ _⟩
+  haveI : IsCurveOver Ω (pullback (specAlgebraMap F Ω) p₀) :=
+    IsCurveOver.of_iso (pullbackSymmetry p₀ (specAlgebraMap F Ω))
+      (pullbackSymmetry_hom_comp_fst _ _)
+  have hUΩ : (SetLike.coe (pullback.snd (specAlgebraMap F Ω) p₀ ⁻¹ᵁ U₀)).Nonempty := by
+    obtain ⟨x, hx⟩ := hU₀
+    obtain ⟨y, rfl⟩ := (pullback.snd (specAlgebraMap F Ω) p₀).surjective x
+    exact ⟨y, hx⟩
+  -- The Belyi map over `Ω`.
+  obtain ⟨fΩ, hBel, hover, hWU, hWne, -, hWet⟩ :=
+    exists_belyi_open_le Ω (pullback (specAlgebraMap F Ω) p₀) _ hUΩ
+  haveI := hBel.isFinite
+  -- The image `S₀ ⊆ X₀` of the complement of `W_Ω`.
+  set S₀ : Set X₀ := ⇑(pullback.snd (specAlgebraMap F Ω) p₀) ''
+    (SetLike.coe (fΩ ⁻¹ᵁ puncturedLine Ω))ᶜ with hS₀
+  have hS₀fin : S₀.Finite :=
+    (finite_compl_of_isCurveOver (k := Ω) _ (fΩ ⁻¹ᵁ puncturedLine Ω) hWne).image _
+  -- Spread out `X_Ω ⟶ ℙ¹_Ω ⟶ ℙ¹_F` to a finite subextension `K`.
+  have hφ : (fΩ ≫ P1.mapOfAlgebra F Ω) ≫ (P1 F ↘ Spec (.of F)) =
+      pullback.snd (Spec.map (CommRingCat.ofHom (algebraMap F Ω))) p₀ ≫ p₀ := by
+    rw [Category.assoc, P1.mapOfAlgebra_comp_structMap, ← Category.assoc, hover]
+    exact pullback.condition
+  obtain ⟨K', ψ, hK₀, hKR, hψ, hψover⟩ := exists_baseChange_model_up (Ω := Ω) p₀
+    (P1 F ↘ Spec (.of F)) (fΩ ≫ P1.mapOfAlgebra F Ω) hφ (P S₀) R hR
+  set K := K'.unop with hK
+  let πX : pullback (specAlgebraMap F Ω) p₀ ⟶ pullback (specAlgebraMap F K.1) p₀ :=
+    (baseChangeCone (Ω := Ω) p₀).π.app K'
+  have hπfst : πX ≫ pullback.fst _ _ = pullback.fst _ _ ≫ specAlgebraMap K.1 Ω :=
+    pullback.lift_fst _ _ _
+  have hπsnd : πX ≫ pullback.snd _ _ = pullback.snd _ _ := baseChangeCone_π_app_snd p₀ K'
+  let ψ' : pullback (specAlgebraMap F K.1) p₀ ⟶ P1 F := ψ
+  have hψ' : πX ≫ ψ' = fΩ ≫ P1.mapOfAlgebra F Ω := hψ
+  have hcomm : ψ' ≫ (P1 F ↘ Spec (.of F)) = pullback.fst _ _ ≫ specAlgebraMap F K.1 :=
+    hψover.trans pullback.condition.symm
+  -- The descended map `f_K : X_K ⟶ ℙ¹_K`.
+  let fK : pullback (specAlgebraMap F K.1) p₀ ⟶ P1 K.1 :=
+    pullback.lift ψ' (pullback.fst _ _) hcomm ≫ inv (P1.toPullback F K.1)
+  have hfKmap : fK ≫ P1.mapOfAlgebra F K.1 = ψ' := by
+    rw [← P1.toPullback_fst, Category.assoc, IsIso.inv_hom_id_assoc, pullback.lift_fst]
+  have hfKstr : fK ≫ (P1 K.1 ↘ Spec (.of K.1)) = pullback.fst _ _ := by
+    rw [← P1.toPullback_snd F K.1, Category.assoc, IsIso.inv_hom_id_assoc, pullback.lift_snd]
+  -- The cartesian square `X_Ω = X_K ×_{ℙ¹_K} ℙ¹_Ω`.
+  have hP1 := P1.isPullback_mapOfAlgebra K.1 Ω
+  have houter : IsPullback (pullback.fst (specAlgebraMap F Ω) p₀) πX (specAlgebraMap K.1 Ω)
+      (pullback.fst (specAlgebraMap F K.1) p₀) := by
+    refine IsPullback.of_bot ?_ hπfst.symm (IsPullback.of_hasPullback (specAlgebraMap F K.1) p₀)
+    rw [hπsnd, specAlgebraMap_comp_specAlgebraMap]
+    exact IsPullback.of_hasPullback _ _
+  have hw : fΩ ≫ P1.mapOfAlgebra K.1 Ω = πX ≫ fK := by
+    rw [← cancel_mono (P1.toPullback F K.1)]
+    apply pullback.hom_ext
+    · simp only [Category.assoc, P1.toPullback_fst]
+      rw [P1.mapOfAlgebra_comp_mapOfAlgebra, hfKmap, hψ']
+    · simp only [Category.assoc, P1.toPullback_snd]
+      rw [hfKstr, hπfst, hP1.w, ← Category.assoc, hover]
+      rfl
+  have hS0 : IsPullback fΩ πX (P1.mapOfAlgebra K.1 Ω) fK := by
+    refine IsPullback.of_right ?_ hw hP1.flip
+    rw [hover, hfKstr]
+    exact houter
+  haveI : Surjective (P1.mapOfAlgebra K.1 Ω) :=
+    MorphismProperty.of_isPullback (P := @Surjective) hP1.flip inferInstance
+  haveI : Flat (P1.mapOfAlgebra K.1 Ω) :=
+    MorphismProperty.of_isPullback (P := @Flat) hP1.flip inferInstance
+  haveI : QuasiCompact (P1.mapOfAlgebra K.1 Ω) :=
+    MorphismProperty.of_isPullback (P := @QuasiCompact) hP1.flip inferInstance
+  haveI : Surjective πX := MorphismProperty.of_isPullback (P := @Surjective) houter
+    inferInstance
+  -- Finiteness descends.
+  letI : (pullback (specAlgebraMap F K.1) p₀).Over (Spec (.of K.1)) := ⟨pullback.fst _ _⟩
+  haveI : fK.IsOver (Spec (.of K.1)) := ⟨hfKstr⟩
+  haveI : IsProper (pullback (specAlgebraMap F K.1) p₀ ↘ Spec (.of K.1)) :=
+    MorphismProperty.pullback_fst (P := @IsProper) _ _ inferInstance
+  haveI : IsProper fK := isProper_of_isOver fK (S := Spec (.of K.1))
+  haveI : IsFinite fK := isFinite_of_isPullback_of_faithfullyFlat hS0
+  -- The punctured lines correspond.
+  have hpre : P1.mapOfAlgebra K.1 Ω ⁻¹ᵁ puncturedLine K.1 = puncturedLine Ω := by
+    rw [← opensRange_puncturedι, ← opensRange_puncturedι]
+    exact mapOfAlgebra_preimage_opensRange_puncturedι K.1 Ω
+  have hpt : ∀ y, P1.mapOfAlgebra K.1 Ω (fΩ y) = fK (πX y) := fun y ↦ by
+    rw [← Scheme.Hom.comp_apply, hw, Scheme.Hom.comp_apply]
+  refine ⟨S₀, K, fK, hS₀fin, hK₀, hfKstr, inferInstance, fun x hx ↦ ?_, ?_, inferInstance, ?_,
+    fun x hx ↦ ?_, hKR⟩
+  · obtain ⟨y, rfl⟩ := πX.surjective x
+    have hy : y ∈ fΩ ⁻¹ᵁ puncturedLine Ω := by
+      rw [← hpre]
+      simpa [Scheme.Hom.mem_preimage, hpt] using hx
+    have := hWU hy
+    simp only [Scheme.Hom.mem_preimage] at this ⊢
+    rwa [← Scheme.Hom.comp_apply, hπsnd]
+  · obtain ⟨y, hy⟩ := hWne
+    refine ⟨πX y, ?_⟩
+    have hy' : y ∈ fΩ ⁻¹ᵁ (P1.mapOfAlgebra K.1 Ω ⁻¹ᵁ puncturedLine K.1) := by
+      rw [hpre]; exact hy
+    simp only [Scheme.Hom.mem_preimage, SetLike.mem_coe] at hy' ⊢
+    rwa [← hpt]
+  · refine of_morphismRestrict_of_isPullback @Etale hS0 (puncturedLine K.1) ?_
+    rw [hpre]
+    exact hWet
+  · obtain ⟨y, rfl⟩ := πX.surjective x
+    refine ⟨y, fun hy ↦ hx ?_, ?_⟩
+    · have hy' : y ∈ fΩ ⁻¹ᵁ (P1.mapOfAlgebra K.1 Ω ⁻¹ᵁ puncturedLine K.1) := by
+        rw [hpre]; exact hy
+      simp only [Scheme.Hom.mem_preimage] at hy' ⊢
+      rwa [← hpt]
+    · rw [← Scheme.Hom.comp_apply, hπsnd]
+
+end BelyiUp
 
 variable {K : Type u} [Field K] [NumberField K] {M : Type u} [Field M] [NumberField M]
   [Algebra K M]
@@ -193,17 +428,24 @@ lemma compl_nonempty_of_cuspDegree_pos {k : Type u} [Field k] {X : Scheme.{u}}
   exact lt_irrefl 0 h
 
 include S in
-/-- **Existence of Belyi data** ([AbsTopII] Example 3.6, Corollary 3.7 (a)): for an affine
-hyperbolic curve `CX` over a number field `K` of strictly Belyi type (`S`) and a nonempty open
-`U_X ⊆ X`, there are a finite extension `M'` of `M` in `Ω`, Belyi data `D` over `M'` and `j ≤ r`
-such that the `j`-th open of the run of fillings `W ⊆ … ⊆ V` is `V ×_X U_X`, i.e. the preimage of
-`U_X` under `V ≅ Spec Γ(V) ⟶ Spec Γ(X) ≅ X` (`FV`). -/
-theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
+/-- **Existence of Belyi data over a field normal over `K`** ([AbsTopII] Example 3.6,
+Corollary 3.7 (a)): for an affine hyperbolic curve `CX` over a number field `K` of strictly Belyi
+type (`S`) and a nonempty open `U_X ⊆ X`, there are a finite extension `M'` of `M` in `Ω`, Belyi
+data `D` over `M'` and `j ≤ r` such that the `j`-th open of the run of fillings `W ⊆ … ⊆ V` is
+`V ×_X U_X`; moreover `M'` is stable under `Gal(Ω/K)` (the normal closure of the Belyi field,
+`normalFinSub`), and `D.FV : V_{M'} ⟶ X` is `V_{M'} ⟶ V ⟶ X` for a cartesian square
+`V_{M'} = V ×_M M'`. -/
+theorem exists_belyiData_normal (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     (hUXne : (UX : Set CX.Xbar).Nonempty) :
     ∃ (M' : FinSub M Ω) (D : BelyiData (M := M'.1) CX) (j : ℕ) (hj : j ≤ D.r)
       (hVa : IsAffineOpen (D.UW (Fin.last D.r))),
       D.UW ⟨j, Nat.lt_succ_of_le hj⟩ =
-        hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) := by
+        hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) ∧
+      (∀ σ : Ω ≃ₐ[K] Ω, ∀ x ∈ M'.1, σ x ∈ M'.1) ∧
+      ∃ aV : Spec Γ(D.CV.Xbar, D.CV.U) ⟶ Spec Γ(S.CV.Xbar, S.CV.U),
+        IsPullback aV (Spec.map (CommRingCat.ofHom (algebraMap M'.1 Γ(D.CV.Xbar, D.CV.U))))
+          (Spec.map (CommRingCat.ofHom (algebraMap M Γ(S.CV.Xbar, S.CV.U))))
+          (specAlgebraMap M M'.1) ∧ D.FV = aV ≫ S.FV := by
   classical
   -- the field over which the cusps to be filled become rational ([AbsTopII] Example 3.6,
   -- l.4634–4635, l.4667–4668): the cusps of `Q` lie over `ℙ¹_M ∖ Q`, those of `W` over `S₀`
@@ -212,8 +454,13 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     haveI := (ratFinSub M Ω T).2
     haveI := PQ.2
     ⟨(ratFinSub M Ω T).1 ⊔ PQ.1, IntermediateField.finiteDimensional_sup _ _⟩
-  obtain ⟨S₀, M', f, hS₀fin, hPM', hfo, -, hWU, hWne, hfinP, hetP, hS₀⟩ :=
-    exists_belyi_open_le_finSub_ge M Ω S.CV.Xbar (S.U₀ hcX UX) (S.U₀_nonempty hcX UX hUX hUXne) P
+  obtain ⟨S₀, M', f, hS₀fin, hPM', hfo, -, hWU, hWne, hfinP, hetP, hS₀, L₀, hL₀⟩ :=
+    exists_belyi_open_le_finSub_ge_up M Ω S.CV.Xbar (S.U₀ hcX UX) (S.U₀_nonempty hcX UX hUX hUXne)
+      P (normalFinSub K) (le_normalFinSub K)
+  -- `M'` is the normal closure of `L₀` over `K`
+  have hM'st : ∀ σ : Ω ≃ₐ[K] Ω, ∀ x ∈ M'.1, σ x ∈ M'.1 := by
+    rw [hL₀]
+    exact normalFinSub_stable K L₀
   have hPM : (P S₀).1 ≤ M'.1 := hPM'
   haveI := M'.2
   -- the curve `V̄_L` and its opens
@@ -385,7 +632,7 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     change IsAffineOpen (UW (Fin.last r))
     rw [hWlast]
     exact isAffineOpen_of_isPullback π hsqV rfl S.isAffineOpen_V
-  refine ⟨M', D, j, hj, hVa, ?_⟩
+  refine ⟨M', D, j, hj, hVa, ?_, hM'st, aV, hsqVΓ, rfl⟩
   change UW _ = hVa.fromSpec ''ᵁ ((aV ≫ S.FV) ⁻¹ᵁ _)
   rw [hWmid]
   have hcomm := IsAffineOpen.SpecMap_appLE_fromSpec π S.isAffineOpen_V hVa hWlast.le
@@ -418,6 +665,21 @@ theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
   · rintro ⟨t, ht, rfl⟩
     exact ⟨aV t, ht, e t⟩
 
+include S in
+/-- **Existence of Belyi data** ([AbsTopII] Example 3.6, Corollary 3.7 (a)): for an affine
+hyperbolic curve `CX` over a number field `K` of strictly Belyi type (`S`) and a nonempty open
+`U_X ⊆ X`, there are a finite extension `M'` of `M` in `Ω`, Belyi data `D` over `M'` and `j ≤ r`
+such that the `j`-th open of the run of fillings `W ⊆ … ⊆ V` is `V ×_X U_X`, i.e. the preimage of
+`U_X` under `V ≅ Spec Γ(V) ⟶ Spec Γ(X) ≅ X` (`FV`). -/
+theorem exists_belyiData (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
+    (hUXne : (UX : Set CX.Xbar).Nonempty) :
+    ∃ (M' : FinSub M Ω) (D : BelyiData (M := M'.1) CX) (j : ℕ) (hj : j ≤ D.r)
+      (hVa : IsAffineOpen (D.UW (Fin.last D.r))),
+      D.UW ⟨j, Nat.lt_succ_of_le hj⟩ =
+        hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) := by
+  obtain ⟨M', D, j, hj, hVa, h, -, -⟩ := exists_belyiData_normal Ω hcX S UX hUX hUXne
+  exact ⟨M', D, j, hj, hVa, h⟩
+
 /-! ### [AbsTopII] Corollary 3.7 (a) -/
 
 section Cor37a
@@ -432,6 +694,46 @@ instance isScalarTower_finSub (M' : FinSub M Ω) : IsScalarTower K M'.1 Ω :=
     (by rw [IsScalarTower.algebraMap_apply K M M'.1 x]; rfl)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
+
+set_option maxHeartbeats 1000000 in
+-- matching the existential of `exists_belyiData` (Belyi data over `M'.1`) is slow
+include S in
+/-- **[AbsTopII] Corollary 3.7 (a) over a field normal over `K`**: `exists_belyiCandidate` with
+`M'` stable under `Gal(Ω/K)` and `D.FV = (V_{M'} ⟶ V) ≫ S.FV` for a cartesian square
+`V_{M'} = V ×_M M'` (`exists_belyiData_normal`). -/
+theorem exists_belyiCandidate_normal (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
+    (hUXne : (UX : Set CX.Xbar).Nonempty) :
+    ∃ (M' : FinSub M Ω) (D : BelyiData (M := M'.1) CX) (m : ℕ) (hm : m ≤ D.r)
+      (hVa : IsAffineOpen (D.UW (Fin.last D.r))),
+      D.UW ⟨D.r - m, by omega⟩ =
+        hVa.fromSpec ''ᵁ (D.FV ⁻¹ᵁ ((isAffineOpen_U CX hcX).fromSpec ⁻¹ᵁ UX)) ∧
+      PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm ∈
+        belyiCusp (arithmeticExt Ω CX hcX) ∧
+      (∀ σ : Ω ≃ₐ[K] Ω, ∀ x ∈ M'.1, σ x ∈ M'.1) ∧
+      (∃ aV : Spec Γ(D.CV.Xbar, D.CV.U) ⟶ Spec Γ(S.CV.Xbar, S.CV.U),
+        IsPullback aV (Spec.map (CommRingCat.ofHom (algebraMap M'.1 Γ(D.CV.Xbar, D.CV.U))))
+          (Spec.map (CommRingCat.ofHom (algebraMap M Γ(S.CV.Xbar, S.CV.U))))
+          (specAlgebraMap M M'.1) ∧ D.FV = aV ≫ S.FV) ∧
+      ∃ (eU : (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).PiU ≃ₜ*
+          π₁ᵉᵗ(fillPoint Ω D.CW D.hcW (D.hleW ⟨D.r - m, by omega⟩) ≫
+            baseChangeSpec M'.1 Ω Γ(D.CW.Xbar, D.UW ⟨D.r - m, by omega⟩)))
+        (eV : (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).PiV ≃ₜ*
+          π₁ᵉᵗ(fillPoint Ω D.CW D.hcW (D.hleW (Fin.last D.r)) ≫
+            baseChangeSpec M'.1 Ω Γ(D.CW.Xbar, D.UW (Fin.last D.r)))),
+        (∀ x, eV ((PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).surj
+            x) = D.stepHom Ω ⟨D.r - m, by omega⟩ (Fin.last D.r) (Fin.le_last _) (eU x)) ∧
+          ∀ y, (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).emb y =
+            D.φ₄ Ω hcX (eV y) := by
+  have hex := exists_belyiData_normal Ω hcX S UX hUX hUXne
+  obtain ⟨M', D, j, hj, hVa, h, hst, hsq⟩ := hex
+  refine ⟨M', D, D.r - j, Nat.sub_le _ _, hVa, ?_, ?_, hst, hsq, ?_⟩
+  rotate_left
+  · exact D.belyiCandidate_mem Ω hcX _ _
+  · exact D.belyiCandidate_spec Ω hcX _ _
+  have he : (⟨D.r - (D.r - j), by omega⟩ : Fin (D.r + 1)) = ⟨j, Nat.lt_succ_of_le hj⟩ :=
+    Fin.ext (by simp only; omega)
+  rw [he]
+  exact h
 
 set_option maxHeartbeats 1000000 in
 -- matching the existential of `exists_belyiData` (Belyi data over `M'.1`) is slow
@@ -458,16 +760,9 @@ theorem exists_belyiCandidate (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
             x) = D.stepHom Ω ⟨D.r - m, by omega⟩ (Fin.last D.r) (Fin.le_last _) (eU x)) ∧
           ∀ y, (PiChain.belyiCandidate (D.isBelyiType Ω hcX) (D.terminalIso Ω hcX) m hm).emb y =
             D.φ₄ Ω hcX (eV y) := by
-  have hex := exists_belyiData Ω hcX S UX hUX hUXne
-  obtain ⟨M', D, j, hj, hVa, h⟩ := hex
-  refine ⟨M', D, D.r - j, Nat.sub_le _ _, hVa, ?_, ?_, ?_⟩
-  rotate_left
-  · exact D.belyiCandidate_mem Ω hcX _ _
-  · exact D.belyiCandidate_spec Ω hcX _ _
-  have he : (⟨D.r - (D.r - j), by omega⟩ : Fin (D.r + 1)) = ⟨j, Nat.lt_succ_of_le hj⟩ :=
-    Fin.ext (by simp only; omega)
-  rw [he]
-  exact h
+  obtain ⟨M', D, m, hm, hVa, h1, h2, -, -, h3⟩ :=
+    exists_belyiCandidate_normal Ω hcX S UX hUX hUXne
+  exact ⟨M', D, m, hm, hVa, h1, h2, h3⟩
 
 end Cor37a
 

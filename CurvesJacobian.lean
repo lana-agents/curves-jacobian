@@ -20,10 +20,13 @@ import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.BelyiChainCusp
 import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BelyiDataExists
+import CurvesJacobian.Cusp.BelyiGaloisCover
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
 import CurvesJacobian.Cusp.CandidateCover
 import CurvesJacobian.Cusp.CandidateDescent
+import CurvesJacobian.Cusp.CandidateLiftX1
+import CurvesJacobian.Cusp.CandidateLiftX2
 import CurvesJacobian.Cusp.ChainPush
 import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
