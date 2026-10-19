@@ -222,6 +222,7 @@ import CurvesJacobian.Picard.IdealSheaf
 import CurvesJacobian.Picard.IdealSheafGlue
 import CurvesJacobian.Picard.Jacobian
 import CurvesJacobian.Picard.JacobianBaseChange
+import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
 import CurvesJacobian.Picard.JacobianPoints
 import CurvesJacobian.Picard.LineBundle
@@ -251,6 +252,7 @@ import CurvesJacobian.Picard.PicDimension
 import CurvesJacobian.Picard.PicEffective
 import CurvesJacobian.Picard.PicF
 import CurvesJacobian.Picard.PicFField
+import CurvesJacobian.Picard.PicFFieldExt
 import CurvesJacobian.Picard.PicFFieldPoint
 import CurvesJacobian.Picard.PicFH0
 import CurvesJacobian.Picard.PicFOpen
