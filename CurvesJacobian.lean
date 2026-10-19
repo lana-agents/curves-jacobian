@@ -56,6 +56,7 @@ import CurvesJacobian.Cusp.EllipticBelyi
 import CurvesJacobian.Cusp.EllipticCurveScheme
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
+import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.FieldChange
