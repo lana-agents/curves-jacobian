@@ -223,6 +223,7 @@ import CurvesJacobian.Kummer.NFCharacterization
 import CurvesJacobian.Kummer.NFDescent
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PointRestriction
+import CurvesJacobian.Kummer.PrincipalDescent
 import CurvesJacobian.Kummer.PrincipalEta
 import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.TSectionPlace
