@@ -14,6 +14,7 @@ import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BaseChangePi
 import CurvesJacobian.Cusp.BasePointChange
+import CurvesJacobian.Cusp.BasicSubCurve
 import CurvesJacobian.Cusp.BelyiArithChain
 import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.BelyiCover
@@ -24,6 +25,7 @@ import CurvesJacobian.Cusp.ChainPush
 import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
+import CurvesJacobian.Cusp.ConjInducedCusps
 import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
@@ -64,12 +66,15 @@ import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.EllipticPunctured
+import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
 import CurvesJacobian.Cusp.FillAutExt
 import CurvesJacobian.Cusp.FillAutUnique
+import CurvesJacobian.Cusp.FillByKernel
 import CurvesJacobian.Cusp.FillChain
 import CurvesJacobian.Cusp.FillElemOp
+import CurvesJacobian.Cusp.FillHyp
 import CurvesJacobian.Cusp.FillSeq
 import CurvesJacobian.Cusp.FillStep
 import CurvesJacobian.Cusp.FiniteCover
@@ -105,6 +110,10 @@ import CurvesJacobian.Cusp.ModelAction
 import CurvesJacobian.Cusp.ModelAutRing
 import CurvesJacobian.Cusp.ModelCover
 import CurvesJacobian.Cusp.ModelCusps
+import CurvesJacobian.Cusp.ModelEnlargeCore
+import CurvesJacobian.Cusp.ModelEnlargeExt
+import CurvesJacobian.Cusp.ModelEnlargeSetup
+import CurvesJacobian.Cusp.ModelFaithful
 import CurvesJacobian.Cusp.ModelStep
 import CurvesJacobian.Cusp.NonRationalFill
 import CurvesJacobian.Cusp.OpPathRun
@@ -113,6 +122,7 @@ import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
 import CurvesJacobian.Cusp.PlaceTransitivity
 import CurvesJacobian.Cusp.PullbackCover
+import CurvesJacobian.Cusp.QuotConj
 import CurvesJacobian.Cusp.QuotientCurve
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
