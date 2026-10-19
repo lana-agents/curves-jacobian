@@ -110,6 +110,7 @@ import CurvesJacobian.Cusp.ModelAction
 import CurvesJacobian.Cusp.ModelAutRing
 import CurvesJacobian.Cusp.ModelCover
 import CurvesJacobian.Cusp.ModelCusps
+import CurvesJacobian.Cusp.ModelEnlarge
 import CurvesJacobian.Cusp.ModelEnlargeCore
 import CurvesJacobian.Cusp.ModelEnlargeExt
 import CurvesJacobian.Cusp.ModelEnlargeFill
