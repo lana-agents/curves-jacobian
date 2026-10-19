@@ -85,6 +85,7 @@ import CurvesJacobian.Cusp.FillStep
 import CurvesJacobian.Cusp.FiniteCover
 import CurvesJacobian.Cusp.FixedPointConj
 import CurvesJacobian.Cusp.GalInertia
+import CurvesJacobian.Cusp.GaloisDescentOpen
 import CurvesJacobian.Cusp.GaloisFibreTransitive
 import CurvesJacobian.Cusp.GaloisQuotient
 import CurvesJacobian.Cusp.GenusBaseChange

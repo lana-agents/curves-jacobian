@@ -47,7 +47,7 @@ variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebr
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
 
-omit [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
 /-- `Spec α` over `Spec K` for a `K`-isomorphism `α : M₂ ≃ₐ[K] M₁`. -/
 lemma specRingEquiv₂_comp_specAlgebraMap {M₁ M₂ : Type u} [Field M₁] [Field M₂] [Algebra K M₁]
     [Algebra K M₂] (α : M₂ ≃ₐ[K] M₁) :
