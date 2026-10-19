@@ -213,6 +213,7 @@ import CurvesJacobian.Kummer.CuspCentral
 import CurvesJacobian.Kummer.CuspCentralCurve
 import CurvesJacobian.Kummer.CuspExtClass
 import CurvesJacobian.Kummer.CuspFill
+import CurvesJacobian.Kummer.CuspInertiaZHat
 import CurvesJacobian.Kummer.DeltaAbDuality
 import CurvesJacobian.Kummer.DeltaAbKummer
 import CurvesJacobian.Kummer.Image
