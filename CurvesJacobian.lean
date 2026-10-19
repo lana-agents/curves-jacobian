@@ -20,6 +20,7 @@ import CurvesJacobian.Cusp.BelyiArithSpec
 import CurvesJacobian.Cusp.BelyiChainCusp
 import CurvesJacobian.Cusp.BelyiChainHV
 import CurvesJacobian.Cusp.BelyiCover
+import CurvesJacobian.Cusp.BelyiCuspSpec
 import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BelyiGaloisCover
 import CurvesJacobian.Cusp.BigLoops
