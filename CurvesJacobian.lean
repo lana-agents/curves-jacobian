@@ -22,6 +22,7 @@ import CurvesJacobian.Cusp.BelyiCover
 import CurvesJacobian.Cusp.BelyiDataExists
 import CurvesJacobian.Cusp.BigLoops
 import CurvesJacobian.Cusp.BranchBaseChange
+import CurvesJacobian.Cusp.CandidateCover
 import CurvesJacobian.Cusp.ChainPush
 import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
@@ -43,6 +44,7 @@ import CurvesJacobian.Cusp.CoverHypCurve
 import CurvesJacobian.Cusp.CoverInstance
 import CurvesJacobian.Cusp.CoverNormalization
 import CurvesJacobian.Cusp.CoverOpen
+import CurvesJacobian.Cusp.CoverRangeOpen
 import CurvesJacobian.Cusp.CurveGaloisData
 import CurvesJacobian.Cusp.CurveInertiaIso
 import CurvesJacobian.Cusp.CurveInertiaIsoAny
@@ -68,6 +70,7 @@ import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EnlargeKernel
+import CurvesJacobian.Cusp.ExtensionIso
 import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
 import CurvesJacobian.Cusp.FieldTwistDGC
@@ -82,6 +85,7 @@ import CurvesJacobian.Cusp.FillStep
 import CurvesJacobian.Cusp.FiniteCover
 import CurvesJacobian.Cusp.FixedPointConj
 import CurvesJacobian.Cusp.GalInertia
+import CurvesJacobian.Cusp.GaloisFibreTransitive
 import CurvesJacobian.Cusp.GaloisQuotient
 import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
@@ -135,6 +139,7 @@ import CurvesJacobian.Cusp.QuotientCurve
 import CurvesJacobian.Cusp.RationalBaseChange
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
+import CurvesJacobian.Cusp.SemilinearAut
 import CurvesJacobian.Cusp.SingleCusp
 import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Cusp.TwistDGC
