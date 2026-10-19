@@ -101,6 +101,7 @@ import CurvesJacobian.Cusp.LineS
 import CurvesJacobian.Cusp.LineTopS
 import CurvesJacobian.Cusp.LoopLift
 import CurvesJacobian.Cusp.ModelAction
+import CurvesJacobian.Cusp.ModelAutRing
 import CurvesJacobian.Cusp.ModelCover
 import CurvesJacobian.Cusp.ModelCusps
 import CurvesJacobian.Cusp.ModelStep
@@ -111,6 +112,7 @@ import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
 import CurvesJacobian.Cusp.PlaceTransitivity
 import CurvesJacobian.Cusp.PullbackCover
+import CurvesJacobian.Cusp.QuotientCurve
 import CurvesJacobian.Cusp.RationalFibre
 import CurvesJacobian.Cusp.RationalPlace
 import CurvesJacobian.Cusp.SingleCusp
