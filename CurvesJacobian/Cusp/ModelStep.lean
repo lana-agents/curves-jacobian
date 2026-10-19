@@ -88,6 +88,35 @@ theorem toG_apply_of_compat {A B : ChainObj E} {φ : A.grp →ₜ* B.grp} (h : C
     isOpen_map_of_isOpen_range A.toG A.isOpen_range_toG hW⟩ _ hcomm
   exact (inv_mul_eq_one.1 this).symm
 
+/-- `ρ_A(I ∩ H)` is commensurable with `ρ_A(I)` for an open `H ⊆ Π`. -/
+lemma image_inf_commensurable (A : ChainObj E) (I : Subgroup E.Pi) (H : OpenSubgroup E.Pi) :
+    (A.image (I ⊓ (H : Subgroup E.Pi))).Commensurable (A.image I) := by
+  refine A.image_commensurable
+    ⟨?_, by rw [Subgroup.relIndex_eq_one.2 inf_le_left]; exact one_ne_zero⟩
+  haveI := finiteIndex_of_isOpen H.isOpen
+  rw [Subgroup.inf_relIndex_left]
+  intro h0
+  exact Subgroup.FiniteIndex.index_ne_zero (H := (H : Subgroup E.Pi))
+    (by rw [← Subgroup.relIndex_top_right]; exact Subgroup.relIndex_eq_zero_of_le_right le_top h0)
+
+/-- **Compatibility with the rigidifying homomorphisms matches the images of subgroups of `Π`**
+up to commensurability: `ρ_B(I) ∼ φ(ρ_A(I))`. -/
+theorem Compat.image_commensurable {A B : ChainObj E} {φ : A.grp →ₜ* B.grp} (h : Compat A B φ)
+    (I : Subgroup E.Pi) :
+    (B.image I).Commensurable ((A.image I).map (φ : A.grp →* B.grp)) := by
+  obtain ⟨H, hA, hB, hφ⟩ := h
+  have e : B.image (I ⊓ (H : Subgroup E.Pi)) =
+      (A.image (I ⊓ (H : Subgroup E.Pi))).map (φ : A.grp →* B.grp) := by
+    ext b
+    constructor
+    · rintro ⟨⟨x, hxB⟩, ⟨hxI, hxH⟩, rfl⟩
+      exact ⟨A.rho ⟨x, hA hxH⟩, ⟨⟨x, hA hxH⟩, ⟨hxI, hxH⟩, rfl⟩, hφ x hxH⟩
+    · rintro ⟨_, ⟨⟨x, hxA⟩, ⟨hxI, hxH⟩, rfl⟩, rfl⟩
+      exact ⟨⟨x, hB hxH⟩, ⟨hxI, hxH⟩, (hφ x hxH).symm⟩
+  refine (B.image_inf_commensurable I H).symm.trans ?_
+  rw [e]
+  exact Subgroup.Commensurable.map' _ (A.image_inf_commensurable I H)
+
 end ChainObj
 
 end Belyi.Anabelian

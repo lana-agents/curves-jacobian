@@ -83,6 +83,14 @@ structure GeomModel (A : ChainObj (arithmeticExt Ω CX hcX)) where
   normal : A.Delta ≤ Subgroup.normalizer (Set.range ι)
   toG_eq : ∃ g₀ : π₁ᵉᵗ(sK), ∀ σ,
     toGk A (ι σ) = g₀ * resGal K Ω M (projGk Ω Y hY σ) * g₀⁻¹
+  /-- **Cusp compatibility**: for a cuspidal inertia group `I` of `Π_X`, the preimage under `ι` of
+  its image `ρ_A(I)` in `A` is finite or commensurable with a cuspidal inertia group of `Π_Y`. -/
+  cusp : haveI : Algebra.IsAlgebraic M Ω := Algebra.IsAlgebraic.tower_top (K := K) M
+    ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      ((A.image I).comap (ι : π₁ᵉᵗ(basePoint Ω Y hY ≫ baseChangeSpec M Ω Γ(Y.Xbar, Y.U)) →*
+          A.grp)).Commensurable ⊥ ∨
+        ∃ J ∈ arithCusps Ω Y hY, ((A.image I).comap (ι : π₁ᵉᵗ(basePoint Ω Y hY ≫
+          baseChangeSpec M Ω Γ(Y.Xbar, Y.U)) →* A.grp)).Commensurable J
 
 namespace GeomModel
 
@@ -306,6 +314,16 @@ def base : GeomModel Ω CX hcX (ChainObj.base (arithmeticExt Ω CX hcX)) where
     rw [resGal_self]
     simp only [one_mul, inv_one, mul_one]
     rfl⟩
+  cusp I hI := Or.inr ⟨I, hI,
+    ⟨by
+      refine ne_of_eq_of_ne (Subgroup.relIndex_eq_one.2 fun x hx ↦ ?_) one_ne_zero
+      exact Subgroup.mem_comap.2 (Subgroup.mem_map.2 ⟨⟨x, trivial⟩, hx, rfl⟩),
+    by
+      refine ne_of_eq_of_ne (Subgroup.relIndex_eq_one.2 fun x hx ↦ ?_) one_ne_zero
+      obtain ⟨y, hy, hyx⟩ := Subgroup.mem_map.1 (Subgroup.mem_comap.1 hx)
+      have e : y.1 = x := hyx
+      rw [← e]
+      exact hy⟩⟩
 
 end GeomModel
 

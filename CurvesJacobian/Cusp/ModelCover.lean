@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.ModelStep
-import CurvesJacobian.Cusp.CoverInstance
+import CurvesJacobian.Cusp.CoverCuspComap
 
 /-!
 # Model steps across `⋏` and `⋎`: the geometric part (MR8.5, option (A2'))
@@ -84,7 +84,9 @@ lemma range_comp_ι (φ : A.grp →ₜ* B.grp) :
 /-- **Transport of a model along an open embedding `φ : A ↪ B`** compatible with the projections
 to `G` (`ι' = φ ∘ ι`). -/
 def map (φ : A.grp →ₜ* B.grp) (hinj : Function.Injective φ) (hφ : IsOpen (Set.range φ))
-    (hG : ∀ a, B.toG (φ a) = A.toG a) (hN : B.Delta ≤ Subgroup.normalizer (Set.range (φ ∘ D.ι))) :
+    (hG : ∀ a, B.toG (φ a) = A.toG a) (hN : B.Delta ≤ Subgroup.normalizer (Set.range (φ ∘ D.ι)))
+    (hI : ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      (B.image I).Commensurable ((A.image I).map (φ : A.grp →* B.grp))) :
     GeomModel Ω CX hcX B where
   M := D.M
   Y := D.Y
@@ -101,10 +103,21 @@ def map (φ : A.grp →ₜ* B.grp) (hinj : Function.Injective φ) (hφ : IsOpen 
     change B.toG (φ (D.ι σ)) = _
     rw [hG]
     exact D.toG_ι σ⟩
+  cusp I hI' := by
+    have h1 : ((B.image I).comap ((φ : A.grp →* B.grp).comp (D.ι : D.Pi →* A.grp))).Commensurable
+        ((A.image I).comap (D.ι : D.Pi →* A.grp)) := by
+      have := ((hI I hI').comap' (φ : A.grp →* B.grp)).comap' (D.ι : D.Pi →* A.grp)
+      rwa [Subgroup.comap_map_eq_self_of_injective (f := (φ : A.grp →* B.grp)) hinj,
+        Subgroup.comap_comap] at this
+    rcases D.cusp I hI' with h | ⟨J, hJ, h⟩
+    · exact Or.inl (h1.trans h)
+    · exact Or.inr ⟨J, hJ, h1.trans h⟩
 
 lemma range_map (φ : A.grp →ₜ* B.grp) (hinj : Function.Injective φ) (hφ : IsOpen (Set.range φ))
-    (hG : ∀ a, B.toG (φ a) = A.toG a) (hN : B.Delta ≤ Subgroup.normalizer (Set.range (φ ∘ D.ι))) :
-    Set.range (D.map φ hinj hφ hG hN).ι = φ '' Set.range D.ι :=
+    (hG : ∀ a, B.toG (φ a) = A.toG a) (hN : B.Delta ≤ Subgroup.normalizer (Set.range (φ ∘ D.ι)))
+    (hI : ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      (B.image I).Commensurable ((A.image I).map (φ : A.grp →* B.grp))) :
+    Set.range (D.map φ hinj hφ hG hN hI).ι = φ '' Set.range D.ι :=
   D.range_comp_ι φ
 
 /-- `ι` factors through an embedding `φ : B ↪ A` whose image contains `ι(Π_Y)`. -/
@@ -146,7 +159,10 @@ lemma range_comapι (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ)
 (`φ ∘ ι' = ι`). -/
 def comap (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ)
     (hle : Set.range D.ι ⊆ Set.range φ) (hG : ∀ b, A.toG (φ b) = B.toG b)
-    (hN : B.Delta ≤ Subgroup.normalizer (φ ⁻¹' Set.range D.ι)) : GeomModel Ω CX hcX B where
+    (hN : B.Delta ≤ Subgroup.normalizer (φ ⁻¹' Set.range D.ι))
+    (hI : ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      (A.image I).Commensurable ((B.image I).map (φ : B.grp →* A.grp))) :
+    GeomModel Ω CX hcX B where
   M := D.M
   Y := D.Y
   hY := D.hY
@@ -162,11 +178,26 @@ def comap (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ)
     change B.toG (D.comapι φ hinj hle σ) = _
     rw [← hG, φ_comapι]
     exact D.toG_ι σ⟩
+  cusp I hI' := by
+    have e1 : (D.ι : D.Pi →* A.grp) =
+        (φ : B.grp →* A.grp).comp (D.comapι φ hinj hle : D.Pi →* B.grp) :=
+      MonoidHom.ext fun σ ↦ (D.φ_comapι φ hinj hle σ).symm
+    have h1 : ((B.image I).comap (D.comapι φ hinj hle : D.Pi →* B.grp)).Commensurable
+        ((A.image I).comap (D.ι : D.Pi →* A.grp)) := by
+      have := ((hI I hI').comap' (φ : B.grp →* A.grp)).comap' (D.comapι φ hinj hle : D.Pi →* B.grp)
+      rw [Subgroup.comap_map_eq_self_of_injective (f := (φ : B.grp →* A.grp)) hinj,
+        Subgroup.comap_comap, ← e1] at this
+      exact this.symm
+    rcases D.cusp I hI' with h | ⟨J, hJ, h⟩
+    · exact Or.inl (h1.trans h)
+    · exact Or.inr ⟨J, hJ, h1.trans h⟩
 
 lemma range_comap (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ)
     (hle : Set.range D.ι ⊆ Set.range φ) (hG : ∀ b, A.toG (φ b) = B.toG b)
-    (hN : B.Delta ≤ Subgroup.normalizer (φ ⁻¹' Set.range D.ι)) :
-    Set.range (D.comap φ hinj hle hG hN).ι = φ ⁻¹' Set.range D.ι :=
+    (hN : B.Delta ≤ Subgroup.normalizer (φ ⁻¹' Set.range D.ι))
+    (hI : ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      (A.image I).Commensurable ((B.image I).map (φ : B.grp →* A.grp))) :
+    Set.range (D.comap φ hinj hle hG hN hI).ι = φ ⁻¹' Set.range D.ι :=
   D.range_comapι φ hinj hle
 
 /-! ### The cover attached to an open normal subgroup of `Π_Y` -/
@@ -178,8 +209,14 @@ lemma range_mk {M : Type u} [Field M] [NumberField M] [Algebra K M] [Algebra M �
     (inj : Function.Injective ι) (ho : IsOpen (Set.range ι))
     (hn : A.Delta ≤ Subgroup.normalizer (Set.range ι))
     (hg : ∃ g₀ : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))), ∀ σ,
-      toGk A (ι σ) = g₀ * resGal K Ω M (projGk Ω Y hY σ) * g₀⁻¹) :
-    Set.range (GeomModel.mk M Y hY ι inj ho hn hg : GeomModel Ω CX hcX A).ι = Set.range ι :=
+      toGk A (ι σ) = g₀ * resGal K Ω M (projGk Ω Y hY σ) * g₀⁻¹)
+    (hc : haveI : Algebra.IsAlgebraic M Ω := Algebra.IsAlgebraic.tower_top (K := K) M
+      ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+        ((A.image I).comap (ι : π₁ᵉᵗ(basePoint Ω Y hY ≫ baseChangeSpec M Ω Γ(Y.Xbar, Y.U)) →*
+            A.grp)).Commensurable ⊥ ∨
+          ∃ J ∈ arithCusps Ω Y hY, ((A.image I).comap (ι : π₁ᵉᵗ(basePoint Ω Y hY ≫
+            baseChangeSpec M Ω Γ(Y.Xbar, Y.U)) →* A.grp)).Commensurable J) :
+    Set.range (GeomModel.mk M Y hY ι inj ho hn hg hc : GeomModel Ω CX hcX A).ι = Set.range ι :=
   rfl
 
 set_option maxHeartbeats 400000 in
@@ -264,8 +301,30 @@ theorem exists_ofSub (O : Subgroup D.Pi) (hO : IsOpen (O : Set D.Pi)) [O.Normal]
       (ContinuousMonoidHom.toContinuousMonoidHom e)))) := by
     convert hN using 2
   have hinj' := D.inj.comp (Subtype.val_injective.comp e.injective)
+  -- cusp compatibility
+  set ψ : (arithmeticExt Ω (coverCurve D.Y D.hY f) (coverCurve_cusp D.Y D.hY f)).Pi →* D.Pi :=
+    (coverPiIncl Ω D.Y D.hY f ζ hζ).toMonoidHom.comp e.toMulEquiv.toMonoidHom
+  have hψ : Function.Injective ψ := Subtype.val_injective.comp e.injective
+  have hcusp : ∀ I ∈ (arithmeticExt Ω CX hcX).cusps,
+      ((A.image I).comap (D.ι.comp (j.comp
+        (ContinuousMonoidHom.toContinuousMonoidHom e))).toMonoidHom).Commensurable ⊥ ∨
+      ∃ J ∈ arithCusps Ω (coverCurve D.Y D.hY f) (coverCurve_cusp D.Y D.hY f),
+        ((A.image I).comap (D.ι.comp (j.comp
+          (ContinuousMonoidHom.toContinuousMonoidHom e))).toMonoidHom).Commensurable J := by
+    intro I hI
+    have e1 : (A.image I).comap (D.ι.comp (j.comp
+        (ContinuousMonoidHom.toContinuousMonoidHom e))).toMonoidHom =
+        ((A.image I).comap (D.ι : D.Pi →* A.grp)).comap ψ := rfl
+    rw [e1]
+    rcases D.cusp I hI with h | ⟨J, hJ, h⟩
+    · left
+      have h' := h.comap' ψ
+      rwa [MonoidHom.comap_bot, (MonoidHom.ker_eq_bot_iff ψ).2 hψ] at h'
+    · exact Or.inr ⟨_, comap_coverPiEquiv_mem_arithCusps Ω D.Y D.hY (coverCurve D.Y D.hY f)
+        (coverCurve_cusp D.Y D.hY f) f ζ hζ (coverIso D.Y D.hY f) (coverIso_spec D.Y D.hY f) hJ,
+        h.comap' ψ⟩
   have hR := range_mk (M := M') (coverCurve D.Y D.hY f) (coverCurve_cusp D.Y D.hY f) _
-    hinj' hopen hnorm ⟨D.g₀ * resGal K Ω D.M c, key'⟩
+    hinj' hopen hnorm ⟨D.g₀ * resGal K Ω D.M c, key'⟩ hcusp
   exact ⟨_, hR.trans hrangeι⟩
 
 /-- **The model of the cover attached to `O`** (a choice in `exists_ofSub`). -/
@@ -305,33 +364,36 @@ lemma image_quotSub_eq_comap (φ : A.grp →ₜ* B.grp) (hinj : Function.Injecti
 /-- **The model step across `⋎`** (`φ : A ↪ B` open, compatible with the projections to `G`):
 a model of `B` with image `core_B(φ(ι Π_Y))` (`GeomModel.quotCore`). -/
 def ofQuot (φ : A.grp →ₜ* B.grp) (hinj : Function.Injective φ) (hφ : IsOpen (Set.range φ))
-    (hG : ∀ a, B.toG (φ a) = A.toG a) : GeomModel Ω CX hcX B :=
+    (hC : ChainObj.Compat A B φ) : GeomModel Ω CX hcX B :=
   (D.ofSub (D.quotSub φ) (D.isOpen_quotSub φ hφ)
-    (le_normalizer_of_normal _ (D.image_quotSub_eq_comap φ hinj) _)).map φ hinj hφ hG
+    (le_normalizer_of_normal _ (D.image_quotSub_eq_comap φ hinj) _)).map φ hinj hφ
+    (ChainObj.toG_apply_of_compat hC)
     (le_normalizer_of_normal (D.quotCore φ) (by
       rw [Set.range_comp, range_ofSub, image_quotSub]) _)
+    (fun I _ ↦ hC.image_commensurable I)
 
 lemma range_ofQuot (φ : A.grp →ₜ* B.grp) (hinj : Function.Injective φ)
-    (hφ : IsOpen (Set.range φ)) (hG : ∀ a, B.toG (φ a) = A.toG a) :
-    Set.range (D.ofQuot φ hinj hφ hG).ι = D.quotCore φ := by
+    (hφ : IsOpen (Set.range φ)) (hC : ChainObj.Compat A B φ) :
+    Set.range (D.ofQuot φ hinj hφ hC).ι = D.quotCore φ := by
   rw [ofQuot, range_map, range_ofSub, image_quotSub]
 
 /-- **The model step across `⋏`** (`φ : B ↪ A` open, compatible with the projections to `G`):
 a model of `B` with image `coverSubB = φ⁻¹(core_A(ι Π_Y ∩ φ B))` (`GeomModel.coverCore`). -/
 def ofCover (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ) (hφ : IsOpen (Set.range φ))
-    (hG : ∀ b, A.toG (φ b) = B.toG b) : GeomModel Ω CX hcX B :=
+    (hC : ChainObj.Compat B A φ) : GeomModel Ω CX hcX B :=
   (D.ofSub (D.coverSub φ) (D.isOpen_coverSub φ hφ)
     (le_normalizer_of_normal (D.coverCore φ) (D.image_coverSub φ) A.Delta)).comap φ hinj
     (by
       rw [range_ofSub, image_coverSub]
       intro a ha
       exact (Subgroup.normalCore_le _ ha).2)
-    hG
+    (ChainObj.toG_apply_of_compat hC)
     (le_normalizer_of_normal (D.coverSubB φ) (by rw [range_ofSub, image_coverSub]; ext; rfl) _)
+    (fun I _ ↦ hC.image_commensurable I)
 
 lemma range_ofCover (φ : B.grp →ₜ* A.grp) (hinj : Function.Injective φ)
-    (hφ : IsOpen (Set.range φ)) (hG : ∀ b, A.toG (φ b) = B.toG b) :
-    Set.range (D.ofCover φ hinj hφ hG).ι = D.coverSubB φ := by
+    (hφ : IsOpen (Set.range φ)) (hC : ChainObj.Compat B A φ) :
+    Set.range (D.ofCover φ hinj hφ hC).ι = D.coverSubB φ := by
   rw [ofCover, range_comap, range_ofSub, image_coverSub]
   ext
   rfl

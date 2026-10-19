@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.CuspTransport
+import CurvesJacobian.Cusp.CoverInstance
 
 /-!
 # Preimages of cuspidal inertia groups along finite étale maps (MR8.5, cusp compatibility of models)
@@ -94,5 +95,83 @@ theorem comap_coverPiHom_mem_arithCusps {I} (hI : I ∈ arithCusps Ω C hc) :
   exact le_inf (fun g hg ↦ mem_commensurator_of_mem hg)
     ((Subgroup.comap_mono (arithCusps_le Ω C hc hI)).trans
       (comap_coverPiHom_ker_projGk_le Ω C hc C' hc' F hF))
+
+section CoverEquiv
+
+variable {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
+  (η : Spec (.of Ω) ⟶ V) (h : η ≫ f = basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
+  (e : Spec Γ(C'.Xbar, C'.U) ≅ V)
+
+/-- The inclusion `π₁ᵉᵗ(V) ⊆ Π_U` of the group of the chain object of a cover. -/
+def coverPiIncl : (coverChainObj Ω C hc f η h).grp →ₜ* (arithmeticExt Ω C hc).Pi :=
+  ⟨(coverSubgroup f η h :
+    Subgroup π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))).subtype,
+    continuous_subtype_val⟩
+
+omit [Algebra K K'] [IsScalarTower K K' Ω] in
+/-- **`Π_{U'} ≃ π₁ᵉᵗ(V) ⊆ Π_U` is induced by `e ≫ f`** (up to a change of base point). -/
+theorem isConjInduced_coverPiEquiv :
+    IsConjInduced (e.hom ≫ f) (coverPiIncl Ω C hc f η h ∘ coverPiEquiv Ω C hc f η h C' hc' e) := by
+  have h1 : IsConjInduced e.hom (fun γ ↦ autContinuousMulEquivOfIso (coverFiberIso Ω η C' hc' e)
+      (fundamentalGroupMap e.hom (rfl : (basePoint Ω C' hc' ≫
+        baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) ≫ e.hom = _) γ)) :=
+    ⟨coverFiberIso Ω η C' hc' e, fun _ ↦ rfl⟩
+  have h2 : IsConjInduced f (fundamentalGroupMap f h) :=
+    (isConjInduced_iff f h _).2 ⟨Iso.refl _, fun σ ↦ by
+      change _ = (Iso.refl _).conjAut _
+      rw [Iso.conjAut_apply]
+      ext
+      simp⟩
+  exact (h1.comp h2).congr_fun fun γ ↦ rfl
+
+variable (he : e.hom ≫ f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
+    Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
+      Spec.map (CommRingCat.ofHom (algebraMap K K')))
+
+include he in
+/-- **The preimage of a cuspidal inertia group of `Π_U` under `Π_{U'} ≃ π₁ᵉᵗ(V) ⊆ Π_U` is a
+cuspidal inertia group of `Π_{U'}`.** -/
+theorem comap_coverPiEquiv_mem_arithCusps {J} (hJ : J ∈ arithCusps Ω C hc) :
+    J.comap ((coverPiIncl Ω C hc f η h).toMonoidHom.comp
+      (coverPiEquiv Ω C hc f η h C' hc' e).toMulEquiv.toMonoidHom) ∈ arithCusps Ω C' hc' := by
+  haveI : IsFiniteEtale e.hom := {}
+  haveI : IsFiniteEtale (e.hom ≫ f) :=
+    MorphismProperty.comp_mem _ _ _ (inferInstanceAs (IsFiniteEtale e.hom)) ‹_›
+  obtain ⟨t, ht⟩ := (isConjInduced_iff_exists_conj (e.hom ≫ f)
+    (coverFib Ω C hc C' hc' (e.hom ≫ f)) _).1 (isConjInduced_coverPiEquiv Ω C hc C' hc' f η h e)
+  have hF : (e.hom ≫ f) ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
+      Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
+        Spec.map (CommRingCat.ofHom (algebraMap K K')) := by
+    rw [Category.assoc]
+    exact he
+  have key : J.comap ((coverPiIncl Ω C hc f η h).toMonoidHom.comp
+      (coverPiEquiv Ω C hc f η h C' hc' e).toMulEquiv.toMonoidHom) =
+      (J.map (MulAut.conj t⁻¹).toMonoidHom).comap
+        (coverPiHom Ω C hc C' hc' (e.hom ≫ f)).toMonoidHom := by
+    have ht' : ∀ σ, (coverPiIncl Ω C hc f η h ∘ coverPiEquiv Ω C hc f η h C' hc' e) σ =
+        t * (show π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) from
+          coverPiHom Ω C hc C' hc' (e.hom ≫ f) σ) * t⁻¹ :=
+      fun σ ↦ (ht σ).trans rfl
+    ext σ
+    change (coverPiIncl Ω C hc f η h ∘ coverPiEquiv Ω C hc f η h C' hc' e) σ ∈ J ↔
+      coverPiHom Ω C hc C' hc' (e.hom ≫ f) σ ∈ J.map (MulAut.conj t⁻¹).toMonoidHom
+    rw [ht' σ]
+    constructor
+    · intro hσ
+      refine ⟨_, hσ, ?_⟩
+      simp only [MulEquiv.coe_toMonoidHom, MulAut.conj_apply]
+      group
+    · rintro ⟨x, hx, hxσ⟩
+      simp only [MulEquiv.coe_toMonoidHom, MulAut.conj_apply] at hxσ
+      rw [← hxσ]
+      have e2 : t * (t⁻¹ * x * t⁻¹⁻¹) * t⁻¹ = x := by group
+      change t * (t⁻¹ * x * t⁻¹⁻¹) * t⁻¹ ∈ J
+      rw [e2]
+      exact hx
+  rw [key]
+  exact comap_coverPiHom_mem_arithCusps Ω C hc C' hc' (e.hom ≫ f) hF
+    (map_conj_mem_arithCusps Ω C hc hJ t⁻¹)
+
+end CoverEquiv
 
 end CurvesJacobian.Cusp
