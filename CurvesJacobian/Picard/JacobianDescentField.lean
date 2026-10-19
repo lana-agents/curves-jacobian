@@ -319,7 +319,7 @@ theorem jacD_hcov (x : (jacD C σ hσ Ω).left) :
 
 /-- **The Jacobian of `C` as a `k`-scheme** (JAC R4′): the Galois descent of `J_L` along
 `Spec L ⟶ Spec k`. -/
-def jacK : Over Sk := descScheme (jacDAction C σ hσ Ω) (jacD_hcov C σ hσ Ω)
+abbrev jacK : Over Sk := descScheme (jacDAction C σ hσ Ω) (jacD_hcov C σ hσ Ω)
 
 /-- `Hom_k(T, J_k) ≃ Hom^{Gal(L/k)}_L(T ×_k L, J_L)`. -/
 def jacKRepresentableBy : (descFunctor (jacDAction C σ hσ Ω)).RepresentableBy (jacK C σ hσ Ω) :=

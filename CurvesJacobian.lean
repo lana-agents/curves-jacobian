@@ -120,6 +120,7 @@ import CurvesJacobian.Cusp.TwistGalois
 import CurvesJacobian.Descent.GaloisAffine
 import CurvesJacobian.Descent.GaloisAlgebra
 import CurvesJacobian.Descent.GaloisHom
+import CurvesJacobian.Descent.GaloisInvariant
 import CurvesJacobian.Descent.GaloisScheme
 import CurvesJacobian.Descent.GaloisSplit
 import CurvesJacobian.Descent.GaloisStable
@@ -241,6 +242,7 @@ import CurvesJacobian.Picard.JacobianDescentField
 import CurvesJacobian.Picard.JacobianField
 import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
+import CurvesJacobian.Picard.JacobianK
 import CurvesJacobian.Picard.JacobianPoints
 import CurvesJacobian.Picard.LineBundle
 import CurvesJacobian.Picard.LocIso
