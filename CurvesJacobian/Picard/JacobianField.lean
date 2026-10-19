@@ -82,32 +82,22 @@ end BaseChange
 
 variable (Ω : Type u) [Field Ω] [Algebra k Ω] [IsAlgClosed Ω] [Algebra.IsAlgebraic k Ω]
 
-/-- **The field of definition of the Jacobian**: a finite Galois subextension `L` of `Ω/k` over
-which the translates of `F` by classes defined over `L` cover `Pic_{C/k,σ}`
-(`exists_finite_hfield`). -/
-def jacField : IntermediateField k Ω := (exists_finite_hfield C σ hσ Ω).choose
-
-instance : FiniteDimensional k (jacField C σ hσ Ω) :=
-  (exists_finite_hfield C σ hσ Ω).choose_spec.1
-
-instance : IsGalois k (jacField C σ hσ Ω) :=
-  (exists_finite_hfield C σ hσ Ω).choose_spec.2.1
-
-instance : PerfectField (jacField C σ hσ Ω) := Algebra.IsAlgebraic.perfectField k
-
-local notation "L" => jacField C σ hσ Ω
-
-lemma jacField_spec (K : CommRingCat.{u}) (hK : IsField K) (t : Spec K ⟶ Spec (CommRingCat.of L))
-    (y : (G).obj (op (Over.mk (t ≫ specAlgebraMap (k₀ := k) L)))) :
+/-- The **translate property** of a subextension `L` of `Ω/k`: every point of
+`Pic_{C/k,σ}` over a field `K ⊇ L` has a translate by a class pulled back from
+`Pic_{C/k,σ}(L)` lying in `F`. -/
+def HasTranslates (L : IntermediateField k Ω) : Prop :=
+  ∀ (K : CommRingCat.{u}) (_ : IsField K) (t : Spec K ⟶ Spec (CommRingCat.of L))
+    (y : (G).obj (op (Over.mk (t ≫ specAlgebraMap (k₀ := k) L)))),
     ∃ c : (G).obj (op (Over.mk (specAlgebraMap (k₀ := k) L))),
       picF σ hσ (curveToP1 k C) (Spec K) ⟨t ≫ specAlgebraMap (k₀ := k) L,
         ((G).map (Over.homMk t rfl : Over.mk (t ≫ specAlgebraMap (k₀ := k) L) ⟶
-          Over.mk (specAlgebraMap (k₀ := k) L)).op).hom c + y⟩ :=
-  (exists_finite_hfield C σ hσ Ω).choose_spec.2.2 K hK t y
+          Over.mk (specAlgebraMap (k₀ := k) L)).op).hom c + y⟩
 
-/-- **`Pic_{C_L/L,σ_L}` is representable** for `L = jacField C σ hσ Ω` (Stacks, Lemma 44.5.1,
-Tag 0B9Q, with the translates of `F` over `L`). -/
-instance isRepresentable_jacField :
+omit [IsAlgClosed Ω] [Algebra.IsAlgebraic k Ω] in
+/-- **`Pic_{C_L/L,σ_L}` is representable** for every finite `L` with the translate property
+(Stacks, Lemma 44.5.1, Tag 0B9Q, with the translates of `F` over `L`). -/
+theorem isRepresentable_of_hasTranslates (L : IntermediateField k Ω) [PerfectField L]
+    (hL : HasTranslates C σ hσ Ω L) :
     (picSigmaSch (pullback (C ↘ Sk) (specAlgebraMap (k₀ := k) L) ↘ Spec (CommRingCat.of L))
       (sigmaExt C σ hσ L) (sigmaExt_comp C σ hσ L)).IsRepresentable := by
   set π := curveToP1 k C
@@ -122,7 +112,7 @@ instance isRepresentable_jacField :
   rintro K hK ⟨t, y⟩
   let y₀ : (picSigma (pullback (C ↘ Sk) (specAlgebraMap (k₀ := k) L) ↘ Spec (CommRingCat.of L))
       (sigmaExt C σ hσ L) (sigmaExt_comp C σ hσ L)).obj (op (Over.mk t)) := y
-  obtain ⟨c, hc⟩ := jacField_spec C σ hσ Ω K hK t (picRestrictEquiv C σ hσ L t y)
+  obtain ⟨c, hc⟩ := hL K hK t (picRestrictEquiv C σ hσ L t y)
   let c₀ : (G).obj (op (Over.mk (𝟙 _ ≫ specAlgebraMap (k₀ := k) L))) :=
     ((G).map (Over.homMk (𝟙 _) rfl : Over.mk (𝟙 _ ≫ specAlgebraMap (k₀ := k) L) ⟶
       Over.mk (specAlgebraMap (k₀ := k) L)).op).hom c
@@ -137,6 +127,36 @@ instance isRepresentable_jacField :
   erw [hΦ t (𝟙 _) t (Category.comp_id t)]
   rw [AddEquiv.apply_symm_apply, ← ConcreteCategory.comp_apply, ← Functor.map_comp, ← op_comp]
   congr 3
+
+/-- **The field of definition of the Jacobian**: a finite Galois subextension `L` of `Ω/k` with
+the translate property (`exists_finite_hfield`). -/
+def jacField : IntermediateField k Ω := (exists_finite_hfield C σ hσ Ω ⊥).choose
+
+instance : FiniteDimensional k (jacField C σ hσ Ω) :=
+  (exists_finite_hfield C σ hσ Ω ⊥).choose_spec.1
+
+instance : IsGalois k (jacField C σ hσ Ω) :=
+  (exists_finite_hfield C σ hσ Ω ⊥).choose_spec.2.1
+
+instance : PerfectField (jacField C σ hσ Ω) := Algebra.IsAlgebraic.perfectField k
+
+local notation "L" => jacField C σ hσ Ω
+
+lemma hasTranslates_jacField : HasTranslates C σ hσ Ω L :=
+  (exists_finite_hfield C σ hσ Ω ⊥).choose_spec.2.2.2
+
+/-- Every finite subextension is contained in a finite Galois one with the translate property
+(over which `Pic_{C_L/L,σ}` is representable, `isRepresentable_of_hasTranslates`). -/
+lemma exists_hasTranslates_ge (L₂ : IntermediateField k Ω) [FiniteDimensional k L₂] :
+    ∃ (L' : IntermediateField k Ω) (_ : FiniteDimensional k L') (_ : IsGalois k L')
+      (_ : L₂ ≤ L'), HasTranslates C σ hσ Ω L' :=
+  exists_finite_hfield C σ hσ Ω L₂
+
+/-- **`Pic_{C_L/L,σ_L}` is representable** for `L = jacField C σ hσ Ω`. -/
+instance isRepresentable_jacField :
+    (picSigmaSch (pullback (C ↘ Sk) (specAlgebraMap (k₀ := k) L) ↘ Spec (CommRingCat.of L))
+      (sigmaExt C σ hσ L) (sigmaExt_comp C σ hσ L)).IsRepresentable :=
+  isRepresentable_of_hasTranslates C σ hσ Ω L (hasTranslates_jacField C σ hσ Ω)
 
 /-- **The Jacobian `J_L` over `L = jacField C σ hσ Ω`**: the Jacobian of `C_L`, a commutative
 group scheme over `L`. -/

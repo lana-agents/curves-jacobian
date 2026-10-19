@@ -323,10 +323,11 @@ lemma sigma_transport {T : Scheme.{u}} {g₁ g₂ : T ⟶ Sk} (e : g₁ = g₂)
   exact Sigma.ext rfl (heq_of_eq (map_homMk_id C σ hσ _ y))
 
 /-- **The hypothesis `hfield` over a finite Galois extension** (JAC R1): there is a finite Galois
-subextension `L` of `Ω/k` such that for every field `K` over `L`, every point of
-`Pic_{C/k,σ}(K)` has a translate by a class pulled back from `Pic_{C/k,σ}(L)` lying in `F`. -/
-theorem exists_finite_hfield :
-    ∃ (L : IntermediateField k Ω) (_ : FiniteDimensional k L) (_ : IsGalois k L),
+subextension `L` of `Ω/k`, containing a given finite subextension `L₂`, such that for every
+field `K` over `L`, every point of `Pic_{C/k,σ}(K)` has a translate by a class pulled back from
+`Pic_{C/k,σ}(L)` lying in `F`. -/
+theorem exists_finite_hfield (L₂ : IntermediateField k Ω) [FiniteDimensional k L₂] :
+    ∃ (L : IntermediateField k Ω) (_ : FiniteDimensional k L) (_ : IsGalois k L) (_ : L₂ ≤ L),
       ∀ (K : CommRingCat.{u}) (_ : IsField K) (t : Spec K ⟶ Spec (CommRingCat.of L))
         (y : (G).obj (op (Over.mk (t ≫ specAlgebraMap (k₀ := k) L)))),
         ∃ c : (G).obj (op (Over.mk (specAlgebraMap (k₀ := k) L))),
@@ -338,11 +339,13 @@ theorem exists_finite_hfield :
   obtain ⟨x₁, hx₁, hx₁W⟩ := exists_pt_chart_inf_ext C π Ω
   choose Lc hLc hdef using fun c : s ↦ exists_definedOver C σ hσ Ω c.1.2
   obtain ⟨L₁, hL₁, x₁L, hx₁L, hx₁e⟩ := exists_finite_point C Ω x₁ hx₁
-  let L₀ : IntermediateField k Ω := (⨆ c : s, Lc c) ⊔ L₁
+  let L₀ : IntermediateField k Ω := ((⨆ c : s, Lc c) ⊔ L₁) ⊔ L₂
   haveI : FiniteDimensional k L₀ := by
     haveI : ∀ c : s, FiniteDimensional k (Lc c) := hLc
     haveI : FiniteDimensional k (⨆ c : s, Lc c : IntermediateField k Ω) :=
       IntermediateField.finiteDimensional_iSup_of_finite
+    haveI : FiniteDimensional k (((⨆ c : s, Lc c) ⊔ L₁ : IntermediateField k Ω)) :=
+      IntermediateField.finiteDimensional_sup _ _
     exact IntermediateField.finiteDimensional_sup _ _
   haveI : Normal k Ω := ⟨fun _ ↦ IsAlgClosed.splits _⟩
   haveI : IsGalois k Ω := isGalois_iff.mpr ⟨inferInstance, inferInstance⟩
@@ -350,13 +353,13 @@ theorem exists_finite_hfield :
   have hL₀ : L₀ ≤ L := IntermediateField.le_normalClosure L₀
   haveI : FiniteDimensional k L := normalClosure.is_finiteDimensional k L₀ Ω
   haveI : IsGalois k L := IsGalois.normalClosure k L₀ Ω
-  refine ⟨L, inferInstance, inferInstance, fun K hK t y ↦ ?_⟩
+  refine ⟨L, inferInstance, inferInstance, le_sup_right.trans hL₀, fun K hK t y ↦ ?_⟩
   let sL := specAlgebraMap (k₀ := k) L
   have hG := isSheaf_picSigmaSch_curve k C σ hσ
   -- the classes of `s` and the point `x₁` over `L`
   have hdefL : ∀ c : s, DefinedOver C σ hσ Ω c.1.1 L := fun c ↦
-    (hdef c).mono C σ hσ Ω ((le_iSup Lc c).trans (le_sup_left.trans hL₀))
-  have hL₁L : L₁ ≤ L := le_sup_right.trans hL₀
+    (hdef c).mono C σ hσ Ω ((le_iSup Lc c).trans (le_sup_left.trans (le_sup_left.trans hL₀)))
+  have hL₁L : L₁ ≤ L := le_sup_right.trans (le_sup_left.trans hL₀)
   let x₁' := specLE Ω hL₁L ≫ x₁L
   have hx₁' : x₁' ≫ (C ↘ Sk) = sL := by
     rw [Category.assoc, hx₁L, specLE_comp]
