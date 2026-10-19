@@ -27,9 +27,11 @@ every finite `k_H ⊆ k̄` and every semi-abelian variety `A / k_H`, `⋂_{N ≥
 The proof of Prop. 1.6(iii) (l.2033–2039) uses this for `A = J` the Jacobian of `X`, `k_H = k`:
 `H⁰(G_k, Δ_X^{ab}) = 0`. Since `J(k) = J(k̄)^{G_k} = Pic⁰(X_{k̄})^{G_k}` and the degree of an
 element of `⋂_N N · Pic(X_{k̄})^{G_k}` is divisible by every `N`, the condition
-`IsKummerFaithfulJac D` is exactly `⋂_N N · J(k) = 0`. It is a property of the curve (implied by
-Def. 1.5 for `k` through the Jacobian, which is not available as a scheme here): it is used as a
-hypothesis, like `IsKummerFaithfulGm k` for `𝔾_m`.
+`IsKummerFaithfulJac D` is exactly `⋂_N N · J(k) = 0`. It is a property of the curve, used as a
+hypothesis here (like `IsKummerFaithfulGm k` for `𝔾_m`); for a curve with a rational point over a
+Kummer-faithful field `k` (Def. 1.5, `CurvesJacobian.IsKummerFaithful`) it is proved in
+`Kummer/KummerFaithful.lean` (`isKummerFaithfulJac_of_isKummerFaithful`), through the Jacobian
+`J_k` as a `k`-scheme.
 -/
 
 open KummerTheory Curve AffOrbicurve WeilCurves.FunctionField

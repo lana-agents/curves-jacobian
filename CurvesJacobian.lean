@@ -177,6 +177,7 @@ import CurvesJacobian.Kummer.JacobianPi1
 import CurvesJacobian.Kummer.JacobianTate
 import CurvesJacobian.Kummer.JacobianTorsion
 import CurvesJacobian.Kummer.JacobianTorsionCount
+import CurvesJacobian.Kummer.KummerFaithful
 import CurvesJacobian.Kummer.MiddleExact
 import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.NFCharacterization

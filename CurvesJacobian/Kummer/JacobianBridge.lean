@@ -35,12 +35,11 @@ transcendental, `D = curveGaloisData k hτ` its Galois model, `k̄ = kbar k Ω` 
   `⋂_{N ≥ 1} N · J(k) = 0` for `J(k) = jacPoints X σ hσ k`, then `IsKummerFaithfulJac D`.
 
 **On the hypothesis of the last theorem.** [AbsTopIII] Def. 1.5 (Kummer-faithful field), applied
-to the semi-abelian variety `A = J` (the Jacobian of `X`) over `k_H = k`, says exactly
-`⋂_{N ≥ 1} N · J(k) = 0`. The Jacobian of this library is not (yet) a `k`-scheme, so this input
-is taken as the explicit hypothesis `hJ` on the group `J(k) = Pic⁰_{X/k,σ}(k)` of `k`-points; this
-is recorded debt until `J` is available as a `k`-scheme. Everything else is proved: an element of
-`⋂_N N · Pic(F k̄)^{G_k}` has degree `0`, maps to `⋂_N N · J(k̄)^{G_k}`, and
-`J(k) ≅ J(k̄)^{G_k}` (`jacPointsEquivInv`).
+to the semi-abelian variety `A = J_k` (the Jacobian of `X` as a `k`-scheme) over `k_H = k`, says
+exactly `⋂_{N ≥ 1} N · J(k) = 0` (`J_k(k) ≅ J(k)`). This is derived in `Kummer/KummerFaithful.lean`
+(`jacPoints_eq_zero_of_isKummerFaithful`), which gives `IsKummerFaithfulJac D` for Kummer-faithful
+`k` (`isKummerFaithfulJac_of_isKummerFaithful`). Here: an element of `⋂_N N · Pic(F k̄)^{G_k}`
+has degree `0`, maps to `⋂_N N · J(k̄)^{G_k}`, and `J(k) ≅ J(k̄)^{G_k}` (`jacPointsEquivInv`).
 -/
 
 open CategoryTheory Limits AlgebraicGeometry Belyi KummerTheory Curve AffOrbicurve
@@ -312,9 +311,9 @@ lemma deg_eq_zero_of_forall_nsmul
 /-- **Kummer-faithfulness of the Jacobian from [AbsTopIII] Def. 1.5** (MR5 "J1").
 
 The hypothesis `hJ` is `⋂_{N ≥ 1} N · J(k) = 0` for the group `J(k) = Pic⁰_{X/k,σ}(k)` of
-`k`-points of the Jacobian: this is [AbsTopIII] Def. 1.5 (Kummer-faithfulness of `k`) for the
-semi-abelian variety `A = J` over `k_H = k`. It enters as an explicit hypothesis because the
-Jacobian is not yet available as a `k`-scheme (recorded debt). -/
+`k`-points of the Jacobian. It follows from [AbsTopIII] Def. 1.5 (Kummer-faithfulness of `k`) for
+the abelian variety `A = J_k` over `k_H = k`: `isKummerFaithfulJac_of_isKummerFaithful`
+(`Kummer/KummerFaithful.lean`). -/
 theorem isKummerFaithfulJac_curveGaloisData
     (hJ : ∀ z ∈ jacPoints X σ hσ k,
       (∀ N : ℕ, 0 < N → ∃ y ∈ jacPoints X σ hσ k, N • y = z) → z = 0) :
