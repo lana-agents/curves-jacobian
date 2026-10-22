@@ -207,6 +207,7 @@ import CurvesJacobian.Galois.SmoothDescent
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Kummer.BaseChangeFunctionField
+import CurvesJacobian.Kummer.ChernClass
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ClosedRestriction
@@ -215,6 +216,7 @@ import CurvesJacobian.Kummer.CompletionMap
 import CurvesJacobian.Kummer.ConstantExtension
 import CurvesJacobian.Kummer.CuspCentral
 import CurvesJacobian.Kummer.CuspCentralCurve
+import CurvesJacobian.Kummer.CuspChern
 import CurvesJacobian.Kummer.CuspExtClass
 import CurvesJacobian.Kummer.CuspFill
 import CurvesJacobian.Kummer.CuspInertiaZHat
