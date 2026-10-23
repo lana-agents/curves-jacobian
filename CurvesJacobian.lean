@@ -69,8 +69,10 @@ import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DecuspNormalizer
 import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
+import CurvesJacobian.Cusp.EllipticChainFill
 import CurvesJacobian.Cusp.EllipticCurveScheme
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
