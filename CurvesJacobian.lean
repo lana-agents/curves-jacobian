@@ -282,12 +282,15 @@ import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
+import CurvesJacobian.LocAn.ExistsAssembly
 import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.ThmC
+import CurvesJacobian.LocAn.ThmCMLF
+import CurvesJacobian.LocAn.TransportH2
 import CurvesJacobian.LocAn.UniqueReduction
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
