@@ -15,6 +15,7 @@ import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
 import CurvesJacobian.Cusp.BaseChangePi
+import CurvesJacobian.Cusp.BaseExtensionPi
 import CurvesJacobian.Cusp.BasePointChange
 import CurvesJacobian.Cusp.BasicSubCurve
 import CurvesJacobian.Cusp.BelyiArithChain
@@ -98,6 +99,7 @@ import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionIso
 import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
+import CurvesJacobian.Cusp.FieldExtIso
 import CurvesJacobian.Cusp.FieldTwistDGC
 import CurvesJacobian.Cusp.FillAutExt
 import CurvesJacobian.Cusp.FillAutStable
@@ -119,6 +121,8 @@ import CurvesJacobian.Cusp.GaloisQuotient
 import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
 import CurvesJacobian.Cusp.GenusLocAnEq
+import CurvesJacobian.Cusp.GeomInvariance
+import CurvesJacobian.Cusp.GeomInvarianceInertia
 import CurvesJacobian.Cusp.GeomModel
 import CurvesJacobian.Cusp.HemiArith
 import CurvesJacobian.Cusp.HemiPi1
