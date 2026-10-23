@@ -4,7 +4,9 @@ import CurvesJacobian.CommAlg.EtaleOfDerivation
 import CurvesJacobian.CommAlg.RegularLocal
 import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
+import CurvesJacobian.Cusp.ArithAut
 import CurvesJacobian.Cusp.ArithDecomp
+import CurvesJacobian.Cusp.ArithKernel
 import CurvesJacobian.Cusp.ArithmeticCover
 import CurvesJacobian.Cusp.ArithmeticExt
 import CurvesJacobian.Cusp.ArithmeticFill
@@ -61,6 +63,7 @@ import CurvesJacobian.Cusp.CuspConj
 import CurvesJacobian.Cusp.CuspCount
 import CurvesJacobian.Cusp.CuspDegreeEq
 import CurvesJacobian.Cusp.CuspInertiaFacts
+import CurvesJacobian.Cusp.CuspInertiaQuotient
 import CurvesJacobian.Cusp.CuspSchreier
 import CurvesJacobian.Cusp.CuspTerminal
 import CurvesJacobian.Cusp.CuspTerminalFew
@@ -264,6 +267,8 @@ import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.FixedPlaceOrder
+import CurvesJacobian.LocAn.InnerRigidAffine
+import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.UniqueReduction

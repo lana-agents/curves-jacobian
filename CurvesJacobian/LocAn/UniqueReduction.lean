@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.FillAutUnique
+import CurvesJacobian.LocAn.InnerRigidAffine
 
 /-!
 # Uniqueness in the rel-isom-DGC from inner rigidity (MR7, step G1)
@@ -32,15 +33,6 @@ namespace CurvesJacobian.LocAn
 variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω]
 
-/-- **Inner rigidity** of an affine hyperbolic curve `C` over `K`: every `K`-automorphism of
-`Spec Γ(U)` that induces the identity of `Π_U` up to a change of base point (equivalently, an
-inner automorphism of `Π_U`, `isConjInduced_iff_exists_conj`) is the identity. -/
-def InnerRigid (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) : Prop :=
-  ∀ F : Spec Γ(C.Xbar, C.U) ≅ Spec Γ(C.Xbar, C.U), F.hom ≫ sKU C = sKU C →
-    IsConjInduced F.hom
-      (id : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) → _) →
-    F = Iso.refl _
-
 variable {Ω} {C₁ C₂ : HypCurve K} {hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty}
   {hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty}
 
@@ -64,5 +56,16 @@ theorem eq_of_isConjInduced_of_innerRigid (hR : InnerRigid Ω C₁ hc₁)
   ext1
   have := congrArg (fun G : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₁.Xbar, C₁.U) ↦ G.hom ≫ F'.hom) e
   simpa using this
+
+/-- **Uniqueness in the rel-isom-DGC, unconditionally** (MR7 S2): two `K`-isomorphisms
+`Spec Γ(U₁) ≅ Spec Γ(U₂)` inducing the same `φ : Π_{U₁} ≃ Π_{U₂}` up to a change of base point
+are equal (`innerRigid`). -/
+theorem eq_of_isConjInduced [Algebra.IsAlgebraic K Ω] [CharZero Ω]
+    (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃*
+      π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
+    {F F' : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U)}
+    (hF : F.hom ≫ sKU C₂ = sKU C₁) (hF' : F'.hom ≫ sKU C₂ = sKU C₁)
+    (H : IsConjInduced F.hom φ) (H' : IsConjInduced F'.hom φ) : F = F' :=
+  eq_of_isConjInduced_of_innerRigid (innerRigid Ω C₁ hc₁) φ hF hF' H H'
 
 end CurvesJacobian.LocAn
