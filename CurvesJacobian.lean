@@ -72,8 +72,10 @@ import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
+import CurvesJacobian.Cusp.EllipticChainE
 import CurvesJacobian.Cusp.EllipticChainFill
 import CurvesJacobian.Cusp.EllipticCurveScheme
+import CurvesJacobian.Cusp.EllipticCuspSpec
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
