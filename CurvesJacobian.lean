@@ -87,6 +87,7 @@ import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
+import CurvesJacobian.Cusp.EllipticGenusOne
 import CurvesJacobian.Cusp.EllipticInputE
 import CurvesJacobian.Cusp.EllipticMulByN
 import CurvesJacobian.Cusp.EllipticPunctured
