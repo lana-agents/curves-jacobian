@@ -79,6 +79,7 @@ import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.EllipticPunctured
+import CurvesJacobian.Cusp.EllipticSound
 import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionIso
 import CurvesJacobian.Cusp.ExtensionMap
@@ -89,6 +90,7 @@ import CurvesJacobian.Cusp.FillAutStable
 import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.FillByKernel
 import CurvesJacobian.Cusp.FillChain
+import CurvesJacobian.Cusp.FillCover
 import CurvesJacobian.Cusp.FillElemOp
 import CurvesJacobian.Cusp.FillHyp
 import CurvesJacobian.Cusp.FillSeq
