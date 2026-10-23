@@ -226,6 +226,7 @@ import CurvesJacobian.Kummer.BaseChangeFunctionField
 import CurvesJacobian.Kummer.ChernClass
 import CurvesJacobian.Kummer.ChernCompat
 import CurvesJacobian.Kummer.ChernDivisor
+import CurvesJacobian.Kummer.ChernEquivariant
 import CurvesJacobian.Kummer.ChernNatural
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
@@ -266,6 +267,7 @@ import CurvesJacobian.Kummer.PrincipalDescent
 import CurvesJacobian.Kummer.PrincipalEta
 import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.SyncBaseChange
+import CurvesJacobian.Kummer.SyncEquivariant
 import CurvesJacobian.Kummer.SyncZHat
 import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.TopClass
