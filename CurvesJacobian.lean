@@ -235,6 +235,7 @@ import CurvesJacobian.Kummer.KummerFaithful
 import CurvesJacobian.Kummer.MiddleExact
 import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.NFCharacterization
+import CurvesJacobian.Kummer.NFCurve
 import CurvesJacobian.Kummer.NFDescent
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PointRestriction
