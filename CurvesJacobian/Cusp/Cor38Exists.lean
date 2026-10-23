@@ -256,7 +256,7 @@ model `Π_C ≅ x.PiU`, `Π_{C'} ≅ x.PiV` of `x.surj` as a filling `C ⊆ C'`:
 normal, automorphisms of `x.PiV` normalised by `Π_X` lift to `x.PiU`, `x.PiU` is identified with
 `H = (im x.emb).comap (Π_{U_X} ↠ Π_X)` up to conjugation, and every continuous automorphism of
 `H` over `Π_X` is inner from `ker(Π_{U_X} ↠ Π_X)`. -/
-theorem cor38_side1 (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem cor38_side1 (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hgal : haveI := isIntegral_specSections CX hcX; IsGalois (coverObj D.FV))
     (x : CuspCandidate (arithmeticExt Ω CX hcX))
     (eU : x.PiU ≃ₜ* π₁ᵉᵗ(fillPoint Ω D.CW D.hcW (D.hleW i) ≫
@@ -326,7 +326,8 @@ attribute [local instance] isAlgClosure_of_isAlgebraic
 terminal isomorphism and an infinite cusp image at `Π_V`, and `m ≤ r`, whose candidate
 `Π_U ↠ Π_V ↪ Π_X` has normal `Π_V`, the lifting property, `Π_U ≅ H = (Π_V).comap(Π_{U_X} ↠ Π_X)`
 up to conjugation, and automorphisms of `H` over `Π_X` inner from the kernel. -/
-theorem exists_belyiChain_cor38₂ (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem exists_belyiChain_cor38₂
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (S : GaloisBelyiInput CX M) :
     ∃ (c : PiChain (arithmeticExt Ω CX hcX)) (l r : ℕ) (hc : c.IsBelyiType l r)
       (t : c.TerminalIso (PiChain.trivial _))
@@ -383,7 +384,7 @@ attribute [local instance] isAlgClosure_of_isAlgebraic
 nonempty open `U_X ⊆ X` (the descent of `C ⊆ C'`) such that `Π_U` is identified with
 `H = (im x.emb).comap (Π_{U_X} ↠ Π_X)` up to conjugation, and every continuous automorphism of
 `H` over `Π_X` is inner from `ker(Π_{U_X} ↠ Π_X)`. -/
-theorem cor38_side2 (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem cor38_side2 (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (x : CuspCandidate (arithmeticExt Ω CX hcX)) (hN : x.emb.toMonoidHom.range.Normal)
     (hL : ∀ (B : x.PiV ≃ₜ* x.PiV) (g : (arithmeticExt Ω CX hcX).Pi),
       (∀ v, x.emb (B v) = g * x.emb v * g⁻¹) →
@@ -564,7 +565,7 @@ cuspidal extensions `Πᵢ ↠ G_{Kᵢ}`. Assuming the rel-isom-DGC over all num
 for every nonempty open `U_{X₁} ⊆ X₁` there is a nonempty open `U_{X₂} ⊆ X₂` such that (for any
 choice `α₂` of the base point change defining `Π_{U_{X₂}} ↠ Π₂`) some isomorphism
 `φ_U : Π_{U_{X₁}} ≅ Π_{U_{X₂}}` is compatible with `φ` relative to `Π_{U_{Xᵢ}} ↠ Πᵢ`. -/
-theorem cor38_exists (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem cor38_exists (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     {K₁ K₂ : Type u} [Field K₁] [NumberField K₁] [Field K₂] [NumberField K₂]
     (Ω₁ Ω₂ : Type u) [Field Ω₁] [Algebra K₁ Ω₁] [IsAlgClosed Ω₁] [Algebra.IsAlgebraic K₁ Ω₁]
     [CharZero Ω₁] [Field Ω₂] [Algebra K₂ Ω₂] [IsAlgClosed Ω₂] [Algebra.IsAlgebraic K₂ Ω₂]

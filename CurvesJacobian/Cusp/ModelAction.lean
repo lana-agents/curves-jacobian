@@ -29,7 +29,7 @@ namespace CurvesJacobian.Cusp.GeomModel
 variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] {CX : HypCurve K}
   {hcX : (CX.U : Set CX.Xbar)ᶜ.Nonempty} {A : ChainObj (arithmeticExt Ω CX hcX)}
-  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC D.M)
+  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC.Exists D.M)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
@@ -83,7 +83,7 @@ lemma specRingEquiv_trans {L : Type u} [Field L] (α β : L ≃+* L) :
 /-- **`F_{gh} = F_h ≫ F_g`.** -/
 theorem semilinearAutOf_mul (g h : D.Nrm) :
     D.semilinearAutOf hDGC (g * h) = D.semilinearAutOf hDGC h ≪≫ D.semilinearAutOf hDGC g := by
-  refine D.eq_of_semilinearAut hDGC (g * h) (D.resAut_spec (g * h))
+  refine D.eq_of_semilinearAut (g * h) (D.resAut_spec (g * h))
     (D.semilinearAutOf_sKU hDGC (g * h)) ?_ (D.isConjInduced_semilinearAutOf hDGC (g * h)) ?_
   · rw [Iso.trans_hom, Category.assoc, semilinearAutOf_sKU, reassoc_of% semilinearAutOf_sKU,
       resAut_mul]
@@ -102,7 +102,7 @@ lemma semilinearAction_apply (g : D.Nrm) :
 
 /-- **The action is trivial on `ι(Π_Y)`.** -/
 theorem semilinearAction_ι (σ : D.Pi) : D.semilinearAction hDGC (D.ιN σ) = 1 :=
-  (D.semilinearAut_ι hDGC σ (D.resAut_spec _) (D.semilinearAutOf_sKU hDGC _)
+  (D.semilinearAut_ι σ (D.resAut_spec _) (D.semilinearAutOf_sKU hDGC _)
     (D.isConjInduced_semilinearAutOf hDGC _)).2
 
 /-- `ι : Π_Y →* N_A(ι(Π_Y))`. -/

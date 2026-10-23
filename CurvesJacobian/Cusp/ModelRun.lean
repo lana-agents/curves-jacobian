@@ -241,7 +241,7 @@ operation `o : A ⇝ B` of type `•` (with an infinite cusp image in `B`) there
 theorem _root_.Belyi.Anabelian.ElemOp.exists_full_fill {A B : ChainObj (arithmeticExt Ω CX hcX)}
     (o : ElemOp A B) (ho : o.kind = .decusp) (D : GeomModel Ω CX hcX A)
     (hfull : Function.Surjective D.ι)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) (hB : B.HasInfCusp) :
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) (hB : B.HasInfCusp) :
     ∃ (U' : D.Y.Xbar.Opens) (h : D.Y.U ≤ U') (hc' : (U' : Set D.Y.Xbar)ᶜ.Nonempty)
       (hyp : haveI := IsCurveOver.isIntegral D.M D.Y.Xbar
         2 < 2 * Anabelian.curveGenus D.M D.Y.Xbar + cuspDegree D.M D.Y.Xbar U')
@@ -284,7 +284,7 @@ lemma GeomModel.fillPiHom_bijective_self {A : ChainObj (arithmeticExt Ω CX hcX)
 `U' ⊇ U_Y` and `ι' : Π_{(X̄_Y, U')} ≅ Π_{i+m}` such that `ι'⁻¹ ∘ run ∘ ι` is induced by
 `Spec Γ(U_Y) ⟶ Spec Γ(U')`. -/
 theorem _root_.Belyi.Anabelian.PiChain.exists_run_fill (c : PiChain (arithmeticExt Ω CX hcX))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) (i : ℕ) (hi : i ≤ c.len)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) (i : ℕ) (hi : i ≤ c.len)
     (D : GeomModel Ω CX hcX (c.objN i hi)) (hfull : Function.Surjective D.ι) :
     ∀ (m : ℕ) (hm : i + m ≤ c.len) (hrun : c.IsDecuspRun i m hm)
       (_ : ∀ s (hs : s < m), (c.objN (i + s + 1) (by omega)).HasInfCusp),
@@ -330,7 +330,7 @@ infinite cusp image, and `m ≤ r`, there are a full geometric model `(Y, ι : �
 `Π_U ↠ Π_V` of the candidate is `ε ∘ fillPiHom ∘ ι⁻¹`. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_candidate_fill (hc : c.IsBelyiType l r)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (m : ℕ) (hm : m ≤ r) :
     ∃ D : GeomModel Ω CX hcX (c.objN (l + 3 + (r - m)) (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧
@@ -367,7 +367,7 @@ theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_candidate_fill (hc : c
 `res : G_M → G_K` up to conjugation. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_candidate_fill_toG
     (hc : c.IsBelyiType l r) (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (m : ℕ) (hm : m ≤ r) :
     ∃ D : GeomModel Ω CX hcX (c.objN (l + 3 + (r - m)) (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧

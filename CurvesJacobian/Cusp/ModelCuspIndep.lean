@@ -266,7 +266,8 @@ isomorphism `θ : Π_{Y₂} ≅ Π_{Y₁}` with `ι₁ ∘ θ = ι₂` is induce
 `Spec Γ(U₂) ≅ Spec Γ(U₁)` (`exists_isConjInduced_of_relIsomDGC_field`), which maps cuspidal
 inertia groups into cuspidal inertia groups with finite index
 (`exists_arithCusps_map_le_of_conjInduced`). -/
-theorem cuspCompat_of_range_eq₂ (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem cuspCompat_of_range_eq₂
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     {D₁ D₂ : GeomModel Ω CX hcX A} (h : Set.range D₁.ι = Set.range D₂.ι) :
     CuspCompat₂ D₁ D₂ := by
   obtain ⟨θ, hθ⟩ := exists_equiv_of_range_eq₂ D₁.ι D₂.ι D₁.inj D₂.inj h
@@ -302,7 +303,7 @@ variable (Ω CX hcX) in
 `PiChain.IsBelyiType.hasInfCusp_V₃`): any two geometric models of a chain object of `Π_X ↠ G_K`
 have the same cuspidal inertia groups up to commensurability, assuming the rel-isom-DGC over
 number fields. Both models are compared with sub-models with image `ι₁(Π_{Y₁}) ∩ ι₂(Π_{Y₂})`. -/
-theorem modelCuspIndep₂ (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) :
+theorem modelCuspIndep₂ (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) :
     ModelCuspIndep₂ Ω CX hcX := by
   intro A D₁ D₂
   let O : Subgroup A.grp := (D₁.ι : D₁.Pi →* A.grp).range ⊓ (D₂.ι : D₂.Pi →* A.grp).range
@@ -339,7 +340,7 @@ variable {c : PiChain (arithmeticExt Ω CX hcX)} {l r : ℕ}
 `exists_cover_fill`), assuming only the rel-isom-DGC over number fields. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.hasInfCusp_V (hc : c.IsBelyiType l r)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) :
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) :
     (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp :=
   hc.hasInfCusp_V₃ t hDGC (modelCuspIndep₂ Ω CX hcX hDGC)
 
@@ -352,7 +353,7 @@ isomorphism to the trivial chain and `m ≤ r`, the candidate `Π_U ↠ Π_V ↪
 `PiChain.IsBelyiType.hasInfCusp_V`). -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_cover_fill' (hc : c.IsBelyiType l r)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) (m : ℕ) (hm : m ≤ r) :
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) (m : ℕ) (hm : m ≤ r) :
     ∃ D : GeomModel Ω CX hcX (c.objN (l + 3 + (r - m)) (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧
       ∃ (U' : D.Y.Xbar.Opens) (h : D.Y.U ≤ U') (hc' : (U' : Set D.Y.Xbar)ᶜ.Nonempty)

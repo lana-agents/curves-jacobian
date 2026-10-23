@@ -99,7 +99,7 @@ lemma relIndex_ιNHom_ne_zero (P' : Subgroup D.Nrm) : D.ιNHom.range.relIndex P'
   rw [e, Subgroup.index_comap]
   exact Subgroup.relIndex_ne_zero_of_index_ne_zero D.index_range_ne_zero _
 
-variable (hDGC : RelIsomDGC D.M) {P' : Subgroup D.Nrm}
+variable (hDGC : RelIsomDGC.Exists D.M) {P' : Subgroup D.Nrm}
   (hrel : D.ιNHom.range.relIndex P' ≠ 0) (hPP' : D.ιNHom.range ≤ P')
   (hopen : IsOpen ((P'.map D.Nrm.subtype : Subgroup A.grp) : Set A.grp))
   (hnorm : A.Delta ≤ Subgroup.normalizer ((P'.map D.Nrm.subtype : Subgroup A.grp) : Set A.grp))
@@ -332,7 +332,7 @@ is the image of a geometric model of `A`** (assuming the rel-isom-DGC over all n
 Shrink `D` to a model `D₂` with image `T ⊆ P'` normal in `A` (`GeomModel.exists_model_normal_le`),
 so that `N_A(T) = A`, and enlarge `D₂` to `P'` (`GeomModel.enlarge`). -/
 theorem exists_enlarge (D : GeomModel Ω CX hcX A)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (P' : Subgroup A.grp) (hP' : IsOpen (P' : Set A.grp))
     (hnorm : A.Delta ≤ Subgroup.normalizer (P' : Set A.grp))
     (htf : IsTorsionFreeSubgroup (P' ⊓ A.Delta)) :

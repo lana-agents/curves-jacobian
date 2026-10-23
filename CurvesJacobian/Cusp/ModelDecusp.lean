@@ -436,7 +436,7 @@ that some cuspidal decomposition group of `Π_X` has infinite image in `B`, and 
 of `A` with `J ⊆ ι(Π_Y)`. Then `ι⁻¹(ker φ)` is the kernel of the filling `Π_Y ↠ Π_{Y'}` of an open
 `U' ⊇ U_Y` with a cusp, `(X̄_Y, U')` hyperbolic (the input of `GeomModel.decusp`). -/
 theorem exists_fill_of_decusp (D : GeomModel Ω CX hcX A)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (φ : A.grp →ₜ* B.grp) (hsurj : Function.Surjective φ) {C : Subgroup A.grp}
     (hC : A.IsCuspidal C) (htf : A.InTorsionFreeNormalOpen C)
     (hker : (φ : A.grp →* B.grp).ker = A.deltaNormalClosure C)
@@ -535,7 +535,7 @@ theorem exists_fill_of_decusp (D : GeomModel Ω CX hcX A)
 has a geometric model, so has `B` (assuming the rel-isom-DGC over number fields): enlarge the
 model to `P' ⊇ J` (`GeomModel.exists_enlarge`) and fill (`GeomModel.exists_fill_of_decusp`). -/
 theorem exists_decusp (D : GeomModel Ω CX hcX A)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (φ : A.grp →ₜ* B.grp) (hsurj : Function.Surjective φ) {C : Subgroup A.grp}
     (hC : A.IsCuspidal C) (htf : A.InTorsionFreeNormalOpen C)
     (hker : (φ : A.grp →* B.grp).ker = A.deltaNormalClosure C)
@@ -561,7 +561,7 @@ theorem exists_decusp (D : GeomModel Ω CX hcX A)
 
 /-- **Geometric models across an elementary operation of type `•`** (`GeomModel.exists_decusp`). -/
 theorem exists_of_elemOp_decusp (D : GeomModel Ω CX hcX A)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) (o : ElemOp A B)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) (o : ElemOp A B)
     (ho : o.kind = .decusp)
     (hB : ∃ I ∈ (arithmeticExt Ω CX hcX).cusps, ¬ (B.image I).Commensurable ⊥) :
     Nonempty (GeomModel Ω CX hcX B) := by

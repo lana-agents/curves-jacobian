@@ -66,7 +66,7 @@ point, by a finite étale `q : Spec Γ(C₁.U) ⟶ Spec Γ(X)` (DGC across field
 theorem exists_isConjInduced_cover_of_range {M₁ : Type u} [Field M₁] [NumberField M₁]
     [Algebra K M₁] [Algebra M₁ Ω] [IsScalarTower K M₁ Ω] [FiniteDimensional K M₁]
     [Algebra.IsAlgebraic M₁ Ω] (C₁ : HypCurve M₁) (hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty)
-    (hDGC : RelIsomDGC M₁)
+    (hDGC : RelIsomDGC.Exists M₁)
     (f : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M₁ Ω Γ(C₁.Xbar, C₁.U)) →ₜ*
       π₁ᵉᵗ(basePoint Ω CX hcX ≫ baseChangeSpec K Ω Γ(CX.Xbar, CX.U)))
     (hf : Function.Injective f) {Yc : Scheme.{u}} (p : Yc ⟶ Spec Γ(CX.Xbar, CX.U))
@@ -156,7 +156,7 @@ theorem exists_isConjInduced_cover_of_range {M₁ : Type u} [Field M₁] [Number
 theorem exists_isConjInduced_cover_of_range' {M₁ : Type u} [Field M₁] [NumberField M₁]
     [Algebra K M₁] [Algebra M₁ Ω] [IsScalarTower K M₁ Ω] [FiniteDimensional K M₁]
     [Algebra.IsAlgebraic M₁ Ω] (C₁ : HypCurve M₁) (hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty)
-    (hDGC : RelIsomDGC M₁) {P : Type*} [Group P] [TopologicalSpace P]
+    (hDGC : RelIsomDGC.Exists M₁) {P : Type*} [Group P] [TopologicalSpace P]
     (ε : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M₁ Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ* P)
     (emb : P →ₜ* π₁ᵉᵗ(basePoint Ω CX hcX ≫ baseChangeSpec K Ω Γ(CX.Xbar, CX.U)))
     (hemb : Function.Injective emb) {Yc : Scheme.{u}} (p : Yc ⟶ Spec Γ(CX.Xbar, CX.U))
@@ -193,7 +193,7 @@ chain whose object `Π_V` has an infinite cusp image, and `m ≤ r`, the candida
 one curve over a number field and a finite étale `q : Spec Γ(U') ⟶ Spec Γ(X)`. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_cover_fill (hc : c.IsBelyiType l r)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (m : ℕ) (hm : m ≤ r) :
     ∃ D : GeomModel Ω CX hcX (c.objN (l + 3 + (r - m)) (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧

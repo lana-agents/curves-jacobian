@@ -128,7 +128,7 @@ theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.hasInfCusp_D_zero
 image** (assuming the rel-isom-DGC over number fields). -/
 theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.hasInfCusp_D (hc : c.IsEllipticType n)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k) :
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k) :
     (c.objN (n + 3) (by have := hc.len_eq; omega)).HasInfCusp := by
   have hlen := hc.len_eq
   rcases Nat.eq_zero_or_pos n with rfl | hn
@@ -153,7 +153,7 @@ theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.hasInfCusp_D (hc : c.IsEll
 image.** -/
 theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.hasInfCusp (hc : c.IsEllipticType n)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (j : ℕ) (hj : j ≤ c.len) : (c.objN j hj).HasInfCusp := by
   have hlen := hc.len_eq
   have hD := hc.hasInfCusp_D t hDGC
@@ -183,7 +183,7 @@ set_option maxHeartbeats 800000 in
 `U_Y ⊆ U'` and `ε : Π_{(X̄_Y, U')} ≅ Π_D` such that `Π_U ↠ Π_D` is `ε ∘ fillPiHom ∘ ι⁻¹`. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.exists_candidate_fill
     (hc : c.IsEllipticType n) (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (htf : IsTorsionFreeSubgroup (c.objN 3 (by have := hc.len_eq; omega)).Delta) :
     ∃ D : GeomModel Ω CX hcX (c.objN 3 (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧
@@ -217,7 +217,7 @@ set_option maxHeartbeats 800000 in
 lies over `res : G_M → G_K` up to conjugation. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.exists_candidate_fill_toG
     (hc : c.IsEllipticType n) (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (htf : IsTorsionFreeSubgroup (c.objN 3 (by have := hc.len_eq; omega)).Delta) :
     ∃ D : GeomModel Ω CX hcX (c.objN 3 (by have := hc.len_eq; omega)),
       Function.Surjective D.ι ∧

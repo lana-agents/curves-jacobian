@@ -14,7 +14,8 @@ Let `C` be a hyperbolic curve over a number field `M` with a cusp, `U = C.U ⊆ 
 `Spec Γ(U')` lying over `Spec β` for an automorphism `β` of `M`, inducing (up to a change of
 base point) a continuous automorphism `A` of `Π_{U'}`, and let `ψ` be a continuous automorphism
 of `Π_U` lifting `A` along `fillPiHom : Π_U ↠ Π_{U'}`. Assuming the rel-isom-DGC over `M`
-(`hDGC : RelIsomDGC M`), `σ'` restricts to an automorphism of the open `Spec Γ(U) ⊆ Spec Γ(U')`
+(`hDGC : RelIsomDGC.Exists M`),
+`σ'` restricts to an automorphism of the open `Spec Γ(U) ⊆ Spec Γ(U')`
 (**`CurvesJacobian.Cusp.exists_iso_specRes_comp_eq`**).
 
 * `CurvesJacobian.Cusp.exists_theta_of_isConjInduced_semilinear`: a map induced by a morphism
@@ -136,7 +137,7 @@ include hc' hyp in
 let `σ'` be an automorphism of `Spec Γ(U')` over `Spec β` inducing `A` on `Π_{U'}`, and let `ψ`
 be an automorphism of `Π_U` with `fillPiHom ∘ ψ = A ∘ fillPiHom`. Assuming the rel-isom-DGC over
 `M`, `σ'` maps the open `Spec Γ(U) ⊆ Spec Γ(U')` isomorphically onto itself. -/
-theorem exists_iso_specRes_comp_eq (hDGC : RelIsomDGC M) (β : M ≃+* M)
+theorem exists_iso_specRes_comp_eq (hDGC : RelIsomDGC.Exists M) (β : M ≃+* M)
     (σ' : Spec Γ(C.Xbar, U') ≅ Spec Γ(C.Xbar, U'))
     (hσ : σ'.hom ≫ sKU (fillCurve C h hyp) = sKU (fillCurve C h hyp) ≫ specRingEquiv β)
     (A : π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U')) ≃ₜ*
@@ -238,7 +239,7 @@ theorem exists_iso_specRes_comp_eq (hDGC : RelIsomDGC M) (β : M ≃+* M)
   -- (L7) uniqueness: `F' = σ'`
   have hEq : extIso C h hext hext' = σ' :=
     eq_of_isConjInduced_of_relIsomDGC_twist Ω β (C₁ := fillCurve C h hyp)
-      (C₂ := fillCurve C h hyp) (hc₁ := hc') (hc₂ := hc') hDGC A Θ hΘ hAΘ hF' hσ H5 HA
+      (C₂ := fillCurve C h hyp) (hc₁ := hc') (hc₂ := hc') A Θ hΘ hAΘ hF' hσ H5 HA
   refine ⟨F, ?_⟩
   rw [← hEq]
   exact specRes_extIso C h hext hext'

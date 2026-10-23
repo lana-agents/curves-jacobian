@@ -123,7 +123,7 @@ include hyp in
 `H = N.comap f ⊆ E` is identified with `Π_C` (`J`) so that `f ∘ J` is
 `conj(k) ∘ e ∘ fillPiHom` for an injective `e`, then (by the DGC over `M`) every continuous
 automorphism `β` of `H` with `f ∘ β = f` is conjugation by an element of `ker f`. -/
-theorem exists_conj_of_model_fill (hDGC : RelIsomDGC M) {E P : Type*} [Group E] [Group P]
+theorem exists_conj_of_model_fill (hDGC : RelIsomDGC.Exists M) {E P : Type*} [Group E] [Group P]
     [TopologicalSpace E] {f : E →* P} {N : Subgroup P}
     (J : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec M Ω Γ(C.Xbar, C.U)) ≃ₜ* N.comap f)
     (e : π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U')) →* P)

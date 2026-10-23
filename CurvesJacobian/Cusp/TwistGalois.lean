@@ -296,7 +296,7 @@ lemma exists_theta_of_res_conj [FiniteDimensional K M]
 every continuous isomorphism `φ : Π_{U₁} ≃ₜ* Π_{U₂}` with `res ∘ pr₂ ∘ φ = conj(τ⁻¹) ∘ res ∘ pr₁`
 is induced, up to a change of base point, by an isomorphism of schemes
 `Spec Γ(U₁) ≅ Spec Γ(U₂)` lying over `Spec α`. -/
-theorem exists_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M] (hDGC : RelIsomDGC M)
+theorem exists_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M] (hDGC : RelIsomDGC.Exists M)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M Ω Γ(C₂.Xbar, C₂.U)))
     {τ : Ω ≃ₐ[K] Ω} {α : M ≃ₐ[K] M} (hα : ∀ x, algebraMap M Ω (α x) = τ (algebraMap M Ω x))
@@ -309,7 +309,7 @@ theorem exists_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M] (hDGC : R
     (isConjInduced_of_res_conj hα Θ hΘ) hφ'
 
 /-- **The rel-isom-DGC over conjugation by a Galois element, uniqueness.** -/
-theorem eq_of_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M] (hDGC : RelIsomDGC M)
+theorem eq_of_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M]
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M Ω Γ(C₂.Xbar, C₂.U)))
     {τ : Ω ≃ₐ[K] Ω} {α : M ≃ₐ[K] M} (hα : ∀ x, algebraMap M Ω (α x) = τ (algebraMap M Ω x))
@@ -320,7 +320,7 @@ theorem eq_of_isConjInduced_of_relIsomDGC_gal [FiniteDimensional K M] (hDGC : Re
     (hG : G.hom ≫ sKU C₂ = sKU C₁ ≫ specRingEquiv α.toRingEquiv)
     (HF : IsConjInduced F.hom φ) (HG : IsConjInduced G.hom φ) : F = G := by
   obtain ⟨Θ, hΘ, hφ'⟩ := exists_theta_of_res_conj φ τ hφ
-  exact eq_of_isConjInduced_of_relIsomDGC_twist Ω α.toRingEquiv hDGC φ Θ
+  exact eq_of_isConjInduced_of_relIsomDGC_twist Ω α.toRingEquiv φ Θ
     (isConjInduced_of_res_conj hα Θ hΘ) hφ' hF hG HF HG
 
 end DGC

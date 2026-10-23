@@ -184,7 +184,7 @@ variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebr
 /-- **The semilinear action preserves the cusps**: for `g ∈ N_A(ι(Π_Y))`, conjugation by `g`
 maps the cuspidal inertia groups of `Π_Y` onto cuspidal inertia groups (it is induced by the
 semilinear automorphism `F_g` of `Spec Γ(U_Y)`, `GeomModel.exists_semilinearAut`). -/
-theorem map_conjPi_mem_arithCusps_iff (hDGC : RelIsomDGC D.M) (g : D.Nrm) {J} :
+theorem map_conjPi_mem_arithCusps_iff (hDGC : RelIsomDGC.Exists D.M) (g : D.Nrm) {J} :
     J.map (D.conjPi g).toMulEquiv.toMonoidHom ∈ arithCusps Ω D.Y D.hY ↔
       J ∈ arithCusps Ω D.Y D.hY := by
   obtain ⟨-, -, F, -, HF⟩ := D.exists_semilinearAut hDGC g

@@ -15,7 +15,8 @@ composition with inner automorphisms of `Π_{U_{X₂}}` defined by elements of
 `ker(Π_{U_{X₂}} ↠ Π₂)` ("follows immediately from our assumption that the rel-isom-DGC holds",
 l.4840). Here `X = CX.U` is an affine hyperbolic curve over a number field, `U_X ⊆ X` a nonempty
 open (`subCurve`), `Π_{U_X} ↠ Π_X` is `fillMap` followed by a change of base point `α₀` to the
-base point of `X` (`cor38Fill`), and the DGC is the explicit hypothesis `hDGC : RelIsomDGC K`.
+base point of `X` (`cor38Fill`), and the DGC is the explicit hypothesis
+`hDGC : RelIsomDGC.Exists K`.
 
 * `CurvesJacobian.Cusp.cor38_unique`: two continuous isomorphisms `φ₁, φ₂ : P ≃ₜ* Π_{U_X}` with
   the same composite `P → Π_X` differ by `conj(n)`, `n ∈ ker(Π_{U_X} ↠ Π_X)`.
@@ -62,7 +63,7 @@ lemma cor38Fill_eq_iff (x y) : cor38Fill Ω CX hcX UX hUX hne α₀ x =
 /-- **[AbsTopII] Corollary 3.8, uniqueness**: continuous isomorphisms `φ₁, φ₂ : P ≃ₜ* Π_{U_X}`
 with the same composite to `Π_X` differ by an inner automorphism of `Π_{U_X}` defined by an
 element of `ker(Π_{U_X} ↠ Π_X)`. -/
-theorem cor38_unique (hDGC : RelIsomDGC K) {P : Type*} [Group P] [TopologicalSpace P]
+theorem cor38_unique (hDGC : RelIsomDGC.Exists K) {P : Type*} [Group P] [TopologicalSpace P]
     (φ₁ φ₂ : P ≃ₜ* (arithmeticExt Ω (subCurve CX UX hUX hne) (compl_nonempty_of_le hUX hcX)).Pi)
     (hφ : ∀ p, cor38Fill Ω CX hcX UX hUX hne α₀ (φ₂ p) = cor38Fill Ω CX hcX UX hUX hne α₀ (φ₁ p)) :
     ∃ n ∈ (cor38Fill Ω CX hcX UX hUX hne α₀).ker, ∀ p, φ₂ p = n * φ₁ p * n⁻¹ := by
@@ -77,7 +78,7 @@ theorem cor38_unique (hDGC : RelIsomDGC K) {P : Type*} [Group P] [TopologicalSpa
 /-- **[AbsTopII] Corollary 3.7 (b), uniqueness of the lifting**: two automorphisms `ψ₁, ψ₂` of
 `Π_{U_X}` lifting automorphisms of `Π_X` that differ by `conj(s)` differ by `conj(n)` with `n`
 over `s`. -/
-theorem cor37b_lift_unique (hDGC : RelIsomDGC K)
+theorem cor37b_lift_unique (hDGC : RelIsomDGC.Exists K)
     (ψ₁ ψ₂ : (arithmeticExt Ω (subCurve CX UX hUX hne) (compl_nonempty_of_le hUX hcX)).Pi ≃ₜ*
       (arithmeticExt Ω (subCurve CX UX hUX hne) (compl_nonempty_of_le hUX hcX)).Pi)
     (s : (arithmeticExt Ω CX hcX).Pi)

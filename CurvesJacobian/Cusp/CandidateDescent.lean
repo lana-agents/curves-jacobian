@@ -98,7 +98,7 @@ theorem exists_descent_of_lift {M : Type u} [Field M] [NumberField M] [Algebra K
     (h : C.U ≤ U') (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
     (hyp : haveI := IsCurveOver.isIntegral M C.Xbar
       2 < 2 * Anabelian.curveGenus M C.Xbar + cuspDegree M C.Xbar U')
-    (hDGC : RelIsomDGC M)
+    (hDGC : RelIsomDGC.Exists M)
     (q : Spec Γ(C.Xbar, U') ⟶ Spec Γ(CX.Xbar, CX.U)) [IsFiniteEtale q]
     (hqK : q ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(CX.Xbar, CX.U))) =
       Spec.map (CommRingCat.ofHom (algebraMap M Γ(C.Xbar, U'))) ≫

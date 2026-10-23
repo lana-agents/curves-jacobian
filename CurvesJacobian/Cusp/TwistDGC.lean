@@ -5,6 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.HypBaseChange
+import CurvesJacobian.LocAn.UniqueReduction
 
 /-!
 # Galois twists of hyperbolic curves and the twisted rel-isom-DGC (MR8.6)
@@ -248,7 +249,7 @@ number field `M` with cusps and an automorphism `α` of `M`, every continuous is
 `φ : Π_{U₁} ≃ₜ* Π_{U₂}` lying over an automorphism `Θ` of `G_M` induced by `Spec α` is induced, up
 to a change of base point, by an isomorphism of schemes `Spec Γ(U₁) ≅ Spec Γ(U₂)` lying over
 `Spec α`. -/
-theorem exists_isConjInduced_of_relIsomDGC_twist (hDGC : RelIsomDGC M)
+theorem exists_isConjInduced_of_relIsomDGC_twist (hDGC : RelIsomDGC.Exists M)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M Ω Γ(C₂.Xbar, C₂.U)))
     (Θ : π₁ᵉᵗ(sM) → π₁ᵉᵗ(sM)) (hΘ : IsConjInduced (specRingEquiv α) Θ)
@@ -266,7 +267,7 @@ theorem exists_isConjInduced_of_relIsomDGC_twist (hDGC : RelIsomDGC M)
 
 /-- **The twisted rel-isom-DGC, uniqueness**: the isomorphism over `Spec α` inducing `φ` is
 unique. -/
-theorem eq_of_isConjInduced_of_relIsomDGC_twist (hDGC : RelIsomDGC M)
+theorem eq_of_isConjInduced_of_relIsomDGC_twist
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M Ω Γ(C₂.Xbar, C₂.U)))
     (Θ : π₁ᵉᵗ(sM) → π₁ᵉᵗ(sM)) (hΘ : IsConjInduced (specRingEquiv α) Θ)
@@ -295,7 +296,7 @@ theorem eq_of_isConjInduced_of_relIsomDGC_twist (hDGC : RelIsomDGC M)
       twistSpecIso_inv_sKU, hF]
   obtain ⟨h₁, H₁⟩ := key F hF HF
   obtain ⟨h₂, H₂⟩ := key G hG HG
-  have e := eq_of_isConjInduced_of_relIsomDGC Ω hDGC ψ hψ h₁ h₂ H₁ H₂
+  have e := eq_of_isConjInduced_of_relIsomDGC Ω ψ hψ h₁ h₂ H₁ H₂
   simpa using congrArg (· ≪≫ twistSpecIso α C₂ hc₂) e
 
 end TwistDGC

@@ -3,7 +3,6 @@ Copyright (c) 2026 LANA Project. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
-import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.LocAn.InnerRigidAffine
 
 /-!
@@ -69,3 +68,41 @@ theorem eq_of_isConjInduced [Algebra.IsAlgebraic K Ω] [CharZero Ω]
   eq_of_isConjInduced_of_innerRigid (innerRigid Ω C₁ hc₁) φ hF hF' H H'
 
 end CurvesJacobian.LocAn
+
+/-! ### The uniqueness statements of MR8's arithmetic model, without DGC hypothesis -/
+
+namespace CurvesJacobian.Cusp
+
+open CurvesJacobian.LocAn
+
+variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+  [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω]
+  {C₁ C₂ : HypCurve K} {hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty}
+  {hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty}
+
+/-- **The rel-isom-DGC in the arithmetic model, uniqueness** (a theorem, MR7 `innerRigid`): the
+`K`-isomorphism inducing a continuous isomorphism over `G_K` is unique. -/
+theorem eq_of_isConjInduced_of_relIsomDGC
+    (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
+      π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
+    (_hφ : ∀ σ, projGk Ω C₂ hc₂ (φ σ) = projGk Ω C₁ hc₁ σ)
+    {F F' : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U)}
+    (hF : F.hom ≫ sKU C₂ = sKU C₁) (hF' : F'.hom ≫ sKU C₂ = sKU C₁)
+    (H : IsConjInduced F.hom φ) (H' : IsConjInduced F'.hom φ) : F = F' := by
+  haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap K Ω).injective
+  exact eq_of_isConjInduced φ.toMulEquiv hF hF' H H'
+
+variable (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
+
+/-- **A `K`-automorphism of `Spec Γ(U)` inducing an inner automorphism of `Π_U` is the identity**
+(a theorem, MR7 `innerRigid`). -/
+theorem eq_refl_of_isConjInduced_conj
+    (t : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)))
+    (_ht : ∀ σ, projGk Ω C hc (t * σ * t⁻¹) = projGk Ω C hc σ)
+    {F : Spec Γ(C.Xbar, C.U) ≅ Spec Γ(C.Xbar, C.U)} (hF : F.hom ≫ sKU C = sKU C)
+    (H : IsConjInduced F.hom fun σ ↦ t * σ * t⁻¹) : F = Iso.refl _ := by
+  haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap K Ω).injective
+  refine innerRigid Ω C hc F hF ((H.conj t⁻¹).congr_fun fun σ ↦ ?_)
+  simp [mul_assoc]
+
+end CurvesJacobian.Cusp

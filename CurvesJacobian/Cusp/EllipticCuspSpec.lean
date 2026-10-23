@@ -44,7 +44,7 @@ attribute [local instance] isAlgClosure_of_isAlgebraic
 the elliptic candidates (torsion-free `Δ_U`), existence of the elliptic candidate realising
 `Π_{E ∖ E[2]} ↠ Π_{E ∖ {O}}`, and functoriality of `ellipticCusp`. -/
 theorem ellipticCusp_spec_oncePunctured
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (E : WeierstrassCurve K) [E.IsElliptic] (hE : E.Ψ₂Sq.Splits) :
     (∀ (c : PiChain (arithmeticExt Ω (hypCurveX E) (compl_XE_nonempty E))) (n : ℕ)
       (hc : c.IsEllipticType n) (t : c.TerminalIso (PiChain.trivial _))

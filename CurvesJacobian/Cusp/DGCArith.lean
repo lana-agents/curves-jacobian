@@ -23,15 +23,18 @@ cuspidalisation of curves-jacobian works with `Π_U = π₁ᵉᵗ(Spec Γ(U), x)
 * `isPathOverBase_of_isOverGk`: a change of base point realising an isomorphism over `G_K` lies
   over the trivial path of `Spec K` automatically (`G_K` has trivial centre); so `InducedBy` is
   `IsConjInduced` for isomorphisms over `G_K`.
-* **`exists_isConjInduced_of_relIsomDGC`, `eq_of_isConjInduced_of_relIsomDGC`** (the DGC in
-  the arithmetic model): for hyperbolic curves `C₁, C₂` over a number field `K`, each with a
-  cusp, every continuous isomorphism `φ : Π_{U₁} ≃ₜ* Π_{U₂}` over `G_K` is `IsConjInduced` by a
-  `K`-isomorphism `Spec Γ(U₁) ≅ Spec Γ(U₂)`, and this isomorphism is unique.
-* `eq_refl_of_isConjInduced_conj`: a `K`-automorphism of `Spec Γ(U)` inducing an inner
-  automorphism of `Π_U` is the identity.
+* **`exists_isConjInduced_of_relIsomDGC`** (the existence half of the DGC in the arithmetic
+  model): for hyperbolic curves `C₁, C₂` over a number field `K`, each with a cusp, every
+  continuous isomorphism `φ : Π_{U₁} ≃ₜ* Π_{U₂}` over `G_K` is `IsConjInduced` by a
+  `K`-isomorphism `Spec Γ(U₁) ≅ Spec Γ(U₂)`.
+* `IsConjInduced.symm_of_iso`: the inverse of a map induced by an isomorphism `e` is induced by
+  `e⁻¹`.
 
-The DGC enters only as the explicit hypothesis `hDGC : RelIsomDGC K` (`K` a number field, hence
-sub-`p`-adic, `Belyi.Anabelian.isSubPAdic_of_numberField`).
+The existence half enters only as the explicit hypothesis `hDGC : RelIsomDGC.Exists K` (`K` a
+number field, hence sub-`p`-adic, `Belyi.Anabelian.isSubPAdic_of_numberField`). The uniqueness
+half is a theorem (MR7: `CurvesJacobian.LocAn.innerRigid`); the uniqueness statements
+`eq_of_isConjInduced_of_relIsomDGC` and `eq_refl_of_isConjInduced_conj` are in
+`CurvesJacobian/LocAn/UniqueReduction.lean`, without DGC hypothesis.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi
@@ -168,6 +171,33 @@ lemma isConjInduced_hom_of_inv (e : Y ≅ X) (y : Spec (.of Ω) ⟶ X)
   change σ = (eqToIso (congrArg fiber h0)).conjAut ((eqToIso _).conjAut σ)
   rw [← Iso.trans_conjAut, eqToIso_trans, Iso.conjAut_apply]
   ext
+  simp
+
+omit [IsSepClosed Ω] in
+/-- **The inverse of a map induced by an isomorphism `e` is induced by `e⁻¹`.** -/
+lemma IsConjInduced.symm_of_iso (e : X ≅ Y) {x : Spec (.of Ω) ⟶ X} {y : Spec (.of Ω) ⟶ Y}
+    (φ : π₁ᵉᵗ(x) ≃* π₁ᵉᵗ(y)) (H : IsConjInduced e.hom φ) : IsConjInduced e.inv φ.symm := by
+  obtain ⟨γ, hγ⟩ := H
+  have h0 : x = (x ≫ e.hom) ≫ e.inv := by simp
+  let ε : fiber x ≅ fiber (y ≫ e.inv) := eqToIso (congrArg fiber h0) ≪≫
+    fiberIsoMap e.inv (rfl : (x ≫ e.hom) ≫ e.inv = _) (rfl : y ≫ e.inv = _) γ
+  have key : ∀ σ, fundamentalGroupMap e.inv rfl (φ σ) = autContinuousMulEquivOfIso ε σ := by
+    intro σ
+    have h1 : x ≫ e.hom ≫ e.inv = (x ≫ e.hom) ≫ e.inv := (Category.assoc _ _ _).symm
+    have h2 : x ≫ 𝟙 X = (x ≫ e.hom) ≫ e.inv := by simp
+    have c : fundamentalGroupMap e.inv rfl (fundamentalGroupMap e.hom rfl σ) =
+        fundamentalGroupMap (e.hom ≫ e.inv) h1 σ :=
+      (DFunLike.congr_fun (fundamentalGroupMap_comp e.hom e.inv rfl rfl h1) σ).symm
+    rw [hγ, fundamentalGroupMap_autContinuousMulEquivOfIso e.inv rfl rfl γ, c,
+      fundamentalGroupMap_congr e.hom_inv_id h1 h2, fundamentalGroupMap_id_eq h2]
+    change _ = (eqToIso _ ≪≫ _).conjAut σ
+    rw [Iso.trans_conjAut]
+    rfl
+  refine ⟨ε.symm, fun τ ↦ ?_⟩
+  obtain ⟨σ, rfl⟩ := φ.surjective τ
+  rw [MulEquiv.symm_apply_apply, key]
+  change σ = ε.symm.conjAut (ε.conjAut σ)
+  rw [← Iso.trans_conjAut, Iso.self_symm_id, Iso.conjAut_apply]
   simp
 
 end ConjInduced
@@ -337,13 +367,13 @@ lemma isOverGk_dgcTransport
 /-- **The rel-isom-DGC in the arithmetic model, existence**: every continuous isomorphism
 `Π_{U₁} ≃ₜ* Π_{U₂}` over `G_K` is induced, up to a change of base point, by a `K`-isomorphism
 `Spec Γ(U₁) ≅ Spec Γ(U₂)`. -/
-theorem exists_isConjInduced_of_relIsomDGC (hDGC : RelIsomDGC K)
+theorem exists_isConjInduced_of_relIsomDGC (hDGC : RelIsomDGC.Exists K)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
     (hφ : ∀ σ, projGk Ω C₂ hc₂ (φ σ) = projGk Ω C₁ hc₁ σ) :
     ∃ F : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U),
       F.hom ≫ sKU C₂ = sKU C₁ ∧ IsConjInduced F.hom φ := by
-  obtain ⟨⟨f, hf⟩, ⟨γ, -, hγ⟩, -⟩ := hDGC Ω C₁ C₂ (arithGeomPt Ω C₁ hc₁) (arithGeomPt Ω C₂ hc₂)
+  obtain ⟨⟨f, hf⟩, ⟨γ, -, hγ⟩⟩ := hDGC Ω C₁ C₂ (arithGeomPt Ω C₁ hc₁) (arithGeomPt Ω C₂ hc₂)
     (dgcTransport Ω φ) (isOverGk_dgcTransport Ω φ hφ)
   set i₁ := (isAffineOpen_U C₁ hc₁).isoSpec
   set i₂ := (isAffineOpen_U C₂ hc₂).isoSpec
@@ -356,44 +386,6 @@ theorem exists_isConjInduced_of_relIsomDGC (hDGC : RelIsomDGC K)
     refine ((H₁.comp H₂).comp H₃).congr_hom
       (by simp only [Iso.trans_hom, Iso.symm_hom, Category.assoc]; rfl) |>.congr_fun fun σ ↦ ?_
     simp [dgcTransport]
-
-/-- **The rel-isom-DGC in the arithmetic model, uniqueness**: the `K`-isomorphism inducing a
-continuous isomorphism over `G_K` is unique. -/
-theorem eq_of_isConjInduced_of_relIsomDGC (hDGC : RelIsomDGC K)
-    (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
-      π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
-    (hφ : ∀ σ, projGk Ω C₂ hc₂ (φ σ) = projGk Ω C₁ hc₁ σ)
-    {F F' : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U)}
-    (hF : F.hom ≫ sKU C₂ = sKU C₁) (hF' : F'.hom ≫ sKU C₂ = sKU C₁)
-    (H : IsConjInduced F.hom φ) (H' : IsConjInduced F'.hom φ) : F = F' := by
-  set i₁ := (isAffineOpen_U C₁ hc₁).isoSpec
-  set i₂ := (isAffineOpen_U C₂ hc₂).isoSpec
-  have hcen := (isSlim_Gk (K := K) Ω).center_eq_bot
-  have key : ∀ G : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U), G.hom ≫ sKU C₂ = sKU C₁ →
-      IsConjInduced G.hom φ → ∃ hG : (i₁ ≪≫ G ≪≫ i₂.symm).hom ≫ C₂.toSpec = C₁.toSpec,
-        InducedBy (arithGeomPt Ω C₁ hc₁) (arithGeomPt Ω C₂ hc₂) ⟨i₁ ≪≫ G ≪≫ i₂.symm, hG⟩
-          (dgcTransport Ω φ) := by
-    intro G hG HG
-    have hG' : (i₁ ≪≫ G ≪≫ i₂.symm).hom ≫ C₂.toSpec = C₁.toSpec := by
-      simp only [Iso.trans_hom, Iso.symm_hom, Category.assoc]
-      rw [isoSpec_inv_toSpec C₂ hc₂, hG, isoSpec_hom_sKU C₁ hc₁]
-    refine ⟨hG', ?_⟩
-    have H₁ := isConjInduced_arithGeomEquiv_symm Ω C₁ hc₁
-    have H₃ := isConjInduced_arithGeomEquiv Ω C₂ hc₂
-    obtain ⟨γ, hγ⟩ := (((H₁.comp HG).comp H₃).congr_hom
-      (show (i₁.hom ≫ G.hom) ≫ i₂.inv = (i₁ ≪≫ G ≪≫ i₂.symm).hom by simp)).congr_fun
-        (ψ := ⇑(dgcTransport Ω φ)) fun _ ↦ rfl
-    refine ⟨γ, isPathOverBase_of_isOverGk _ _ hG' _ (isOverGk_dgcTransport Ω φ hφ) γ hγ
-      (surjective_toSpec_arithGeomPt Ω C₁ hc₁) hcen, hγ⟩
-  obtain ⟨hG, hI⟩ := key F hF H
-  obtain ⟨hG', hI'⟩ := key F' hF' H'
-  obtain ⟨_, -, huniq⟩ := hDGC Ω C₁ C₂ (arithGeomPt Ω C₁ hc₁) (arithGeomPt Ω C₂ hc₂)
-    (dgcTransport Ω φ) (isOverGk_dgcTransport Ω φ hφ)
-  have e := (huniq _ hI).trans (huniq _ hI').symm
-  have e' : i₁ ≪≫ F ≪≫ i₂.symm = i₁ ≪≫ F' ≪≫ i₂.symm := congrArg Subtype.val e
-  ext1
-  have := congrArg (fun j ↦ i₁.inv ≫ j.hom ≫ i₂.hom) e'
-  simpa using this
 
 variable (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -411,20 +403,6 @@ def conjCMEquiv {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G
     rw [this]
     fun_prop
 
-/-- **A `K`-automorphism of `Spec Γ(U)` inducing an inner automorphism of `Π_U` (over `G_K`) is
-the identity** (uniqueness in the rel-isom-DGC). -/
-theorem eq_refl_of_isConjInduced_conj (hDGC : RelIsomDGC K)
-    (t : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)))
-    (ht : ∀ σ, projGk Ω C hc (t * σ * t⁻¹) = projGk Ω C hc σ)
-    {F : Spec Γ(C.Xbar, C.U) ≅ Spec Γ(C.Xbar, C.U)} (hF : F.hom ≫ sKU C = sKU C)
-    (H : IsConjInduced F.hom fun σ ↦ t * σ * t⁻¹) : F = Iso.refl _ := by
-  have Hid : IsConjInduced (Iso.refl (Spec Γ(C.Xbar, C.U))).hom fun σ ↦ t * σ * t⁻¹ :=
-    (isConjInduced_iff _ (Category.comp_id _) _).2 ⟨t, fun σ ↦ by
-      change _ = t.conjAut (fundamentalGroupMap (𝟙 _) (Category.comp_id _) σ)
-      rw [fundamentalGroupMap_id, Aut_conjAut_eq]
-      rfl⟩
-  exact eq_of_isConjInduced_of_relIsomDGC Ω hDGC (conjCMEquiv t) ht hF (by simp) H Hid
-
 /-- **The rel-isom-DGC for isomorphisms lying over an inner automorphism of `G_K` coming from
 `Π_{U₂}`** (the semilinear case needed for conjugations inside chain objects): if
 `projGk ∘ φ = conj(projGk t) ∘ projGk` for some `t ∈ Π_{U₂}`, then `φ` is induced, up to a
@@ -432,7 +410,7 @@ change of base point, by a `K`-isomorphism `Spec Γ(U₁) ≅ Spec Γ(U₂)` (ap
 `conj(t)⁻¹ ∘ φ`). -/
 theorem exists_isConjInduced_of_relIsomDGC_conj {C₁ C₂ : HypCurve K}
     {hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty} {hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty}
-    (hDGC : RelIsomDGC K)
+    (hDGC : RelIsomDGC.Exists K)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
     (t : π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))

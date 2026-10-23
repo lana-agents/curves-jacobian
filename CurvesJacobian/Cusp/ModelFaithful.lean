@@ -52,7 +52,7 @@ namespace GeomModel
 variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] {CX : HypCurve K}
   {hcX : (CX.U : Set CX.Xbar)ᶜ.Nonempty} {A : ChainObj (arithmeticExt Ω CX hcX)}
-  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC D.M)
+  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC.Exists D.M)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 

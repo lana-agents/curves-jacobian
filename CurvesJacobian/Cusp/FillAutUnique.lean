@@ -4,13 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.FillAutExt
+import CurvesJacobian.LocAn.UniqueReduction
 
 /-!
 # Automorphisms of `Π_U` compatible with filling are inner (MR8.6)
 
 **`CurvesJacobian.Cusp.exists_eq_conj_of_fillMap`.** Let `C` be a hyperbolic curve over a
 number field `K` with a cusp, `U = C.U ⊆ U'` with `(X̄, U')` hyperbolic with a cusp, and
-`fill : Π_U ↠ Π_{U'}` (`fillMap`). Assume the rel-isom-DGC over `K` (`hDGC : RelIsomDGC K`,
+`fill : Π_U ↠ Π_{U'}` (`fillMap`). Assume the rel-isom-DGC over `K` (`hDGC : RelIsomDGC.Exists K`,
 whitelist entry for [LocAn] Theorem A). If a continuous automorphism `ψ` of `Π_U` satisfies
 `fill ∘ ψ = conj(s) ∘ fill` for some `s ∈ Π_{U'}`, then `ψ = conj(n)` for some `n ∈ Π_U` with
 `fill(n) = s`.
@@ -72,33 +73,6 @@ lemma IsConjInduced.transport_id {h : X ⟶ X} {y₁ y₂ : Spec (.of Ω) ⟶ X}
   refine (this.congr_hom (by simp)).congr_fun fun σ ↦ ?_
   change σ = α.conjAut (α.symm.conjAut σ)
   rw [← Iso.trans_conjAut, Iso.symm_self_id, Iso.conjAut_apply]
-  simp
-
-omit [IsSepClosed Ω] in
-/-- **The inverse of a map induced by an isomorphism `e` is induced by `e⁻¹`.** -/
-lemma IsConjInduced.symm_of_iso (e : X ≅ Y) {x : Spec (.of Ω) ⟶ X} {y : Spec (.of Ω) ⟶ Y}
-    (φ : π₁ᵉᵗ(x) ≃* π₁ᵉᵗ(y)) (H : IsConjInduced e.hom φ) : IsConjInduced e.inv φ.symm := by
-  obtain ⟨γ, hγ⟩ := H
-  have h0 : x = (x ≫ e.hom) ≫ e.inv := by simp
-  let ε : fiber x ≅ fiber (y ≫ e.inv) := eqToIso (congrArg fiber h0) ≪≫
-    fiberIsoMap e.inv (rfl : (x ≫ e.hom) ≫ e.inv = _) (rfl : y ≫ e.inv = _) γ
-  have key : ∀ σ, fundamentalGroupMap e.inv rfl (φ σ) = autContinuousMulEquivOfIso ε σ := by
-    intro σ
-    have h1 : x ≫ e.hom ≫ e.inv = (x ≫ e.hom) ≫ e.inv := (Category.assoc _ _ _).symm
-    have h2 : x ≫ 𝟙 X = (x ≫ e.hom) ≫ e.inv := by simp
-    have c : fundamentalGroupMap e.inv rfl (fundamentalGroupMap e.hom rfl σ) =
-        fundamentalGroupMap (e.hom ≫ e.inv) h1 σ :=
-      (DFunLike.congr_fun (fundamentalGroupMap_comp e.hom e.inv rfl rfl h1) σ).symm
-    rw [hγ, fundamentalGroupMap_autContinuousMulEquivOfIso e.inv rfl rfl γ, c,
-      fundamentalGroupMap_congr e.hom_inv_id h1 h2, fundamentalGroupMap_id_eq h2]
-    change _ = (eqToIso _ ≪≫ _).conjAut σ
-    rw [Iso.trans_conjAut]
-    rfl
-  refine ⟨ε.symm, fun τ ↦ ?_⟩
-  obtain ⟨σ, rfl⟩ := φ.surjective τ
-  rw [MulEquiv.symm_apply_apply, key]
-  change σ = ε.symm.conjAut (ε.conjAut σ)
-  rw [← Iso.trans_conjAut, Iso.self_symm_id, Iso.conjAut_apply]
   simp
 
 omit [IsSepClosed Ω] in
@@ -307,7 +281,7 @@ include hc' hyp in
 /-- **Automorphisms of `Π_U` compatible with filling are inner** ([AbsTopII] Cor 3.7 (b),
 Cor 3.8, uniqueness; DGC as the explicit hypothesis `hDGC`): if `fill ∘ ψ = conj(s) ∘ fill`, then
 `ψ = conj(n)` with `fill(n) = s`. -/
-theorem exists_eq_conj_of_fillMap (hDGC : RelIsomDGC K)
+theorem exists_eq_conj_of_fillMap (hDGC : RelIsomDGC.Exists K)
     (ψ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)))
     (s : π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U')))
@@ -370,7 +344,7 @@ theorem exists_eq_conj_of_fillMap (hDGC : RelIsomDGC K)
     (fillAlpha Ω C hc h hc' hyp).symm)
   have hF'K := extIso_over C h hext hext' hF
   have hF'id : F' = Iso.refl _ :=
-    eq_refl_of_isConjInduced_conj Ω (fillCurve C h hyp) hc' hDGC 1 (fun σ ↦ by simp) hF'K
+    eq_refl_of_isConjInduced_conj Ω (fillCurve C h hyp) hc' 1 (fun σ ↦ by simp) hF'K
       (H3.congr_fun fun σ ↦ by simp)
   -- hence `F = id`
   have hf' : ∀ a, extRing C h hext hext' a = a := fun a ↦ by
@@ -410,7 +384,7 @@ include hc' hyp in
 /-- **Uniqueness of lifts along filling** ([AbsTopII] Cor 3.7 (b) "unique lifting", Cor 3.8
 uniqueness): two continuous isomorphisms `φ₁, φ₂ : P ≃ₜ* Π_U` whose composites with
 `fill : Π_U ↠ Π_{U'}` differ by `conj(s)` differ by `conj(n)` for some `n` with `fill(n) = s`. -/
-theorem exists_eq_conj_comp_of_fillMap (hDGC : RelIsomDGC K) {P : Type*} [Group P]
+theorem exists_eq_conj_comp_of_fillMap (hDGC : RelIsomDGC.Exists K) {P : Type*} [Group P]
     [TopologicalSpace P]
     (φ₁ φ₂ : P ≃ₜ* π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)))
     (s : π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U')))

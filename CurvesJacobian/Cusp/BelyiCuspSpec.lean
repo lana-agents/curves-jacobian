@@ -76,7 +76,7 @@ def IsGeomCandidate₂ (x : CuspCandidate (arithmeticExt Ω CX hcX)) : Prop :=
 
 /-- **[AbsTopII] Cor 3.7 (a), soundness of `belyiCusp`**: every Belyi cuspidalisation candidate
 of `Π_X` is geometric. The only input is the rel-isom-DGC over number fields (`hDGC`). -/
-theorem belyiCusp_sound (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem belyiCusp_sound (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     {x : CuspCandidate (arithmeticExt Ω CX hcX)}
     (hx : x ∈ belyiCusp (arithmeticExt Ω CX hcX)) : IsGeomCandidate₂ Ω CX hcX x := by
   obtain ⟨c, l, r, hc, t, m, hm, rfl⟩ := hx
@@ -94,7 +94,7 @@ Galois `V → X` and every nonempty open `U_X ⊆ X`, some Belyi candidate `Π_U
 `Π_V`, lifts automorphisms of `Π_V` induced by `Π_X` to `Π_U`, and `Π_U ≅ Π_V ×_{Π_X} Π_{U_X}`
 over `Π_X` up to conjugation by some `k`, with automorphisms of `Π_V ×_{Π_X} Π_{U_X}` over `Π_X`
 inner from `ker(Π_{U_X} ↠ Π_X)`. -/
-theorem belyiCusp_complete (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem belyiCusp_complete (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (S : GaloisBelyiInput CX M) (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U)
     (hne : (UX : Set CX.Xbar).Nonempty)
     (α₀ : fiber (basePoint Ω CX hcX) ≅
@@ -128,7 +128,7 @@ type with a Galois cover `V → X` (`S`), assuming the rel-isom-DGC over number 
 to `φ_U : Π_{U_X} ≅ Π_{U_{X₂}}` for some nonempty open `U_{X₂} ⊆ X₂` (Cor 3.8, existence);
 (e) such lifts are unique up to inner automorphisms from `ker(Π_{U_X} ↠ Π_X)` (Cor 3.8,
 uniqueness). -/
-theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (S : GaloisBelyiInput CX M) :
     (∀ x ∈ belyiCusp (arithmeticExt Ω CX hcX), IsGeomCandidate₂ Ω CX hcX x) ∧
     (∀ (UX : CX.Xbar.Opens) (hUX : UX ≤ CX.U) (hne : (UX : Set CX.Xbar).Nonempty)
@@ -178,7 +178,7 @@ theorem belyiCusp_spec (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIs
 /-- **`belyiCusp_spec` for `X = E ∖ {O}`** with `K`-rational `E[2]` (`hE`; IUT I Def 3.1 (b)
 assumes the `2·3`-torsion rational), via its Galois Belyi input `nonempty_galoisBelyiInput`. -/
 theorem belyiCusp_spec_oncePunctured
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     {E : WeierstrassCurve K} [E.IsElliptic] (hE : E.Ψ₂Sq.Splits) :
     (∀ x ∈ belyiCusp (arithmeticExt Ω (hypCurveX E) (compl_XE_nonempty E)),
       IsGeomCandidate₂ Ω (hypCurveX E) (compl_XE_nonempty E) x) ∧

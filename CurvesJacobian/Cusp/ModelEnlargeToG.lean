@@ -69,7 +69,7 @@ namespace CurvesJacobian.Cusp.GeomModel
 variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] {CX : HypCurve K}
   {hcX : (CX.U : Set CX.Xbar)ᶜ.Nonempty} {A : ChainObj (arithmeticExt Ω CX hcX)}
-  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC D.M) {P' : Subgroup D.Nrm}
+  (D : GeomModel Ω CX hcX A) (hDGC : RelIsomDGC.Exists D.M) {P' : Subgroup D.Nrm}
   (hrel : D.ιNHom.range.relIndex P' ≠ 0)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic

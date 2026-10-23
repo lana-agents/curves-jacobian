@@ -299,7 +299,7 @@ namespace GeomModel
 /-- **Full models** (option (Q) with `P' = A`): if `Δ_A` is torsion-free, every model of `A` can be
 enlarged to a model with `ι : Π_Y ≅ A`. -/
 theorem exists_full {A : ChainObj (arithmeticExt Ω CX hcX)} (D : GeomModel Ω CX hcX A)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (htf : IsTorsionFreeSubgroup A.Delta) :
     ∃ D' : GeomModel Ω CX hcX A, Function.Surjective D'.ι := by
   obtain ⟨D', hD'⟩ := D.exists_enlarge hDGC ⊤ isOpen_univ
@@ -315,7 +315,8 @@ end GeomModel
 /-- **Geometric models across an elementary operation other than `⊚`**, given an infinite cusp
 image in the target (needed only for `•`). -/
 theorem nonempty_geomModel_of_elemOp {A B : ChainObj (arithmeticExt Ω CX hcX)} (o : ElemOp A B)
-    (D : GeomModel Ω CX hcX A) (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (D : GeomModel Ω CX hcX A)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (ho : o.kind ≠ .deorb) (hB : B.HasInfCusp) : Nonempty (GeomModel Ω CX hcX B) := by
   match o, ho with
   | .cover φ inj op compat, _ => exact ⟨D.ofCover φ inj op compat⟩
@@ -327,7 +328,7 @@ theorem nonempty_geomModel_of_elemOp {A B : ChainObj (arithmeticExt Ω CX hcX)} 
 /-- **Geometric models of all objects of a chain** without operations of type `⊚` whose objects
 all have an infinite cusp image (assuming the rel-isom-DGC over number fields). -/
 theorem _root_.Belyi.Anabelian.PiChain.nonempty_geomModel (c : PiChain (arithmeticExt Ω CX hcX))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hk : ∀ j, (c.op j).kind ≠ .deorb) (hinf : ∀ j, (c.obj j).HasInfCusp) (j : Fin (c.len + 1)) :
     Nonempty (GeomModel Ω CX hcX (c.obj j)) := by
   induction j using Fin.induction with
@@ -344,7 +345,7 @@ theorem _root_.Belyi.Anabelian.PiChain.nonempty_geomModel (c : PiChain (arithmet
 /-- **Geometric models of all objects of a Belyi-type chain** (MR8 round 26, step (1)), given that
 `Π_V` (the second to last object) has an infinite cusp image. -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.nonempty_geomModel (hc : c.IsBelyiType l r)
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (j : Fin (c.len + 1)) :
     Nonempty (GeomModel Ω CX hcX (c.obj j)) :=
   c.nonempty_geomModel hDGC (fun j ↦ hc.kind_ne_deorb j.1 j.2) (hc.hasInfCusp hV) j
@@ -353,7 +354,7 @@ theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.nonempty_geomModel (hc : c.Is
 a terminal isomorphism (MR8 round 26, step (2)). -/
 theorem _root_.Belyi.Anabelian.PiChain.IsBelyiType.exists_full_geomModel (hc : c.IsBelyiType l r)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (hV : (c.objN (l + r + 3) (by have := hc.len_eq; omega)).HasInfCusp) (k : ℕ)
     (hk1 : l + 3 ≤ k) (hk2 : k ≤ l + r + 3) :
     ∃ D : GeomModel Ω CX hcX (c.objN k (by have := hc.len_eq; omega)),

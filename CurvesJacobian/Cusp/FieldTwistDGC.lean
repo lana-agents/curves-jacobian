@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Cusp.TwistGalois
+import CurvesJacobian.LocAn.UniqueReduction
 
 /-!
 # The twisted rel-isom-DGC across two fields
@@ -253,7 +254,7 @@ lemma exists_projGk_twist₂_conj
 isomorphism `φ : Π_{U₁} ≃ₜ* Π_{U₂}` lying over a map `Θ : G_{M₁} → G_{M₂}` induced by `Spec α`
 is induced, up to a change of base point, by an isomorphism of schemes
 `Spec Γ(U₁) ≅ Spec Γ(U₂)` lying over `Spec α`. -/
-theorem exists_isConjInduced_of_relIsomDGC_twist₂ (hDGC : RelIsomDGC M₁)
+theorem exists_isConjInduced_of_relIsomDGC_twist₂ (hDGC : RelIsomDGC.Exists M₁)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M₁ Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M₂ Ω Γ(C₂.Xbar, C₂.U)))
     (Θ : π₁ᵉᵗ(sM₁) → π₁ᵉᵗ(sM₂)) (hΘ : IsConjInduced (specRingEquiv₂ α) Θ)
@@ -271,7 +272,7 @@ theorem exists_isConjInduced_of_relIsomDGC_twist₂ (hDGC : RelIsomDGC M₁)
 
 /-- **The twisted rel-isom-DGC across two fields, uniqueness**: the isomorphism over `Spec α`
 inducing `φ` is unique. -/
-theorem eq_of_isConjInduced_of_relIsomDGC_twist₂ (hDGC : RelIsomDGC M₁)
+theorem eq_of_isConjInduced_of_relIsomDGC_twist₂
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M₁ Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M₂ Ω Γ(C₂.Xbar, C₂.U)))
     (Θ : π₁ᵉᵗ(sM₁) → π₁ᵉᵗ(sM₂)) (hΘ : IsConjInduced (specRingEquiv₂ α) Θ)
@@ -301,7 +302,7 @@ theorem eq_of_isConjInduced_of_relIsomDGC_twist₂ (hDGC : RelIsomDGC M₁)
       twistSpecIso₂_inv_sKU, hF]
   obtain ⟨h₁, H₁⟩ := key F hF HF
   obtain ⟨h₂, H₂⟩ := key G hG HG
-  have e := eq_of_isConjInduced_of_relIsomDGC Ω hDGC ψ hψ h₁ h₂ H₁ H₂
+  have e := eq_of_isConjInduced_of_relIsomDGC Ω ψ hψ h₁ h₂ H₁ H₂
   simpa using congrArg (· ≪≫ twistSpecIso₂ α C₂ hc₂) e
 
 end TwistDGC
@@ -498,7 +499,7 @@ lemma exists_theta_of_res_conj₂ [FiniteDimensional K M₂]
 isomorphism of schemes `Spec Γ(U₁) ≅ Spec Γ(U₂)` lying over `Spec α` for a `K`-isomorphism
 `α : M₂ ≃ₐ[K] M₁` (the restriction of `c⁻¹`). Only `RelIsomDGC M₁` is assumed. -/
 theorem exists_isConjInduced_of_relIsomDGC_field [FiniteDimensional K M₁] [FiniteDimensional K M₂]
-    (hDGC : RelIsomDGC M₁)
+    (hDGC : RelIsomDGC.Exists M₁)
     (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec M₁ Ω Γ(C₁.Xbar, C₁.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec M₂ Ω Γ(C₂.Xbar, C₂.U)))
     (c : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))))

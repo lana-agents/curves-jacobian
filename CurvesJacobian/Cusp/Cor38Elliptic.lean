@@ -29,7 +29,7 @@ namespace CurvesJacobian.Cusp
 
 /-- **[AbsTopII] Corollary 3.8, existence, for `X₁ = E ∖ {O}`** with `K`-rational `E[2]`. -/
 theorem cor38_exists_oncePunctured
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     {K₁ K₂ : Type u} [Field K₁] [NumberField K₁] [Field K₂] [NumberField K₂]
     {E : WeierstrassCurve K₁} [E.IsElliptic] (hE : E.Ψ₂Sq.Splits)
     (Ω₁ Ω₂ : Type u) [Field Ω₁] [Algebra K₁ Ω₁] [IsAlgClosed Ω₁] [Algebra.IsAlgebraic K₁ Ω₁]

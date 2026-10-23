@@ -225,7 +225,7 @@ lemma exists_resAut (g : D.Nrm) :
 /-- **The semilinear action of `N` on the model** ([AbsTopI] Thm 4.7 (i), proof): for `g ∈ N`,
 an automorphism `F_g` of `Spec Γ(U_Y)` lying over `Spec α_g` (`α_g` the restriction of `τ_g` to
 `M`) that induces `conjPi g` up to a change of base point. -/
-theorem exists_semilinearAut (hDGC : RelIsomDGC D.M) (g : D.Nrm) :
+theorem exists_semilinearAut (hDGC : RelIsomDGC.Exists D.M) (g : D.Nrm) :
     ∃ (α : D.M ≃ₐ[K] D.M) (_ : ∀ x, algebraMap D.M Ω (α x) = D.tau g (algebraMap D.M Ω x))
       (F : Spec Γ(D.Y.Xbar, D.Y.U) ≅ Spec Γ(D.Y.Xbar, D.Y.U)),
       F.hom ≫ sKU D.Y = sKU D.Y ≫ specRingEquiv α.toRingEquiv ∧
@@ -236,13 +236,13 @@ theorem exists_semilinearAut (hDGC : RelIsomDGC D.M) (g : D.Nrm) :
   exact ⟨α, hα, F, hF, H⟩
 
 /-- **Uniqueness of the semilinear automorphism** `F_g` (for a given restriction `α_g`). -/
-theorem eq_of_semilinearAut (hDGC : RelIsomDGC D.M) (g : D.Nrm) {α : D.M ≃ₐ[K] D.M}
+theorem eq_of_semilinearAut (g : D.Nrm) {α : D.M ≃ₐ[K] D.M}
     (hα : ∀ x, algebraMap D.M Ω (α x) = D.tau g (algebraMap D.M Ω x))
     {F G : Spec Γ(D.Y.Xbar, D.Y.U) ≅ Spec Γ(D.Y.Xbar, D.Y.U)}
     (hF : F.hom ≫ sKU D.Y = sKU D.Y ≫ specRingEquiv α.toRingEquiv)
     (hG : G.hom ≫ sKU D.Y = sKU D.Y ≫ specRingEquiv α.toRingEquiv)
     (HF : IsConjInduced F.hom (D.conjPi g)) (HG : IsConjInduced G.hom (D.conjPi g)) : F = G :=
-  eq_of_isConjInduced_of_relIsomDGC_gal hDGC (D.conjPi g) hα (D.res_projGk_conjPi g) hF hG HF HG
+  eq_of_isConjInduced_of_relIsomDGC_gal (D.conjPi g) hα (D.res_projGk_conjPi g) hF hG HF HG
 
 omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
 lemma specRingEquiv_refl (L : Type u) [Field L] :
@@ -265,7 +265,7 @@ lemma tau_ι_apply (σ : D.Pi) (x : D.M) :
 /-- **The action is trivial on `ι(Π_Y)`**: for `g ∈ ι(Π_Y)` the restriction `α_g` is the identity
 and the semilinear automorphism `F_g` is the identity, so the action factors through
 `N / ι(Π_Y)`. -/
-theorem semilinearAut_ι (hDGC : RelIsomDGC D.M) (σ : D.Pi) {α : D.M ≃ₐ[K] D.M}
+theorem semilinearAut_ι (σ : D.Pi) {α : D.M ≃ₐ[K] D.M}
     (hα : ∀ x, algebraMap D.M Ω (α x) = D.tau (D.ιN σ) (algebraMap D.M Ω x))
     {F : Spec Γ(D.Y.Xbar, D.Y.U) ≅ Spec Γ(D.Y.Xbar, D.Y.U)}
     (hF : F.hom ≫ sKU D.Y = sKU D.Y ≫ specRingEquiv α.toRingEquiv)
@@ -273,7 +273,7 @@ theorem semilinearAut_ι (hDGC : RelIsomDGC D.M) (σ : D.Pi) {α : D.M ≃ₐ[K]
   have hα1 : α = AlgEquiv.refl := AlgEquiv.ext fun x ↦
     (algebraMap D.M Ω).injective ((hα x).trans (D.tau_ι_apply σ x))
   subst hα1
-  refine ⟨rfl, D.eq_of_semilinearAut hDGC (D.ιN σ) hα hF ?_ HF ?_⟩
+  refine ⟨rfl, D.eq_of_semilinearAut (D.ιN σ) hα hF ?_ HF ?_⟩
   · change (Iso.refl _).hom ≫ sKU D.Y = sKU D.Y ≫ specRingEquiv (RingEquiv.refl D.M)
     rw [specRingEquiv_refl, Iso.refl_hom, Category.id_comp, Category.comp_id]
   · refine (isConjInduced_iff _ (Category.comp_id _) _).2 ⟨σ, fun τ ↦ ?_⟩

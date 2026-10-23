@@ -112,7 +112,7 @@ attribute [local instance] isAlgClosure_of_isAlgebraic
 conjugation for some `toGD : Π_D → G_K` with `pr ∘ emb = conj ∘ toGD ∘ incl`. Then the candidate
 `Π_U ×_{Π_D} Π_V ↠ Π_V ↪ Π_X` is geometric (rel-isom-DGC over number fields). -/
 theorem _root_.Belyi.Anabelian.EllCandidate.isGeomCandidate₂_of_fill
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (x : EllCandidate (arithmeticExt Ω CX hcX)) {M : Type u} [Field M] [NumberField M]
     [Algebra K M] [Algebra M Ω] [IsScalarTower K M Ω] [FiniteDimensional K M]
     [Algebra.IsAlgebraic M Ω] (Y : HypCurve M) (hY : (Y.U : Set Y.Xbar)ᶜ.Nonempty)
@@ -183,7 +183,7 @@ chain and torsion-free `Δ_U` (`U = Π_3`), the candidate `Π_U ×_{Π_D} Π_V �
 étale `q : Z' ⟶ X` over `Spec K` (assuming the rel-isom-DGC over number fields). -/
 theorem _root_.Belyi.Anabelian.PiChain.IsEllipticType.isGeomCandidate₂ (hc : c.IsEllipticType n)
     (t : c.TerminalIso (PiChain.trivial _))
-    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC k)
+    (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomDGC.Exists k)
     (htf : IsTorsionFreeSubgroup (c.objN 3 (by have := hc.len_eq; omega)).Delta) :
     IsGeomCandidate₂ Ω CX hcX (PiChain.ellipticCandidate hc t).toCuspCandidate := by
   have hlen := hc.len_eq
