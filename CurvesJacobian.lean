@@ -116,6 +116,7 @@ import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
 import CurvesJacobian.Cusp.GenusLocAnEq
 import CurvesJacobian.Cusp.GeomModel
+import CurvesJacobian.Cusp.HemiPi1
 import CurvesJacobian.Cusp.HypBaseChange
 import CurvesJacobian.Cusp.HypOfNonabelian
 import CurvesJacobian.Cusp.Hyperbolic
