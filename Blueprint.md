@@ -195,3 +195,24 @@ Literature looked up: Stacks Project Tags 031P, 031Q, 031R, 031S, 031T, 0567 (20
 (2026-10-17).
 [LocAn] cites Serre's criterion as "[Mats], Chapter 7, §17.I, Theorem 39" (Lemma 13.3); Matsumura
 is not available locally.
+
+### MR7 — [LocAn] relative Grothendieck conjecture (`CurvesJacobian/LocAn/`, plan `iut-scratch/multiradial/MR7-plan.md`)
+
+Target: belyi's `Belyi.Anabelian.RelIsomDGC` = `RelIsomDGC.Exists ∧ RelIsomDGC.Unique`
+(`relIsomDGC_iff_exists_and_unique`, belyi 7206d78). First goal: the uniqueness half for affine
+hyperbolic curves (the only curves MR8 uses), so that MR8 keeps only `RelIsomDGC.Exists` as a
+hypothesis. Route (MR7 plan, "S2 route"): an automorphism `h` of `U` with Δ-inner `π₁ᵉᵗ(h)` fixes
+the cusps; its lift to the maximal cover unramified over `U` centralises `Δ`; function-field
+lemmas below then force `h = id`.
+
+- (F1, done) `LocAn/PlaceAut.lean`: derivative `derivAt σ P` of an automorphism at a fixed place,
+  multiplicative; finite order + derivative `1` ⇒ identity (`eq_one_of_fixes_of_derivAt_eq_one`);
+  commuting finite-order automorphisms with equal derivative are equal (`eq_of_derivAt_eq`).
+- (F2, done) `LocAn/FixedPlaceOrder.lean`: an automorphism fixing a place of a curve of genus
+  `≥ 1` has finite order (`exists_pow_eq_one_of_fixes`; eigenvector on `L((g+1)P)` modulo
+  constants, ramification moved by `σ`, `genus_belyi`).
+- (F3/F4, done) `LocAn/Stabilizer.lean`: genus `0`, three fixed places ⇒ identity
+  (`eq_one_of_genus_eq_zero`); an automorphism of order dividing `e` commuting with an automorphism
+  of order `e`, both fixing a place, is a power of it (`exists_eq_pow_of_commute`).
+- (G1–G3, open) π₁ glue: `Unique` ⇐ "Δ-inner automorphisms are trivial"; cusps fixed;
+  centralising lift, fixed place above a cusp, ramified cover of index divisible by the order.
