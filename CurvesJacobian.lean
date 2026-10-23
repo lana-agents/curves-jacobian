@@ -76,6 +76,7 @@ import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
 import CurvesJacobian.Cusp.EllipticChainE
+import CurvesJacobian.Cusp.EllipticChainEN
 import CurvesJacobian.Cusp.EllipticChainFill
 import CurvesJacobian.Cusp.EllipticComplete
 import CurvesJacobian.Cusp.EllipticCompleteInput
