@@ -228,6 +228,7 @@ import CurvesJacobian.Galois.SmoothDescent
 import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Kummer.BaseChangeFunctionField
+import CurvesJacobian.Kummer.ChernArith
 import CurvesJacobian.Kummer.ChernClass
 import CurvesJacobian.Kummer.ChernCompat
 import CurvesJacobian.Kummer.ChernDivisor
@@ -291,6 +292,7 @@ import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.Stabilizer
+import CurvesJacobian.LocAn.ThetaClass
 import CurvesJacobian.LocAn.ThmC
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnits
