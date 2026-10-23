@@ -282,6 +282,7 @@ theorem cor37b_normalU
   rw [cor37b_comap Ω CX hcX UX hUX hne α₀ CV hcV FV CU hcU FU j' hgal hsq]
   exact Subgroup.Normal.comap inferInstance _
 
+omit [Algebra K M] [IsScalarTower K M Ω] in
 /-- `Π_U` has trivial centre. -/
 theorem cor37b_center : Subgroup.center (cor37bPiU Ω CX hcX UX hUX hne CU hcU FU) = ⊥ :=
   CuspidalExt.center_eq_bot_of_isOpen _ (by

@@ -187,6 +187,7 @@ theorem cor37b_belyi (S : GaloisBelyiInput CX M) :
     (S.belyi_hcU hcX UX hUX hne) (S.belyiFU hcX UX hUX hne) (S.belyiJ hcX UX) S.isGalois
     (S.isPullback_belyiFU hcX UX hUX hne)
 
+omit [IsScalarTower K M Ω] in
 /-- **[AbsTopII] Corollary 3.7 (b)**: `Π_{U_X} ≃* Π_U ⋊^out (Π_{U_X}/Π_U)` and
 `Π_{U_X}/Π_U ≃* Π_X/Π_V` for `U = V ×_X U_X`, `V → X` Galois. -/
 theorem cor37b_belyi_equiv (S : GaloisBelyiInput CX M) :

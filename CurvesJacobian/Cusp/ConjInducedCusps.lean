@@ -57,8 +57,7 @@ section Cover
 
 variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
-  [Algebra.IsAlgebraic K' Ω]
+  {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U))
@@ -96,6 +95,7 @@ theorem exists_arithCusps_map_le_of_conjInduced
   · rw [e, Subgroup.relIndex_map_map_of_injective _ _ (MulAut.conj t).injective]
     exact hfin
 
+variable [Algebra K K'] [IsScalarTower K K' Ω] in
 /-- **(K1 b) Preimages of cuspidal inertia groups of `Π_U` under a map induced by `F` (lying
 over `Spec K' ⟶ Spec K`) are cuspidal inertia groups of `Π_{U'}`.** -/
 theorem comap_mem_arithCusps_of_conjInduced

@@ -377,36 +377,6 @@ variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebr
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
-/-- **Lifting deck transformations** (`hlift_of_lifts` for a candidate): for a geometric
-candidate with the lifting property, every automorphism of `Π_{C'}` induced by a deck
-transformation of `q` lifts along `fillPiHom : Π_C ↠ Π_{C'}`. -/
-theorem hlift_of_candidate₂ (x : CuspCandidate (arithmeticExt Ω CX hcX))
-    (hL : ∀ (B : x.PiV ≃ₜ* x.PiV) (g : (arithmeticExt Ω CX hcX).Pi),
-      (∀ v, x.emb (B v) = g * x.emb v * g⁻¹) →
-        ∃ ψ : x.PiU ≃ₜ* x.PiU, ∀ u, x.surj (ψ u) = B (x.surj u))
-    {M : Type u} [Field M] [NumberField M] [Algebra M Ω] [Algebra.IsAlgebraic M Ω]
-    (C : HypCurve M) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
-    (ι : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec M Ω Γ(C.Xbar, C.U)) →ₜ* x.PiU)
-    (hι : Function.Bijective ι) {U' : C.Xbar.Opens} (h : C.U ≤ U')
-    (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
-    (hyp : haveI := IsCurveOver.isIntegral M C.Xbar
-      2 < 2 * Anabelian.curveGenus M C.Xbar + cuspDegree M C.Xbar U')
-    (ε : π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U')) ≃ₜ*
-      x.PiV)
-    (hε : ∀ σ, x.surj (ι σ) = ε (fillPiHom Ω C hc h hc' hyp σ))
-    (q : Spec Γ(C.Xbar, U') ⟶ Spec Γ(CX.Xbar, CX.U))
-    (hq : IsConjInduced q (fun τ ↦ x.emb (ε τ) :
-      π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U')) →
-        π₁ᵉᵗ(basePoint Ω CX hcX ≫ baseChangeSpec K Ω Γ(CX.Xbar, CX.U)))) :
-    ∀ (σ' : Spec Γ(C.Xbar, U') ≅ Spec Γ(C.Xbar, U')), σ'.hom ≫ q = q →
-      ∀ (A : π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U')) ≃ₜ*
-        π₁ᵉᵗ(basePoint Ω (fillCurve C h hyp) hc' ≫ baseChangeSpec M Ω Γ(C.Xbar, U'))),
-        IsConjInduced σ'.hom A →
-        ∃ ψ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec M Ω Γ(C.Xbar, C.U)) ≃ₜ*
-          π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec M Ω Γ(C.Xbar, C.U)),
-          ∀ s, fillPiHom Ω C hc h hc' hyp (ψ s) = A (fillPiHom Ω C hc h hc' hyp s) := by
-  exact hlift_of_lifts x.surj.toMonoidHom x.emb.toMonoidHom hL ι hι ε hε q hq
-
 /-- **[AbsTopII] Cor 3.8, the `X₂` side.** A candidate `x = (Π_U ↠ Π_V ↪ Π_X)` with normal
 `Π_V` and the lifting property, which is geometric (`Π_C ≅ Π_U`, `Π_{C'} ≅ Π_V` for a filling
 `C ⊆ C'`, `Π_V ↪ Π_X` induced by a finite étale `q : C' ⟶ X` over `Spec K`), determines a
@@ -455,7 +425,7 @@ theorem cor38_side2 (hDGC : ∀ (k : Type u) [Field k] [NumberField k], RelIsomD
   have hgal : IsGalois (coverObj q) :=
     isGalois_of_isConjInduced_normal ε.toMulEquiv.toMonoidHom ε.surjective x.emb.toMonoidHom hN
       hq
-  have hlift := hlift_of_candidate₂ Ω CX hcX x hL C hc ι hι h hc' hyp ε hε q hq
+  have hlift := hlift_of_lifts x.surj.toMonoidHom x.emb.toMonoidHom hL ι hι ε hε q hq
   obtain ⟨UX, hUX, hne, FU, hFU, hpb⟩ :=
     exists_descent_of_lift CX hcX C hc h hc' hyp (hDGC M) q hqK hgal hlift
   refine ⟨UX, hUX, hne, fun α ↦ ?_⟩

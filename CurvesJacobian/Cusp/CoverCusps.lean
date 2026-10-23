@@ -339,8 +339,7 @@ section Cover
 
 variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
-  [Algebra.IsAlgebraic K' Ω]
+  {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U))
@@ -384,72 +383,6 @@ theorem isOpen_range_coverPiHom : IsOpen (Set.range (coverPiHom Ω C hc C' hc' F
     rfl
   rw [e]
   exact (autContinuousMulEquivOfIso (coverFib Ω C hc C' hc' F)).toHomeomorph.isOpenMap _ h
-
-variable (hF : F ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
-    Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
-      Spec.map (CommRingCat.ofHom (algebraMap K K')))
-
-include hF in
-lemma coverPiHom_base_spec :
-    ((basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) ≫ F) ≫
-        Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
-      Spec.map (CommRingCat.ofHom (algebraMap K Ω)) := by
-  rw [Category.assoc, hF, ← Category.assoc, basePoint_spec₂, specMap_algebraMap_tower]
-
-/-- The element of `G_K` by which the change of base point conjugates (`pr_coverPiHom`). -/
-def coverG : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
-  fiberIsoMap (Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))))
-    (coverPiHom_base_spec Ω C C' hc' F hF) (basePoint_spec₂ Ω C hc) (coverFib Ω C hc C' hc' F)
-
-/-- **`ι : G_{K'} → G_K`** for `coverPiHom`: `galoisMap` followed by conjugation by `coverG`. -/
-def coverι : (arithmeticExt Ω C' hc').G →ₜ* (arithmeticExt Ω C hc).G :=
-  (ContinuousMonoidHom.toContinuousMonoidHom
-    (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF))).comp (galoisMap K K' Ω)
-
-/-- **Compatibility with the projections**: `pr ∘ coverPiHom = coverι ∘ pr'`. -/
-theorem pr_coverPiHom (γ : (arithmeticExt Ω C' hc').Pi) :
-    (arithmeticExt Ω C hc).pr (coverPiHom Ω C hc C' hc' F γ) =
-      coverι Ω C hc C' hc' F hF ((arithmeticExt Ω C' hc').pr γ) := by
-  let sK := Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U)))
-  let sK' := Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U)))
-  let x' := basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)
-  have h1 : (x' ≫ F) ≫ sK = Spec.map (CommRingCat.ofHom (algebraMap K Ω)) :=
-    coverPiHom_base_spec Ω C C' hc' F hF
-  have hB := fundamentalGroupMap_autContinuousMulEquivOfIso sK h1 (basePoint_spec₂ Ω C hc)
-    (coverFib Ω C hc C' hc' F) (fundamentalGroupMap F rfl γ)
-  have hC : fundamentalGroupMap sK h1 (fundamentalGroupMap F rfl γ) =
-      galoisMap K K' Ω ((arithmeticExt Ω C' hc').pr γ) := by
-    have h3 : x' ≫ F ≫ sK = Spec.map (CommRingCat.ofHom (algebraMap K Ω)) :=
-      (Category.assoc _ _ _).symm.trans h1
-    have h4 : x' ≫ sK' ≫ Spec.map (CommRingCat.ofHom (algebraMap K K')) =
-        Spec.map (CommRingCat.ofHom (algebraMap K Ω)) := hF ▸ h3
-    have c1 := DFunLike.congr_fun (fundamentalGroupMap_comp F sK rfl h1 h3) γ
-    have c2 := DFunLike.congr_fun (fundamentalGroupMap_comp _ _ (basePoint_spec₂ Ω C' hc')
-      (specMap_algebraMap_tower K K' Ω) h4) γ
-    rw [fundamentalGroupMap_congr hF h3 h4] at c1
-    exact c1.symm.trans c2
-  change fundamentalGroupMap sK (basePoint_spec₂ Ω C hc) (autContinuousMulEquivOfIso
-    (coverFib Ω C hc C' hc' F) (fundamentalGroupMap F rfl γ)) = _
-  rw [hB, hC]
-  rfl
-
-/-- `coverι` is injective. -/
-theorem coverι_injective : Function.Injective (coverι Ω C hc C' hc' F hF) :=
-  (autContinuousMulEquivOfIso _).injective.comp (galoisMap_injective K K' Ω)
-
-/-- `coverι` has open image. -/
-theorem isOpen_range_coverι : IsOpen (Set.range (coverι Ω C hc C' hc' F hF)) := by
-  haveI := isFiniteEtale_specMap_numberField (K := K) (K' := K')
-  have h := isOpen_range_fundamentalGroupMap_of_isFiniteEtale
-    (Spec.map (CommRingCat.ofHom (algebraMap K K'))) (Spec.map (CommRingCat.ofHom
-      (algebraMap K' Ω))) (specMap_algebraMap_tower K K' Ω)
-  have e : Set.range (coverι Ω C hc C' hc' F hF) =
-      autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF) ''
-        Set.range (galoisMap K K' Ω) := by
-    rw [← Set.range_comp]
-    rfl
-  rw [e]
-  exact (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF)).toHomeomorph.isOpenMap _ h
 
 /-! #### The function fields -/
 
@@ -795,6 +728,80 @@ theorem exists_arithCusps_coverHom_le {I} (hI : I ∈ arithCusps Ω C hc) :
   refine ⟨_, cuspAt_mem_arithCusps Ω C' hc' (arithIso Ω C' hc') hW, ?_⟩
   have := hβ (W'.comap (σ.symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C)))
   rwa [hWW] at this
+
+/-! #### Covers lying over an extension of number fields -/
+
+section Tower
+
+variable [Algebra K K'] [IsScalarTower K K' Ω]
+
+variable (hF : F ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
+    Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
+      Spec.map (CommRingCat.ofHom (algebraMap K K')))
+
+include hF in
+lemma coverPiHom_base_spec :
+    ((basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) ≫ F) ≫
+        Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
+      Spec.map (CommRingCat.ofHom (algebraMap K Ω)) := by
+  rw [Category.assoc, hF, ← Category.assoc, basePoint_spec₂, specMap_algebraMap_tower]
+
+/-- The element of `G_K` by which the change of base point conjugates (`pr_coverPiHom`). -/
+def coverG : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
+  fiberIsoMap (Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))))
+    (coverPiHom_base_spec Ω C C' hc' F hF) (basePoint_spec₂ Ω C hc) (coverFib Ω C hc C' hc' F)
+
+/-- **`ι : G_{K'} → G_K`** for `coverPiHom`: `galoisMap` followed by conjugation by `coverG`. -/
+def coverι : (arithmeticExt Ω C' hc').G →ₜ* (arithmeticExt Ω C hc).G :=
+  (ContinuousMonoidHom.toContinuousMonoidHom
+    (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF))).comp (galoisMap K K' Ω)
+
+/-- **Compatibility with the projections**: `pr ∘ coverPiHom = coverι ∘ pr'`. -/
+theorem pr_coverPiHom (γ : (arithmeticExt Ω C' hc').Pi) :
+    (arithmeticExt Ω C hc).pr (coverPiHom Ω C hc C' hc' F γ) =
+      coverι Ω C hc C' hc' F hF ((arithmeticExt Ω C' hc').pr γ) := by
+  let sK := Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U)))
+  let sK' := Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U)))
+  let x' := basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)
+  have h1 : (x' ≫ F) ≫ sK = Spec.map (CommRingCat.ofHom (algebraMap K Ω)) :=
+    coverPiHom_base_spec Ω C C' hc' F hF
+  have hB := fundamentalGroupMap_autContinuousMulEquivOfIso sK h1 (basePoint_spec₂ Ω C hc)
+    (coverFib Ω C hc C' hc' F) (fundamentalGroupMap F rfl γ)
+  have hC : fundamentalGroupMap sK h1 (fundamentalGroupMap F rfl γ) =
+      galoisMap K K' Ω ((arithmeticExt Ω C' hc').pr γ) := by
+    have h3 : x' ≫ F ≫ sK = Spec.map (CommRingCat.ofHom (algebraMap K Ω)) :=
+      (Category.assoc _ _ _).symm.trans h1
+    have h4 : x' ≫ sK' ≫ Spec.map (CommRingCat.ofHom (algebraMap K K')) =
+        Spec.map (CommRingCat.ofHom (algebraMap K Ω)) := hF ▸ h3
+    have c1 := DFunLike.congr_fun (fundamentalGroupMap_comp F sK rfl h1 h3) γ
+    have c2 := DFunLike.congr_fun (fundamentalGroupMap_comp _ _ (basePoint_spec₂ Ω C' hc')
+      (specMap_algebraMap_tower K K' Ω) h4) γ
+    rw [fundamentalGroupMap_congr hF h3 h4] at c1
+    exact c1.symm.trans c2
+  change fundamentalGroupMap sK (basePoint_spec₂ Ω C hc) (autContinuousMulEquivOfIso
+    (coverFib Ω C hc C' hc' F) (fundamentalGroupMap F rfl γ)) = _
+  rw [hB, hC]
+  rfl
+
+/-- `coverι` is injective. -/
+theorem coverι_injective : Function.Injective (coverι Ω C hc C' hc' F hF) :=
+  (autContinuousMulEquivOfIso _).injective.comp (galoisMap_injective K K' Ω)
+
+/-- `coverι` has open image. -/
+theorem isOpen_range_coverι : IsOpen (Set.range (coverι Ω C hc C' hc' F hF)) := by
+  haveI := isFiniteEtale_specMap_numberField (K := K) (K' := K')
+  have h := isOpen_range_fundamentalGroupMap_of_isFiniteEtale
+    (Spec.map (CommRingCat.ofHom (algebraMap K K'))) (Spec.map (CommRingCat.ofHom
+      (algebraMap K' Ω))) (specMap_algebraMap_tower K K' Ω)
+  have e : Set.range (coverι Ω C hc C' hc' F hF) =
+      autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF) ''
+        Set.range (galoisMap K K' Ω) := by
+    rw [← Set.range_comp]
+    rfl
+  rw [e]
+  exact (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF)).toHomeomorph.isOpenMap _ h
+
+end Tower
 
 end Cover
 
