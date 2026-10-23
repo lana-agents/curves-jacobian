@@ -246,6 +246,7 @@ import CurvesJacobian.Kummer.DeltaAbDuality
 import CurvesJacobian.Kummer.DeltaAbKummer
 import CurvesJacobian.Kummer.H2Map
 import CurvesJacobian.Kummer.Image
+import CurvesJacobian.Kummer.JacDivFreeCurve
 import CurvesJacobian.Kummer.JacobianBridge
 import CurvesJacobian.Kummer.JacobianBridgeSurj
 import CurvesJacobian.Kummer.JacobianDivExt
