@@ -216,6 +216,7 @@ import CurvesJacobian.Kummer.BaseChangeFunctionField
 import CurvesJacobian.Kummer.ChernClass
 import CurvesJacobian.Kummer.ChernCompat
 import CurvesJacobian.Kummer.ChernDivisor
+import CurvesJacobian.Kummer.ChernNatural
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ClosedRestriction
