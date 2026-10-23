@@ -213,6 +213,7 @@ import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Kummer.BaseChangeFunctionField
 import CurvesJacobian.Kummer.ChernClass
 import CurvesJacobian.Kummer.ChernCompat
+import CurvesJacobian.Kummer.ChernDivisor
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ClosedRestriction
@@ -250,6 +251,7 @@ import CurvesJacobian.Kummer.PrincipalDescent
 import CurvesJacobian.Kummer.PrincipalEta
 import CurvesJacobian.Kummer.RationalCharacterization
 import CurvesJacobian.Kummer.TSectionPlace
+import CurvesJacobian.Kummer.TopClass
 import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
