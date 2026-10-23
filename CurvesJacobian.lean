@@ -77,12 +77,15 @@ import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
 import CurvesJacobian.Cusp.EllipticChainE
 import CurvesJacobian.Cusp.EllipticChainFill
+import CurvesJacobian.Cusp.EllipticComplete
+import CurvesJacobian.Cusp.EllipticCompleteInput
 import CurvesJacobian.Cusp.EllipticCurveScheme
 import CurvesJacobian.Cusp.EllipticCuspSpec
 import CurvesJacobian.Cusp.EllipticDoubleCover
 import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
+import CurvesJacobian.Cusp.EllipticInputE
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EllipticSound
 import CurvesJacobian.Cusp.EnlargeKernel
