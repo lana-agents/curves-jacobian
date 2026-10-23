@@ -1,0 +1,68 @@
+/-
+Copyright (c) 2026 LANA Project. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: LANA Project
+-/
+import CurvesJacobian.Cusp.FillAutUnique
+
+/-!
+# Uniqueness in the rel-isom-DGC from inner rigidity (MR7, step G1)
+
+In MR8's arithmetic model (`CurvesJacobian/Cusp/DGCArith.lean`: an affine hyperbolic curve `C`
+over a number field `K`, `Π_U = π₁ᵉᵗ(Spec Γ(U))` at `basePoint`), the uniqueness half of the
+rel-isom-DGC says that two `K`-isomorphisms `F, F' : Spec Γ(U₁) ≅ Spec Γ(U₂)` inducing the same
+`φ : Π_{U₁} ≃ Π_{U₂}` (up to a change of base point, `IsConjInduced`) are equal. This reduces to
+**inner rigidity** of `U₁` (`CurvesJacobian.LocAn.InnerRigid`): a `K`-automorphism of
+`Spec Γ(U₁)` inducing the identity of `Π_{U₁}` up to a change of base point (i.e. an inner
+automorphism) is the identity. Apply it to `F ≫ F'⁻¹`, which induces `φ⁻¹ ∘ φ = id`
+(`CurvesJacobian.LocAn.eq_of_isConjInduced_of_innerRigid`).
+
+This is the formal step (G1) of the MR7 uniqueness route; inner rigidity itself is the content
+(MR7 plan, steps G2–G3 with the function-field lemmas of `LocAn/PlaceAut.lean`,
+`LocAn/FixedPlaceOrder.lean`, `LocAn/Stabilizer.lean`).
+-/
+
+universe u
+
+open CategoryTheory AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
+open CurvesJacobian.Cusp
+
+namespace CurvesJacobian.LocAn
+
+variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+  [IsAlgClosed Ω]
+
+/-- **Inner rigidity** of an affine hyperbolic curve `C` over `K`: every `K`-automorphism of
+`Spec Γ(U)` that induces the identity of `Π_U` up to a change of base point (equivalently, an
+inner automorphism of `Π_U`, `isConjInduced_iff_exists_conj`) is the identity. -/
+def InnerRigid (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) : Prop :=
+  ∀ F : Spec Γ(C.Xbar, C.U) ≅ Spec Γ(C.Xbar, C.U), F.hom ≫ sKU C = sKU C →
+    IsConjInduced F.hom
+      (id : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) → _) →
+    F = Iso.refl _
+
+variable {Ω} {C₁ C₂ : HypCurve K} {hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty}
+  {hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty}
+
+/-- **Uniqueness from inner rigidity**: if `U₁` is inner rigid, two `K`-isomorphisms
+`Spec Γ(U₁) ≅ Spec Γ(U₂)` inducing the same `φ : Π_{U₁} ≃ Π_{U₂}` up to a change of base point
+are equal. -/
+theorem eq_of_isConjInduced_of_innerRigid (hR : InnerRigid Ω C₁ hc₁)
+    (φ : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) ≃*
+      π₁ᵉᵗ(basePoint Ω C₂ hc₂ ≫ baseChangeSpec K Ω Γ(C₂.Xbar, C₂.U)))
+    {F F' : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₂.Xbar, C₂.U)}
+    (hF : F.hom ≫ sKU C₂ = sKU C₁) (hF' : F'.hom ≫ sKU C₂ = sKU C₁)
+    (H : IsConjInduced F.hom φ) (H' : IsConjInduced F'.hom φ) : F = F' := by
+  have H'' := IsConjInduced.symm_of_iso F' φ H'
+  have Hc : IsConjInduced (F ≪≫ F'.symm).hom
+      (id : π₁ᵉᵗ(basePoint Ω C₁ hc₁ ≫ baseChangeSpec K Ω Γ(C₁.Xbar, C₁.U)) → _) :=
+    (H.comp H'').congr_fun fun σ ↦ by simp
+  have hG : (F ≪≫ F'.symm).hom ≫ sKU C₁ = sKU C₁ := by
+    have : F'.inv ≫ sKU C₁ = sKU C₂ := by rw [← hF', Iso.inv_hom_id_assoc]
+    rw [Iso.trans_hom, Iso.symm_hom, Category.assoc, this, hF]
+  have e := hR _ hG Hc
+  ext1
+  have := congrArg (fun G : Spec Γ(C₁.Xbar, C₁.U) ≅ Spec Γ(C₁.Xbar, C₁.U) ↦ G.hom ≫ F'.hom) e
+  simpa using this
+
+end CurvesJacobian.LocAn

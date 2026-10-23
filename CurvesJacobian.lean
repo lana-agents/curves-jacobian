@@ -259,6 +259,7 @@ import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.Stabilizer
+import CurvesJacobian.LocAn.UniqueReduction
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap

@@ -214,5 +214,7 @@ lemmas below then force `h = id`.
 - (F3/F4, done) `LocAn/Stabilizer.lean`: genus `0`, three fixed places ⇒ identity
   (`eq_one_of_genus_eq_zero`); an automorphism of order dividing `e` commuting with an automorphism
   of order `e`, both fixing a place, is a power of it (`exists_eq_pow_of_commute`).
-- (G1–G3, open) π₁ glue: `Unique` ⇐ "Δ-inner automorphisms are trivial"; cusps fixed;
+- (G1, done) `LocAn/UniqueReduction.lean`: `InnerRigid` (a K-automorphism of `Spec Γ(U)` inducing an
+  inner automorphism of `Π_U` is the identity) ⇒ uniqueness (`eq_of_isConjInduced_of_innerRigid`).
+- (G2–G3, open) π₁ glue for `InnerRigid`: cusps fixed;
   centralising lift, fixed place above a cusp, ramified cover of index divisible by the order.
