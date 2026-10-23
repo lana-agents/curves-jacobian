@@ -247,6 +247,7 @@ import CurvesJacobian.Kummer.NF
 import CurvesJacobian.Kummer.NFCharacterization
 import CurvesJacobian.Kummer.NFCurve
 import CurvesJacobian.Kummer.NFDescent
+import CurvesJacobian.Kummer.NatIsoCompat
 import CurvesJacobian.Kummer.PicAction
 import CurvesJacobian.Kummer.PicDivisible
 import CurvesJacobian.Kummer.PointRestriction
