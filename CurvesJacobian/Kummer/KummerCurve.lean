@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: LANA Project
 -/
 import CurvesJacobian.Kummer.Image
-import CurvesJacobian.Kummer.KummerFaithful
+import CurvesJacobian.Kummer.TorallyFromKF
 import ContinuousKummerTheory.Kummer.Faithful
 
 /-!
@@ -17,7 +17,8 @@ in `F`" of the generic statements is discharged by `mem_range_of_isAlgebraic_F`,
 Kummer-faithfulness for the Jacobian by `isKummerFaithfulJac_of_isKummerFaithful`:
 
 * **`kummerMapZHat_injective_curve`** (Prop. 1.6(i), l.1988): `κ : Γ(U, 𝒪^×) → H¹(Π_U, Ẑ(1))` is
-  injective for torally Kummer-faithful `k` (`KummerTheory.IsTorallyKummerFaithful`, the
+  injective for torally Kummer-faithful `k`, hence for Kummer-faithful `k`
+  (`kummerMapZHat_injective_curve_of_isKummerFaithful`) (`KummerTheory.IsTorallyKummerFaithful`, the
   `𝔾_m`-form of [AbsTopIII] Def. 1.5); `kummerMapZHat_injective_curve_numberField` and
   `kummerMapZHat_injective_curve_localField`: for number fields and for finite extensions of
   `ℚ_p` ([AbsTopIII] Rem. 1.5.3(i), 1.5.4(i) for tori) without further hypotheses; the same on
@@ -42,6 +43,12 @@ variable (k : Type u) [Field k] [CharZero k] {X : Scheme.{u}} [X.Over (Spec (.of
 theorem kummerMapZHat_injective_curve (hkf : IsTorallyKummerFaithful k) :
     Function.Injective (kummerMapZHat (curveGaloisData k hτ)) :=
   kummerMapZHat_injective_of_isTorallyKummerFaithful (mem_range_of_isAlgebraic_F k hτ) hkf
+
+/-- **[AbsTopIII] Prop. 1.6(i) for a curve** over a Kummer-faithful field (the hypothesis of the
+paper; `IsKummerFaithful.isTorallyKummerFaithful`). -/
+theorem kummerMapZHat_injective_curve_of_isKummerFaithful (hk : IsKummerFaithful k) :
+    Function.Injective (kummerMapZHat (curveGaloisData k hτ)) :=
+  kummerMapZHat_injective_curve k hτ hk.isTorallyKummerFaithful
 
 /-- [AbsTopIII] Prop. 1.6(i) for a curve, on `π₁ᵉᵗ`. -/
 theorem kummerMapEtaleZHat_injective_curve (hkf : IsTorallyKummerFaithful k) :

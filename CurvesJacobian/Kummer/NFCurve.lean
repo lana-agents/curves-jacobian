@@ -5,6 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.Kummer.NFCharacterization
 import CurvesJacobian.Kummer.KummerFaithful
+import CurvesJacobian.Kummer.TorallyFromKF
 
 /-!
 # [AbsTopIII] Prop. 1.8(i), "if", for a curve over a Kummer-faithful field
@@ -20,9 +21,9 @@ Prop. 1.6(iii)), "`k` is algebraically closed in `F`" and `H_L = H`. For the Gal
 * `k` algebraically closed in `F ≅ K(X)` (`mem_range_of_isAlgebraic_F`);
 * `H_L = H` by definition of `curveGaloisData`.
 
-The `𝔾_m`-form `IsTorallyKummerFaithful k` of continuous-kummer-theory stays a separate
-hypothesis: [AbsTopIII] Def. 1.5 implies it (tori are semi-abelian), but Mathlib has no `𝔾_m` as a
-group scheme, so `IsKummerFaithful k → IsTorallyKummerFaithful k` is not available.
+* the `𝔾_m`-form `IsTorallyKummerFaithful k` of continuous-kummer-theory from
+  `IsKummerFaithful k` ([AbsTopIII] Rem. 1.5.3(ii), `IsKummerFaithful.isTorallyKummerFaithful`,
+  `Kummer/TorallyFromKF.lean`).
 
 * **`CurvesJacobian.Kummer.NFModel.exists_eq_kummerMapZHat_of_restrictClosed_curve`**.
 -/
@@ -50,7 +51,7 @@ characteristic `0` with `X(k) ≠ ∅` (Galois model `curveGaloisData k hτ`, `U
 `x₂` (`[k_{x_i} : k] < ∞`), then `η` is the Kummer class of a nonconstant NF-rational function. -/
 theorem exists_eq_kummerMapZHat_of_restrictClosed_curve
     (N : NFModel (curveGaloisData k hτ))
-    (htf : IsTorallyKummerFaithful k) (hk : IsKummerFaithful k)
+    (hk : IsKummerFaithful k)
     (σ : Spec (CommRingCat.of k) ⟶ X)
     (hσ : σ ≫ (X ↘ Spec (CommRingCat.of k)) = 𝟙 (Spec (CommRingCat.of k)))
     (η : ContH1 (Pi (curveGaloisData k hτ)) (ZHatOne (F (curveGaloisData k hτ)) (FFClosure X)))
@@ -74,7 +75,7 @@ theorem exists_eq_kummerMapZHat_of_restrictClosed_curve
     ∃ w : units (curveGaloisData k hτ), η = kummerMapZHat (curveGaloisData k hτ) w ∧
       w ∉ Set.range (constUnit (curveGaloisData k hτ)) ∧
       N.IsNFFunction ((w : (F (curveGaloisData k hτ))ˣ) : F (curveGaloisData k hτ)) :=
-  N.exists_eq_kummerMapZHat_of_restrictClosed htf
+  N.exists_eq_kummerMapZHat_of_restrictClosed hk.isTorallyKummerFaithful
     (isKummerFaithfulJac_of_isKummerFaithful k hτ hk σ hσ) (mem_range_of_isAlgebraic_F k hτ) rfl
     η hη A₁ hk₁ hkres₁ ht₁ hA₁ A₂ hk₂ hkres₂ ht₂ h₁ h₂
 

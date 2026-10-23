@@ -262,6 +262,7 @@ import CurvesJacobian.Kummer.SyncBaseChange
 import CurvesJacobian.Kummer.SyncZHat
 import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.TopClass
+import CurvesJacobian.Kummer.TorallyFromKF
 import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
