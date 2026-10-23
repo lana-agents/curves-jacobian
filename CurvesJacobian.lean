@@ -86,6 +86,7 @@ import CurvesJacobian.Cusp.EllipticDuplication
 import CurvesJacobian.Cusp.EllipticGalois
 import CurvesJacobian.Cusp.EllipticGenus
 import CurvesJacobian.Cusp.EllipticInputE
+import CurvesJacobian.Cusp.EllipticMulByN
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EllipticSound
 import CurvesJacobian.Cusp.EnlargeKernel
@@ -153,6 +154,7 @@ import CurvesJacobian.Cusp.ModelRun
 import CurvesJacobian.Cusp.ModelStep
 import CurvesJacobian.Cusp.NonRationalFill
 import CurvesJacobian.Cusp.OpPathRun
+import CurvesJacobian.Cusp.OrbiQuotientPi1
 import CurvesJacobian.Cusp.P1Curve
 import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
