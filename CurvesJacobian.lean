@@ -210,6 +210,7 @@ import CurvesJacobian.Galois.SurfaceGroupAnyPoint
 import CurvesJacobian.Galois.UnramifiedKummer
 import CurvesJacobian.Kummer.BaseChangeFunctionField
 import CurvesJacobian.Kummer.ChernClass
+import CurvesJacobian.Kummer.ChernCompat
 import CurvesJacobian.Kummer.ClosedCharacterization
 import CurvesJacobian.Kummer.ClosedPoints
 import CurvesJacobian.Kummer.ClosedRestriction
@@ -224,6 +225,7 @@ import CurvesJacobian.Kummer.CuspFill
 import CurvesJacobian.Kummer.CuspInertiaZHat
 import CurvesJacobian.Kummer.DeltaAbDuality
 import CurvesJacobian.Kummer.DeltaAbKummer
+import CurvesJacobian.Kummer.H2Map
 import CurvesJacobian.Kummer.Image
 import CurvesJacobian.Kummer.JacobianBridge
 import CurvesJacobian.Kummer.JacobianBridgeSurj
@@ -240,6 +242,7 @@ import CurvesJacobian.Kummer.NFCharacterization
 import CurvesJacobian.Kummer.NFCurve
 import CurvesJacobian.Kummer.NFDescent
 import CurvesJacobian.Kummer.PicAction
+import CurvesJacobian.Kummer.PicDivisible
 import CurvesJacobian.Kummer.PointRestriction
 import CurvesJacobian.Kummer.PrincipalDescent
 import CurvesJacobian.Kummer.PrincipalEta
