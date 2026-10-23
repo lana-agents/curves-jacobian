@@ -276,6 +276,7 @@ import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
+import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.InnerRigidAffine
