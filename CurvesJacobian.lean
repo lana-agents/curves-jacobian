@@ -72,6 +72,7 @@ import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DecuspNormalizer
 import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.DupDecomp
 import CurvesJacobian.Cusp.DupSubgroup
 import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
@@ -92,6 +93,7 @@ import CurvesJacobian.Cusp.EllipticInputE
 import CurvesJacobian.Cusp.EllipticMulByN
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EllipticSound
+import CurvesJacobian.Cusp.EllipticTorsionCount
 import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionIso
 import CurvesJacobian.Cusp.ExtensionMap
