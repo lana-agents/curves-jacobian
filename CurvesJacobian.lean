@@ -254,6 +254,8 @@ import CurvesJacobian.Kummer.PointRestriction
 import CurvesJacobian.Kummer.PrincipalDescent
 import CurvesJacobian.Kummer.PrincipalEta
 import CurvesJacobian.Kummer.RationalCharacterization
+import CurvesJacobian.Kummer.SyncBaseChange
+import CurvesJacobian.Kummer.SyncZHat
 import CurvesJacobian.Kummer.TSectionPlace
 import CurvesJacobian.Kummer.TopClass
 import CurvesJacobian.Kummer.Values
