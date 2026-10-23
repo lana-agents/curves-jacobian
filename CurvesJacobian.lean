@@ -72,6 +72,7 @@ import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DecuspNormalizer
 import CurvesJacobian.Cusp.DifferentialGenus
+import CurvesJacobian.Cusp.DupSubgroup
 import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
 import CurvesJacobian.Cusp.EllipticBelyi
@@ -116,6 +117,7 @@ import CurvesJacobian.Cusp.GenusBaseChange
 import CurvesJacobian.Cusp.GenusLocAn
 import CurvesJacobian.Cusp.GenusLocAnEq
 import CurvesJacobian.Cusp.GeomModel
+import CurvesJacobian.Cusp.HemiArith
 import CurvesJacobian.Cusp.HemiPi1
 import CurvesJacobian.Cusp.HypBaseChange
 import CurvesJacobian.Cusp.HypOfNonabelian
