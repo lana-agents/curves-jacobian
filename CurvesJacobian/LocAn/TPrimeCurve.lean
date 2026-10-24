@@ -5,6 +5,7 @@ Authors: LANA Project
 -/
 import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.WeilCupTransport
+import CurvesJacobian.LocAn.DeltaXEquiv
 
 /-!
 # Route T′ at the level of curves (MR7 stage S4)
@@ -36,13 +37,15 @@ surface-group presentation, recorded as debts in `MR7-plan.md`. The perfectness 
 
 * `CurvesJacobian.LocAn.TPrimeCurve.zpow_eq_of_modEq_mu`: `ζ^a = ζ^b` in `μ_n` if `a ≡ b mod n`;
 * **`CurvesJacobian.LocAn.TPrimeCurve.tprime_curve`**: Claim T′ for two curves;
-  `tprime_curve_of_weilCupG`: the same with (P6) as `JacInput.WeilCupG` for both models.
+  `tprime_curve_of_weilCupG`: the same with (P6) as `JacInput.WeilCupG` for both models;
+  `tprime_curve_of_model`: in addition `Δ_{X₁} ≅ Π̂_{g,0}` from a scheme model of `X₁,k̄`.
 -/
 
 open KummerTheory Curve AffOrbicurve WeilCurves.FunctionField
 open CurvesJacobian.Kummer CurvesJacobian.LocAn.SemiAb CurvesJacobian.LocAn.WeilForm
 open CurvesJacobian.LocAn.ArithChern CurvesJacobian.LocAn.JacInput
 open CurvesJacobian.LocAn.WeilCupTransport
+open scoped Belyi
 
 set_option linter.unusedSectionVars false
 
@@ -179,5 +182,51 @@ theorem tprime_curve_of_weilCupG {g : ℕ} (eΔ : DeltaX D₁ ≃ₜ* Pi1.Profin
   obtain ⟨s₂, -, hP₂⟩ := hWC₂ hg₂
   exact tprime_curve hW₁ hW₂ eΔ α hαc hαc' hα σ₁ σ₂ hσα hs₁ hf₁ hf₂ (hP₁ E₁ f₁ hf₁ hE₁)
     (hP₂ E₂ f₂ hf₂ hE₂) lam hlam hu hr₁ hc₁ hc₂
+
+set_option synthInstance.maxHeartbeats 400000 in
+-- the group structures of the quotients `Π_X` are slow to synthesize
+set_option maxHeartbeats 800000 in
+-- elaborating the two theta classes and the transport of the Weil forms is slow
+/-- **Claim T′ for two curves, `Δ_{X₁} ≅ Π̂_{g,0}` discharged**: as `tprime_curve_of_weilCupG`,
+where the surface-group presentation of `Δ_{X₁}` comes from a scheme model `X̄₁` of the base
+change `baseChange D₁` over `k̄` (`DeltaXEquiv.nonempty_deltaX_equiv_surface`, JAC). -/
+theorem tprime_curve_of_model {X₁ : AlgebraicGeometry.Scheme.{u}}
+    [X₁.Over (AlgebraicGeometry.Spec (.of (kbar k Ω)))]
+    [Belyi.IsCurveOver (kbar k Ω) X₁] [AlgebraicGeometry.IsIntegral X₁]
+    [Nonempty (⊤ : X₁.Opens)]
+    {eL : X₁.functionField ≃+* (Kummer.baseChange D₁).L}
+    (hH : (Kummer.baseChange D₁).H ≤ (Kummer.baseChange D₁).HL)
+    (hk : ∀ c : kbar k Ω, ((eL (algebraMap (kbar k Ω) X₁.functionField c) :
+      (Kummer.baseChange D₁).L) : Ω) = algebraMap (kbar k Ω) Ω c)
+    {τ : X₁.functionField} (hτ : ((eL τ : (Kummer.baseChange D₁).L) : Ω) = t₁)
+    (hWC₁ : WeilCupG D₁ n hW₁) (hWC₂ : WeilCupG D₂ n hW₂)
+    (hg₁ : 1 ≤ genus (kbar k Ω) (F (Kummer.baseChange D₁)))
+    (hg₂ : 1 ≤ genus (kbar k Ω) (F (Kummer.baseChange D₂)))
+    (α : PiX D₁ ≃* PiX D₂) (hαc : Continuous α) (hαc' : Continuous α.symm)
+    (hα : ∀ u, piXToGk D₂ (α u) = piXToGk D₁ u)
+    (σ₁ : OverGk D₁) (σ₂ : OverGk D₂) (hσα : ∀ u, α (σ₁.toHom u) = σ₂.toHom (α u))
+    {E₁ : Divisor (kbar k Ω) (F (Kummer.baseChange D₁))} {f₁ : Ω} (hf₁ : IsArithRep D₁ n E₁ f₁)
+    (hE₁ : ∀ h : D₁.H, divMap (autF _ h) E₁ = E₁)
+    {E₂ : Divisor (kbar k Ω) (F (Kummer.baseChange D₂))} {f₂ : Ω} (hf₂ : IsArithRep D₂ n E₂ f₂)
+    (hE₂ : ∀ h : D₂.H, divMap (autF _ h) E₂ = E₂)
+    (lam : ℤ)
+    (hlam : ContH2.map (SemiAb.resDelta α.toMonoidHom hα)
+        ((hαc.comp continuous_subtype_val).subtype_mk _) (MonoidHom.id _)
+        (fun _ _ => (deltaX_smul_mu _ _).trans (deltaX_smul_mu _ _).symm)
+        (JacInput.resDelta (D := D₂) (n := n) hf₂.chern) =
+          JacInput.resDelta (D := D₁) (n := n) hf₁.chern ^ lam)
+    {u : ℤ} (hu : E₂.deg * u ≡ 1 [ZMOD n])
+    {r₁ r₂ : ℤ} (hr₁ : r₁ = 1 ∨ r₁ = -1)
+    {c₁ : ContH2 (PiX D₁) (Mu n Ω)} {c₂ : ContH2 (PiX D₂) (Mu n Ω)}
+    (hc₁ : c₁ = ContH2.map (piSigma σ₁) (continuous_piSigma _) (MonoidHom.id _)
+      (fun _ _ => rfl) (thetaE hW₁ r₁))
+    (hc₂ : c₂ = ContH2.map (piSigma σ₂) (continuous_piSigma _) (MonoidHom.id _)
+      (fun _ _ => rfl) (thetaE hW₂ r₂)) :
+    ∃ m : ℕ, ContH2.map α.toMonoidHom hαc (MonoidHom.id _)
+        (fun v x => by rw [piX_smul_mu, piX_smul_mu, MulEquiv.coe_toMonoidHom, hα]; rfl) c₂ =
+      c₁ ^ m := by
+  obtain ⟨eΔ⟩ := DeltaXEquiv.nonempty_deltaX_equiv_surface hH hk hτ
+  exact tprime_curve_of_weilCupG hW₁ hW₂ eΔ hWC₁ hWC₂ hg₁ hg₂ α hαc hαc' hα σ₁ σ₂ hσα hf₁ hE₁
+    hf₂ hE₂ lam hlam hu hr₁ hc₁ hc₂
 
 end CurvesJacobian.LocAn.TPrimeCurve
