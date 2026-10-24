@@ -329,6 +329,7 @@ import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.NormCocycle
 import CurvesJacobian.LocAn.PlaceAut
+import CurvesJacobian.LocAn.ResDeltaGeneric
 import CurvesJacobian.LocAn.SemiAb
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.TPrimeAssembly
