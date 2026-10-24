@@ -181,6 +181,7 @@ import CurvesJacobian.Cusp.SingleCusp
 import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Cusp.TwistDGC
 import CurvesJacobian.Cusp.TwistGalois
+import CurvesJacobian.Cusp.WeierAutVE
 import CurvesJacobian.Descent.GaloisAffine
 import CurvesJacobian.Descent.GaloisAlgebra
 import CurvesJacobian.Descent.GaloisHom
