@@ -316,6 +316,7 @@ import CurvesJacobian.LocAn.ArithChernCurve
 import CurvesJacobian.LocAn.DescentBase
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
+import CurvesJacobian.LocAn.EqOfClosedPoints
 import CurvesJacobian.LocAn.ExistsAssembly
 import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.HypCurveBcExt
