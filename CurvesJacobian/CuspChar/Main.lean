@@ -14,8 +14,9 @@ import Mathlib.GroupTheory.Archimedean
 
 Let `Δ`, `Δ'` be profinite groups with sets `S`, `S'` of **cusp groups**: conjugation-stable,
 self-normalising (`N_Δ(I) = I`), each the closure `cl⟨a⟩` of a cyclic group with `a ∉ cl⟨a^p⟩`
-for every prime `p` (e.g. `I ≅ ℤ̂`), distinct ones meeting trivially, finitely many cusps for
-every open subgroup, and finitely many continuous `ℤ/p`-characters on every open subgroup.
+for every prime `p` (e.g. `I ≅ ℤ̂`), containing the centraliser of each of their nontrivial
+elements, finitely many cusps for every open subgroup, and finitely many continuous
+`ℤ/p`-characters on every open subgroup.
 
 **Theorem** (`CurvesJacobian.CuspChar.mem_iff_map_mem_of_numCusp`). If a topological isomorphism
 `Φ : Δ ≃ₜ* Δ'` is *numerically cuspidal* — `r(H) = r'(Φ H)` for every open subgroup `H`, where
@@ -33,8 +34,8 @@ proof uses cuspidally *purely* totally ramified cyclic covers, which do not exis
   at every cusp but nonzero at `b^{d'}`, while `a^{d'}` spans the line of the cusp `I` — this
   contradicts `transport_sameLine`.
 * By compactness `B_p ⊆ J_p ∈ S'`; `B_p ≠ 1`; the `B_q` commute with `B_2`, so all lie in `J_2`
-  (trivial intersections, self-normalising); the `B_q` generate `cl⟨b⟩` modulo every `N`, so
-  `Φ I ⊆ J_2`. Symmetrically and by trivial intersections, `Φ I = J_2`.
+  (centralisers, self-normalising); the `B_q` generate `cl⟨b⟩` modulo every `N`, so
+  `Φ I ⊆ J_2`. Symmetrically and by the centraliser property, `Φ I = J_2`.
 -/
 
 namespace CurvesJacobian.CuspChar
@@ -99,14 +100,15 @@ variable {Δ : Type*} [Group Δ] [TopologicalSpace Δ] [IsTopologicalGroup Δ] [
 /-- The properties of the set of cuspidal inertia groups used by the group-theoretic
 characterisation: conjugation-stable; self-normalising ([AbsTopI] Lemma 4.5 (vi)); each the
 closure of a cyclic group whose generator is no `p`-th power of an element of it (e.g. `≅ ℤ̂`);
-distinct ones meet trivially ([AbsTopI] Lemma 4.1 (i)); finitely many cusps for every open
+the centraliser of every nontrivial element of a cusp group lies in it (cf. [AbsTopI]
+Lemma 4.1 (i)); finitely many cusps for every open
 subgroup; finitely many continuous `ℤ/p`-characters on every open subgroup. -/
 def IsCuspSet (S : Set (Subgroup Δ)) : Prop :=
   ConjStable S ∧ (∀ I ∈ S, ∀ g : Δ, conjSub g I = I → g ∈ I) ∧
     (∀ I ∈ S, ∃ a : Δ, I = (Subgroup.zpowers a).topologicalClosure) ∧
     (∀ I ∈ S, ∀ a : Δ, I = (Subgroup.zpowers a).topologicalClosure → ∀ p : ℕ, p.Prime →
       a ∉ (Subgroup.zpowers (a ^ p)).topologicalClosure) ∧
-    (∀ I ∈ S, ∀ J ∈ S, I ⊓ J ≠ ⊥ → I = J) ∧
+    (∀ I ∈ S, ∀ x ∈ I, x ≠ 1 → ∀ z : Δ, z * x = x * z → z ∈ I) ∧
     (∀ H : OpenSubgroup Δ, Finite (CuspQuot S (H : Subgroup Δ))) ∧
     (∀ p : ℕ, p.Prime → ∀ H : OpenSubgroup Δ, Finite (charSpace p H))
 

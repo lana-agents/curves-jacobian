@@ -302,17 +302,9 @@ theorem exists_map_le_of_numCusp (Φ : Δ ≃ₜ* Δ') {S : Set (Subgroup Δ)}
   have hBq : ∀ q : ℕ, q.Prime → pPart b q ≤ J₂ := by
     intro q hq z hz
     have hzcl := pPart_le_closure b hq hz
-    have hsub : pPart b 2 ≤ J₂ ⊓ conjSub z J₂ := by
-      intro x hx
-      refine ⟨hB₂ hx, mem_conjSub_iff.2 ?_⟩
-      have hcomm := mem_closure_zpowers_comm (pPart_le_closure b Nat.prime_two hx) hzcl
-      have : z⁻¹ * x * z = x := by
-        rw [mul_assoc, hcomm, ← mul_assoc, inv_mul_cancel, one_mul]
-      rw [this]
-      exact hB₂ hx
-    have hne : J₂ ⊓ conjSub z J₂ ≠ ⊥ := fun h ↦ hB₂ne (le_bot_iff.1 (h ▸ hsub))
-    have heq := hS'.2.2.2.2.1 J₂ hJ₂ _ (hS'.1 J₂ hJ₂ z) hne
-    exact hS'.2.1 J₂ hJ₂ z heq.symm
+    obtain ⟨⟨x, hx⟩, hx1⟩ := (Subgroup.ne_bot_iff_exists_ne_one).1 hB₂ne
+    exact hS'.2.2.2.2.1 J₂ hJ₂ x (hB₂ hx) (fun h ↦ hx1 (Subtype.ext h)) z
+      (mem_closure_zpowers_comm hzcl (pPart_le_closure b Nat.prime_two hx))
   -- hence `b ∈ J₂`
   have hbJ : b ∈ J₂ := by
     refine mem_of_forall_mem_sup (hS'.isClosed hJ₂) fun N ↦ ?_
@@ -396,7 +388,12 @@ theorem map_mem_of_numCusp (Φ : Δ ≃ₜ* Δ') {S : Set (Subgroup Δ)}
       exact this
     rw [this]
     exact Subgroup.one_mem _
-  have hEq : I = I₂ := hS.2.2.2.2.1 I hI I₂ hI₂ (by rwa [inf_eq_left.2 hII₂])
+  have hEq : I = I₂ := by
+    refine le_antisymm hII₂ fun z hz ↦ ?_
+    obtain ⟨⟨x, hx⟩, hx1⟩ := (Subgroup.ne_bot_iff_exists_ne_one).1 hIne
+    obtain ⟨a₂, ha₂⟩ := hS.2.2.1 I₂ hI₂
+    exact hS.2.2.2.2.1 I hI x hx (fun h ↦ hx1 (Subtype.ext h)) z
+      (mem_closure_zpowers_comm (ha₂ ▸ hz) (ha₂ ▸ hII₂ hx))
   have hJle : J ≤ I.map Φ.toMulEquiv.toMonoidHom := by
     have h1 := Subgroup.map_mono (f := Φ.toMulEquiv.toMonoidHom) (hEq ▸ hJI₂)
     have h2 := map_symm_map Φ.symm J

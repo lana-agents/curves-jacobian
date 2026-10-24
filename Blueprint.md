@@ -224,7 +224,7 @@ lemmas below then force `h = id`.
 Group-theoretic route (no hDGC). Step G (done): `CuspChar.mem_iff_map_mem_of_numCusp` — a
 numerically cuspidal `Φ : Δ ≃ₜ* Δ'` (equal cusp counts `r(H) = r'(Φ H)` for all open `H`) maps
 the cusp groups exactly onto the cusp groups, for any `IsCuspSet` (conjugation-stable,
-self-normalising, procyclic with generator not a `p`-th power, pairwise trivial intersections,
+self-normalising, procyclic with generator not a `p`-th power, containing the centralisers of their nontrivial elements,
 finitely many cusps / `ℤ/p`-characters on open subgroups). Replaces [CombGC] Thm 1.6 (i), whose
 "purely totally ramified cyclic covers" do not exist: G1 cusp count of `ℤ/p`-covers
 (`cuspCount_ker_add`), G2 hyperplane counting (`card_mem_span_eq`, `transport_sameLine`), G3
