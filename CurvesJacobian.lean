@@ -168,6 +168,7 @@ import CurvesJacobian.Cusp.ModelEnlargeToG
 import CurvesJacobian.Cusp.ModelFaithful
 import CurvesJacobian.Cusp.ModelRun
 import CurvesJacobian.Cusp.ModelStep
+import CurvesJacobian.Cusp.MulNSubgroup
 import CurvesJacobian.Cusp.NonRationalFill
 import CurvesJacobian.Cusp.OpPathRun
 import CurvesJacobian.Cusp.OrbiQuotientPi1
