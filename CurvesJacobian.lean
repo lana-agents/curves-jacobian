@@ -305,6 +305,7 @@ import CurvesJacobian.Kummer.Values
 import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
+import CurvesJacobian.LocAn.ArithChern
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.ExistsAssembly
@@ -313,9 +314,11 @@ import CurvesJacobian.LocAn.HypCurveBcExt
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
+import CurvesJacobian.LocAn.SemiAb
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.ThetaClass
+import CurvesJacobian.LocAn.ThetaPullback
 import CurvesJacobian.LocAn.ThmC
 import CurvesJacobian.LocAn.ThmCGenusZero
 import CurvesJacobian.LocAn.ThmCMLF
@@ -323,6 +326,7 @@ import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
 import CurvesJacobian.LocAn.TransportH2
 import CurvesJacobian.LocAn.UniqueReduction
+import CurvesJacobian.LocAn.WeilForm
 import CurvesJacobian.Picard.AbelInj
 import CurvesJacobian.Picard.AbelInjLocal
 import CurvesJacobian.Picard.AbelMap
