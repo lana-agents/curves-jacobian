@@ -519,4 +519,5 @@ import CurvesJacobian.Scheme.GeomIntegralConstantField
 import CurvesJacobian.Scheme.PointDegree
 import CurvesJacobian.Scheme.TensorDomainConstantField
 import CurvesJacobian.Scheme.ValuationPoints
+import CurvesJacobian.Tsen.C1
 import CurvesJacobian.Tsen.Homogeneous
