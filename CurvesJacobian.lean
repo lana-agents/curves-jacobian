@@ -129,6 +129,7 @@ import CurvesJacobian.Cusp.GeomInvariance
 import CurvesJacobian.Cusp.GeomInvarianceInertia
 import CurvesJacobian.Cusp.GeomModel
 import CurvesJacobian.Cusp.HemiArith
+import CurvesJacobian.Cusp.HemiInvolutionGen
 import CurvesJacobian.Cusp.HemiPi1
 import CurvesJacobian.Cusp.HemiSemiElliptic
 import CurvesJacobian.Cusp.HypBaseChange
