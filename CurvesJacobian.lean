@@ -304,9 +304,11 @@ import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.Stabilizer
+import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.ThetaClass
 import CurvesJacobian.LocAn.ThmC
 import CurvesJacobian.LocAn.ThmCMLF
+import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
 import CurvesJacobian.LocAn.TransportH2
 import CurvesJacobian.LocAn.UniqueReduction
