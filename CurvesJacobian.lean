@@ -37,6 +37,7 @@ import CurvesJacobian.Cusp.ChainPushOps
 import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.ConjInducedCusps
+import CurvesJacobian.Cusp.Cor34Elliptic
 import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
@@ -46,6 +47,7 @@ import CurvesJacobian.Cusp.Cor38Unique
 import CurvesJacobian.Cusp.CoverComparison
 import CurvesJacobian.Cusp.CoverConstantField
 import CurvesJacobian.Cusp.CoverCurve
+import CurvesJacobian.Cusp.CoverCuspClasses
 import CurvesJacobian.Cusp.CoverCuspComap
 import CurvesJacobian.Cusp.CoverCuspDegree
 import CurvesJacobian.Cusp.CoverCusps
@@ -74,6 +76,7 @@ import CurvesJacobian.Cusp.DecompositionInertia
 import CurvesJacobian.Cusp.DecuspNormalizer
 import CurvesJacobian.Cusp.DifferentialGenus
 import CurvesJacobian.Cusp.DupDecomp
+import CurvesJacobian.Cusp.DupFillMatch
 import CurvesJacobian.Cusp.DupSubgroup
 import CurvesJacobian.Cusp.EllipticArithChain
 import CurvesJacobian.Cusp.EllipticBaseChange
@@ -107,6 +110,7 @@ import CurvesJacobian.Cusp.FillAutUnique
 import CurvesJacobian.Cusp.FillByKernel
 import CurvesJacobian.Cusp.FillChain
 import CurvesJacobian.Cusp.FillCover
+import CurvesJacobian.Cusp.FillCuspClasses
 import CurvesJacobian.Cusp.FillElemOp
 import CurvesJacobian.Cusp.FillHyp
 import CurvesJacobian.Cusp.FillSeq
