@@ -189,6 +189,7 @@ import CurvesJacobian.Cusp.TwistGalois
 import CurvesJacobian.Cusp.WeierAutVE
 import CurvesJacobian.CuspChar.Arith
 import CurvesJacobian.CuspChar.Assembly
+import CurvesJacobian.CuspChar.Centraliser
 import CurvesJacobian.CuspChar.Characters
 import CurvesJacobian.CuspChar.Count
 import CurvesJacobian.CuspChar.Cuspidal
