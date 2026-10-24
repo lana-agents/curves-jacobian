@@ -98,6 +98,7 @@ import CurvesJacobian.Cusp.EllipticInputE
 import CurvesJacobian.Cusp.EllipticMulByN
 import CurvesJacobian.Cusp.EllipticPunctured
 import CurvesJacobian.Cusp.EllipticSound
+import CurvesJacobian.Cusp.EllipticTorsionCardN
 import CurvesJacobian.Cusp.EllipticTorsionCount
 import CurvesJacobian.Cusp.EnlargeKernel
 import CurvesJacobian.Cusp.ExtensionIso
