@@ -218,3 +218,16 @@ lemmas below then force `h = id`.
   inner automorphism of `Π_U` is the identity) ⇒ uniqueness (`eq_of_isConjInduced_of_innerRigid`).
 - (G2–G3, open) π₁ glue for `InnerRigid`: cusps fixed;
   centralising lift, fixed place above a cusp, ramified cover of index divisible by the order.
+
+### MR3 — [AbsTopI] Lemma 4.5 (v), cusp preservation (`CurvesJacobian/CuspChar/`, plan `iut-scratch/multiradial/MR3-plan.md`)
+
+Group-theoretic route (no hDGC). Step G (done): `CuspChar.mem_iff_map_mem_of_numCusp` — a
+numerically cuspidal `Φ : Δ ≃ₜ* Δ'` (equal cusp counts `r(H) = r'(Φ H)` for all open `H`) maps
+the cusp groups exactly onto the cusp groups, for any `IsCuspSet` (conjugation-stable,
+self-normalising, procyclic with generator not a `p`-th power, pairwise trivial intersections,
+finitely many cusps / `ℤ/p`-characters on open subgroups). Replaces [CombGC] Thm 1.6 (i), whose
+"purely totally ramified cyclic covers" do not exist: G1 cusp count of `ℤ/p`-covers
+(`cuspCount_ker_add`), G2 hyperplane counting (`card_mem_span_eq`, `transport_sameLine`), G3
+Lemma T + compactness (`exists_mem_sup_of_numCusp`, `exists_map_le_of_numCusp`).
+Open: (B) numerical cuspidality of `Π_X ≃ₜ* Π_X'` over `G_K ≃ G_K'` from determinants of
+`Hom(H, ℤ/l^k)` (Weil pairing, cusp residues, Riemann–Hurwitz), and `IsCuspSet (arithCusps …)`.
