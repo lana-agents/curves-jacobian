@@ -316,6 +316,7 @@ import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.ArithChern
 import CurvesJacobian.LocAn.ArithChernCurve
+import CurvesJacobian.LocAn.DeltaXEquiv
 import CurvesJacobian.LocAn.DescentBase
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
@@ -325,6 +326,7 @@ import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.HypCurveBcExt
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
+import CurvesJacobian.LocAn.NormCocycle
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.SemiAb
 import CurvesJacobian.LocAn.Stabilizer
