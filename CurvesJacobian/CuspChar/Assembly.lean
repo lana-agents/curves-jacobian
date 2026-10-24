@@ -13,16 +13,18 @@ import Mathlib.LinearAlgebra.Determinant
 Let `Π` be a topological group with a normal subgroup `D` (the geometric fundamental group `Δ`
 inside `Π_U`) and `S` a set of subgroups of `D` (the cuspidal inertia groups). For an open subgroup
 `H ⊆ D` and `x ∈ Π` with `x H x⁻¹ = H`, conjugation by `x` acts on the continuous characters
-`H → ℤ/n`; `CurvesJacobian.CuspChar.charDet` is the determinant of this action.
+`H → ℤ/n` by `ξ ↦ ξ ∘ (h ↦ x h x⁻¹)`; `CurvesJacobian.CuspChar.charDet` is the determinant of
+this action (the transpose of the action on `H^ab ⊗ ℤ/n`, so it has the same determinant).
 
 The **cusp weight identity** (`CurvesJacobian.CuspChar.CuspWeightIdentity D S l χ₀ χ`) says: for
 every open `H ⊆ D` there is an open subgroup `P ⊆ Π` normalising `H` on which
-`det(x | Hom(H, ℤ/l^k))² · χ_k(x)^{e_H} = 1` for all `k`, where `e_H = [D : H] χ₀ + r_H`
+`det(x | Hom(H, ℤ/l^k))² = χ_k(x)^{e_H}` for all `k`, where `e_H = [D : H] χ₀ + r_H`
 (`r_H` the number of cusps of `H`). For `U` a hyperbolic curve of genus `g` with `r ≥ 1` cusps
 over a number field, `χ₀ = 2g - 2 + r`, `χ_k` the cyclotomic character mod `l^k` (composed with
 `Π_U ↠ G_K`), this is the Kummer/Weil-pairing computation of `MR3-plan.md` (B1) plus
-Riemann–Hurwitz (B2): `Hom(H, μ_m)` is an extension of `((ℤ/m)^{cusps})_{Σ = 0}` by `J_H[m]`,
-`det(J_H[m])² = χ^{2 g_H}`, and `2 g_H - 2 + r_H = [D : H](2g - 2 + r)`.
+Riemann–Hurwitz (B2): on an open subgroup fixing the cusps of `H`, `H^ab ⊗ ℤ/m` is an extension
+of `J_H[m]` by `(ℤ/m)(1)^{cusps}/diagonal` (cusp inertia `≅ ℤ̂(1)`), `det(J_H[m])² = χ^{2 g_H}`
+(Weil pairing), so `det² = χ^{2 g_H + 2 r_H - 2}`, and `2 g_H - 2 + r_H = [D : H](2g - 2 + r)`.
 
 Main result (`CurvesJacobian.CuspChar.isNumCusp_of_cuspWeightIdentity`): for a topological
 isomorphism `Φ : Π ≃ₜ* Π'` with `Φ(D) = D'`, if both sides satisfy the weight identity, the
@@ -181,15 +183,15 @@ variable {Γ : Type*} [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ]
 
 /-- **The cusp weight identity** for `(Π, D, S)` at the prime `l`, with Euler characteristic
 `χ₀` and characters `χ_k : Π → (ℤ/l^k)ˣ`: for every open `H ⊆ D` there is an open `P ⊆ Π`
-normalising `H` with `det(x | Hom(H, ℤ/l^k))² · χ_k(x)^{[D:H] χ₀ + r_H} = 1` for `x ∈ P`.
+normalising `H` with `det(x | Hom(H, ℤ/l^k))² = χ_k(x)^{[D:H] χ₀ + r_H}` for `x ∈ P`.
 (For an affine hyperbolic curve over a number field: Kummer theory of the covers, Weil pairing and
 Riemann–Hurwitz, see the module docstring.) -/
 def CuspWeightIdentity (D : Subgroup Γ) [D.Normal] (S : Set (Subgroup D)) (l χ₀ : ℕ)
     (χ : ∀ k : ℕ, Γ →* (ZMod (l ^ k))ˣ) : Prop :=
   ∀ H : OpenSubgroup D, ∃ P : Subgroup Γ, IsOpen (P : Set Γ) ∧
     ∃ hP : ∀ x ∈ P, mapOpenSub (conjD D x) H = H, ∀ x (hx : x ∈ P) (k : ℕ),
-      charDet (p := l ^ k) (conjD D x) H (hP x hx) ^ 2 *
-        χ k x ^ ((H : Subgroup D).index * χ₀ + cuspCount S (H : Subgroup D)) = 1
+      charDet (p := l ^ k) (conjD D x) H (hP x hx) ^ 2 =
+        χ k x ^ ((H : Subgroup D).index * χ₀ + cuspCount S (H : Subgroup D))
 
 end Weight
 
@@ -280,7 +282,7 @@ theorem isNumCusp_of_cuspWeightIdentity (Φ : Γ ≃ₜ* Γ')
       rw [← charDet_congr hc (mapOpenSub Ψ H) (hc ▸ hP' _ hσ.2) (hP' _ hσ.2)]
       exact charDet_conj Ψ (conjD D σ) H (hP σ hσ.1) _
     rw [index_mapOpenSub, hdet] at h2
-    exact (mul_left_cancel (h1.trans h2.symm))
+    exact h1.symm.trans h2
   choose A hAo hA using hpow
   have hmul : ∀ H K : OpenSubgroup D,
       ((H : Subgroup D).index * χ₀ + cuspCount S (H : Subgroup D)) *
