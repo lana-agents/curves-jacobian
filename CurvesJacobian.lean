@@ -322,6 +322,7 @@ import CurvesJacobian.LocAn.ThetaPullback
 import CurvesJacobian.LocAn.ThmC
 import CurvesJacobian.LocAn.ThmCConstExt
 import CurvesJacobian.LocAn.ThmCGenusZero
+import CurvesJacobian.LocAn.ThmCGenusZeroConstExt
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
