@@ -313,6 +313,7 @@ import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.ArithChern
 import CurvesJacobian.LocAn.ArithChernCurve
+import CurvesJacobian.LocAn.DescentBase
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.ExistsAssembly
@@ -330,6 +331,7 @@ import CurvesJacobian.LocAn.ThmC
 import CurvesJacobian.LocAn.ThmCConstExt
 import CurvesJacobian.LocAn.ThmCGenusZero
 import CurvesJacobian.LocAn.ThmCGenusZeroConstExt
+import CurvesJacobian.LocAn.ThmCGenusZeroFinite
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
