@@ -309,6 +309,7 @@ import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.ThetaClass
 import CurvesJacobian.LocAn.ThmC
+import CurvesJacobian.LocAn.ThmCGenusZero
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
