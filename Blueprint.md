@@ -229,5 +229,12 @@ finitely many cusps / `ℤ/p`-characters on open subgroups). Replaces [CombGC] T
 "purely totally ramified cyclic covers" do not exist: G1 cusp count of `ℤ/p`-covers
 (`cuspCount_ker_add`), G2 hyperplane counting (`card_mem_span_eq`, `transport_sameLine`), G3
 Lemma T + compactness (`exists_mem_sup_of_numCusp`, `exists_map_le_of_numCusp`).
-Open: (B) numerical cuspidality of `Π_X ≃ₜ* Π_X'` over `G_K ≃ G_K'` from determinants of
-`Hom(H, ℤ/l^k)` (Weil pairing, cusp residues, Riemann–Hurwitz), and `IsCuspSet (arithCusps …)`.
+Step B (done up to one debt): `CuspChar.isNumCusp_of_cuspWeightIdentity` (ratio argument
+`eq_of_mul_eq_mul`, character determinants `charDet`), cyclotomic character without finite
+exponent on open subgroups (`arithCycChar_noExponent`, `l` odd), centraliser property of cuspidal
+inertia in `Π̂_{g,r}` (`mem_inertia_of_commute`), `IsCuspSet (deltaCusps …)`, ℤ/2-character count
+and covers with large ramification (`CuspChar/Delta.lean`). **Main theorem**
+`CuspChar.mem_arithCusps_iff_map_mem` / `CuspChar.arithmeticExtIso` ([AbsTopI] Lemma 4.5 (v) over
+number fields). Debt (explicit arguments `hW`, `hW'`): `CuspWeightIdentity` at `l = 3`, i.e.
+`det(x | Hom(H, ℤ/3^k))² = χ(x)^{[Δ:H](2g-2+r) + r_H}` on an open subgroup (Kummer theory of the
+covers, Weil pairing, Riemann–Hurwitz).

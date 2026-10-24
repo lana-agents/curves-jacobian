@@ -196,6 +196,8 @@ import CurvesJacobian.CuspChar.Characters
 import CurvesJacobian.CuspChar.Count
 import CurvesJacobian.CuspChar.Cuspidal
 import CurvesJacobian.CuspChar.Cyclotomic
+import CurvesJacobian.CuspChar.Delta
+import CurvesJacobian.CuspChar.Final
 import CurvesJacobian.CuspChar.Hyperplane
 import CurvesJacobian.CuspChar.Line
 import CurvesJacobian.CuspChar.Main
