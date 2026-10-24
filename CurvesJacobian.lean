@@ -187,10 +187,12 @@ import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Cusp.TwistDGC
 import CurvesJacobian.Cusp.TwistGalois
 import CurvesJacobian.Cusp.WeierAutVE
+import CurvesJacobian.CuspChar.Arith
 import CurvesJacobian.CuspChar.Assembly
 import CurvesJacobian.CuspChar.Characters
 import CurvesJacobian.CuspChar.Count
 import CurvesJacobian.CuspChar.Cuspidal
+import CurvesJacobian.CuspChar.Cyclotomic
 import CurvesJacobian.CuspChar.Hyperplane
 import CurvesJacobian.CuspChar.Line
 import CurvesJacobian.CuspChar.Main
