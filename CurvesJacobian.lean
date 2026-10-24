@@ -267,6 +267,7 @@ import CurvesJacobian.Kummer.JacobianBridgeSurj
 import CurvesJacobian.Kummer.JacobianDivExt
 import CurvesJacobian.Kummer.JacobianDivisible
 import CurvesJacobian.Kummer.JacobianH1Reduction
+import CurvesJacobian.Kummer.JacobianLocalField
 import CurvesJacobian.Kummer.JacobianPi1
 import CurvesJacobian.Kummer.JacobianTate
 import CurvesJacobian.Kummer.JacobianTorsion
@@ -464,6 +465,13 @@ import CurvesJacobian.Picard.ZeroScheme
 import CurvesJacobian.Picard.ZeroSchemeAlgebra
 import CurvesJacobian.Picard.ZeroSchemeDegree
 import CurvesJacobian.Picard.ZeroSchemeDivisor
+import CurvesJacobian.PointTopology.Basic
+import CurvesJacobian.PointTopology.Germ
+import CurvesJacobian.PointTopology.Group
+import CurvesJacobian.PointTopology.Local
+import CurvesJacobian.PointTopology.NumberFieldLocal
+import CurvesJacobian.PointTopology.Proper
+import CurvesJacobian.PointTopology.UltraValuation
 import CurvesJacobian.Scheme.ConstantField
 import CurvesJacobian.Scheme.CurveFunctionField
 import CurvesJacobian.Scheme.CurveIdealDivisor
