@@ -306,6 +306,7 @@ import CurvesJacobian.Kummer.WeilGenericPoint
 import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.ArithChern
+import CurvesJacobian.LocAn.ArithChernCurve
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.ExistsAssembly

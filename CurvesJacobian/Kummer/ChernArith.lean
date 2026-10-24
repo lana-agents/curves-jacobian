@@ -197,12 +197,12 @@ variable [TopologicalSpace G] [IsTopologicalGroup G] [TopologicalSpace Q] [IsTop
 
 /-- **Restriction of the arithmetic Chern class.** Let `κ : G' →* G` and `ι : Q' →* Q` be
 compatible (`ρ ∘ κ = ι ∘ ρ'`, `κ` compatible with the actions on `Ω` and `ι` with those on `μ_n`,
-`ι` continuous) and `ker ρ' = κ⁻¹(ker ρ)` (the same universal cover). If `f` is invariant modulo
-`n`-th powers for both, then `ι^* c_{ρ}(f) = c_{ρ'}(f)`. (Example: `G' = Gal(Ω/F k̄) ⊆ G`,
-`Q' = Δ_X ⊆ Π_X = Q`.) -/
+`ι` continuous) and `ker ρ' ⊆ κ⁻¹(ker ρ)` (e.g. the same universal cover). If `f` is
+invariant modulo `n`-th powers for both, then `ι^* c_{ρ}(f) = c_{ρ'}(f)`. (Example:
+`G' = Gal(Ω/F k̄) ⊆ G`, `Q' = Δ_X ⊆ Π_X = Q`.) -/
 theorem map_chernClassA [NeZero n] (κ : G' →* G) (hκ : ∀ (σ : G') (x : Ω), κ σ • x = σ • x)
     (ι : Q' →* Q) (hι : Continuous ι) (hρ : ∀ σ, ρ (κ σ) = ι (ρ' σ))
-    (hker : ∀ σ, ρ' σ = 1 ↔ ρ (κ σ) = 1)
+    (hker : ∀ σ, ρ' σ = 1 → ρ (κ σ) = 1)
     (hιμ : ∀ (γ : Q') (ζ : Mu n Ω), ι γ • ζ = γ • ζ) {f : Ω} (hf : KummerInv ρ n f)
     (hf' : KummerInv ρ' n f) :
     ContH2.map ι hι (MonoidHom.id (Mu n Ω)) (fun γ ζ ↦ hιμ γ ζ)
@@ -212,7 +212,7 @@ theorem map_chernClassA [NeZero n] (κ : G' →* G) (hκ : ∀ (σ : G') (x : Ω
   -- the pulled-back choice `g ∘ ι` is admissible for `(ρ', s')`
   have hfixT : ∀ x : Ω, IsFix ρ x → IsFix ρ' x := fun x hx σ hσ ↦ by
     rw [← hκ]
-    exact hx _ ((hker σ).1 hσ)
+    exact hx _ (hker σ hσ)
   have hsmul : ∀ (γ : Q') (x : Ω), IsFix ρ x → s' γ • x = s (ι γ) • x := fun γ x hx ↦ by
     rw [← hκ]
     exact hx.smul_eq (by rw [hρ, hs', hs])
