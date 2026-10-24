@@ -21,7 +21,9 @@ characteristic `0` the genus is invariant under every base change
 * `CurvesJacobian.Cusp.curveGenus_bcX_eq`: `g(X_{M'}) = g(X)` for `X_{M'} = Spec M' ×_{Spec M} X`
   (`dim H⁰(Ω¹)`, `char M = 0`, any extension `M'/M`);
 * **`Belyi.Anabelian.HypCurve.bcExt`**: the base change of a hyperbolic curve to any extension
-  field; `bcExt_cusp`, `bcExt_proper`: cusps are preserved, proper curves stay proper.
+  field; `bcExt_cusp`, `bcExt_proper`: cusps are preserved, proper curves stay proper;
+* `Belyi.Anabelian.HypCurve.bcExtOpenIso`: `U_{M'} ≅ Spec M' ×_{Spec M} U`;
+  **`Belyi.Anabelian.HypCurve.KIso.bcExt`**: base change of a `k`-isomorphism `U₁ ≅ U₂`.
 -/
 
 open CategoryTheory Limits AlgebraicGeometry Belyi Belyi.Anabelian
@@ -103,5 +105,52 @@ lemma bcExt_proper (C : HypCurve M) (hc : (C.U : Set C.Xbar)ᶜ = ∅) :
   change bcπ M M' C.Xbar y ∈ (C.U : Set C.Xbar)
   rw [hc]
   trivial
+
+end Belyi.Anabelian.HypCurve
+
+namespace Belyi.Anabelian.HypCurve
+
+open CurvesJacobian.Cusp
+
+variable {M : Type u} [Field M] [CharZero M] (M' : Type u) [Field M'] [Algebra M M']
+
+/-- `U_{M'} ≅ Spec M' ×_{Spec M} U` for the open `U_{M'} = bcπ⁻¹ U` of `X̄_{M'}`. -/
+def bcExtOpenIso (C : HypCurve M) :
+    (C.bcExt M').U.toScheme ≅ pullback (specAlgebraMap M M') C.toSpec :=
+  (pullbackRestrictIsoRestrict (bcπ M M' C.Xbar) C.U).symm ≪≫
+    pullbackLeftPullbackSndIso (specAlgebraMap M M') (C.Xbar ↘ Spec (.of M)) C.U.ι
+
+lemma bcExtOpenIso_hom_fst (C : HypCurve M) :
+    (bcExtOpenIso M' C).hom ≫ pullback.fst _ _ = (C.bcExt M').toSpec := by
+  simp only [bcExt, toSpec, bcExtOpenIso, Iso.trans_hom, Iso.symm_hom, Category.assoc,
+    pullbackLeftPullbackSndIso_hom_fst, comp_over]
+  erw [pullbackRestrictIsoRestrict_inv_fst_assoc]
+  rfl
+
+/-- Spec M' ×_{Spec M} (−) applied to a `k`-isomorphism of the opens. -/
+def pullbackIsoOfKIso {C₁ C₂ : HypCurve M} (f : KIso C₁ C₂) :
+    pullback (specAlgebraMap M M') C₁.toSpec ≅ pullback (specAlgebraMap M M') C₂.toSpec where
+  hom := pullback.map _ _ _ _ (𝟙 _) f.1.hom (𝟙 _) (by simp) (by simp [f.2])
+  inv := pullback.map _ _ _ _ (𝟙 _) f.1.inv (𝟙 _) (by simp) (by
+    simp only [Category.comp_id]
+    exact (Iso.eq_inv_comp _).2 f.2)
+  hom_inv_id := by
+    ext
+    · erw [Category.assoc, pullback.lift_fst, pullback.lift_fst, Category.comp_id]
+    · erw [Category.assoc, pullback.lift_snd, ← Category.assoc, pullback.lift_snd, Category.assoc,
+        f.1.hom_inv_id, Category.comp_id]
+  inv_hom_id := by
+    ext
+    · erw [Category.assoc, pullback.lift_fst, pullback.lift_fst, Category.comp_id]
+    · erw [Category.assoc, pullback.lift_snd, ← Category.assoc, pullback.lift_snd, Category.assoc,
+        f.1.inv_hom_id, Category.comp_id]
+
+/-- **Base change of a `k`-isomorphism** `U₁ ≅ U₂` to `U₁,_{M'} ≅ U₂,_{M'}`. -/
+def KIso.bcExt {C₁ C₂ : HypCurve M} (f : KIso C₁ C₂) : KIso (C₁.bcExt M') (C₂.bcExt M') :=
+  ⟨bcExtOpenIso M' C₁ ≪≫ pullbackIsoOfKIso M' f ≪≫ (bcExtOpenIso M' C₂).symm, by
+    rw [← bcExtOpenIso_hom_fst, ← bcExtOpenIso_hom_fst]
+    simp only [pullbackIsoOfKIso, Iso.trans_hom, Iso.symm_hom, Category.assoc,
+      Iso.inv_hom_id_assoc, Iso.cancel_iso_hom_left]
+    erw [pullback.lift_fst, Category.comp_id]⟩
 
 end Belyi.Anabelian.HypCurve

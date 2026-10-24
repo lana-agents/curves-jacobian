@@ -320,6 +320,7 @@ import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.ThetaClass
 import CurvesJacobian.LocAn.ThetaPullback
 import CurvesJacobian.LocAn.ThmC
+import CurvesJacobian.LocAn.ThmCConstExt
 import CurvesJacobian.LocAn.ThmCGenusZero
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnitCoord
