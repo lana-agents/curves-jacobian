@@ -302,6 +302,7 @@ import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.ExistsAssembly
 import CurvesJacobian.LocAn.FixedPlaceOrder
+import CurvesJacobian.LocAn.HypCurveBcExt
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.PlaceAut
