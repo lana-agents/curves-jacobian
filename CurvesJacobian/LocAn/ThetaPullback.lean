@@ -214,73 +214,94 @@ noncomputable def resDelta : ContH2 (PiX D) (Mu n Ω) →* ContH2 (DeltaX D) (Mu
 
 end Cup
 
-/-! ### The statements -/
+/-! ### The statements, for any Galois model -/
 
 section Statements
 
-variable {k : Type u} [Field k] [CharZero k] {X : Scheme.{u}} [X.Over (Spec (.of k))]
-  [IsCurveOver k X] [IsIntegral X] {τ : X.functionField} (hτ : Transcendental k τ)
-  [IsGalois (K₀ k (coordT τ)) (FFClosure X)]
-
 attribute [local instance] isFunctionField_F
+
+variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω}
+  {D : Pi1.Orbifold.GaloisData k t} [CharZero k] [IsGalois (K₀ k t) Ω] [IsAlgClosed Ω]
+  [Fact (Function.Surjective (piJ1ToGk D))] {n : ℕ} [NeZero n]
+  (hW : Function.Bijective (weilDual (κ := kbar k Ω) (K := F (Kummer.baseChange D)) (n := n)))
+
 attribute [local instance 2000] Kummer.group_piX
 
 /-- The character `χ_δ = e(δ, ·) : Δ_X → μ_n` of `δ ∈ Δ_X` (the Kummer character of `a(δ)`). -/
-noncomputable def chiDelta (n : ℕ) [NeZero n] (δ : DeltaX (curveGaloisData k hτ)) :
-    DeltaX (curveGaloisData k hτ) →* Mu n (FFClosure X) :=
-  (MonoidHom.mk' (weilForm hτ n (deltaAbMk (curveGaloisData k hτ) δ))
-    (weilForm_mul_right hτ n _)).comp (deltaAbMk (curveGaloisData k hτ))
+noncomputable def chiDelta (δ : DeltaX D) : DeltaX D →* Mu n Ω :=
+  (MonoidHom.mk' (weilForm hW (deltaAbMk D δ)) (weilForm_mul_right hW _)).comp (deltaAbMk D)
 
-theorem isLocallyConstant_chiDelta (n : ℕ) [NeZero n] (δ : DeltaX (curveGaloisData k hτ)) :
-    IsLocallyConstant (chiDelta hτ n δ) := by
-  have h1 := (isLocallyConstant_weilForm hτ n).comp_continuous
-    (Continuous.prodMk_right (deltaAbMk (curveGaloisData k hτ) δ))
+theorem isLocallyConstant_chiDelta [Finite (JT D n)] (δ : DeltaX D) :
+    IsLocallyConstant (chiDelta hW δ) := by
+  have h1 := (isLocallyConstant_weilForm hW).comp_continuous
+    (Continuous.prodMk_right (deltaAbMk D δ))
   unfold chiDelta
   rw [MonoidHom.coe_comp]
   exact h1.comp_continuous (QuotientGroup.continuous_mk (N := (commClosure _).subgroupOf _))
 
-/-- **(★) The theta pull-back** (JAC D-d, `JAC-plan.md` D-d.0; debt of MR7's T′): for odd `n` and
-`g(X_{k̄}) ≥ 2`, for every `σ ∈ Gal(Ω/k(t))` normalising `H = Gal(Ω/F)`, fixing `k̄` and acting
-non-trivially on `F = K(X)`, there are a `G_k`-invariant divisor `P` of `X_{k̄}` of positive
-degree (`P = P_σ = δ_σ^* L`), a representative `f` of `P` modulo `n` and a sign `s = ±1` with
+variable (D n) in
+/-- **(★) The theta pull-back, for a Galois model `D`** (JAC D-d, `JAC-plan.md` D-d.0; debt of
+MR7's T′), `hW` the perfectness of the Weil pairing on `J(k̄)[n]` (which defines the Weil form
+`e = weilForm hW`): for odd `n` and `g(X_{k̄}) ≥ 2`, for every `σ ∈ Gal(Ω/k(t))` normalising
+`H = Gal(Ω/F)`, fixing `k̄` and acting non-trivially on `F`, there are a `G_k`-invariant divisor
+`P` of `X_{k̄}` of positive degree (`P = P_σ = δ_σ^* L`), a representative `f` of `P` modulo `n`
+and a sign `s = ±1` with
 
   `c^{ar}(P) = π_σ^* θ_{e^s}` in `H²(Π_X, μ_n)`,
 
-`π_σ = piSigma (sigmaPi σ) : Π_X → Δ_X^{ab} ⋊ G_k`, `θ_{e^s} = thetaE hτ n s` the theta class of
-the Weil form (`e^s = halfForm (e^{2s})`, whose commutator pairing `e^{2s}` is that of
-`c(L)`). -/
-def ThetaPullback (n : ℕ) [NeZero n] : Prop :=
-  Odd n → 2 ≤ genus (kbar k (FFClosure X)) (F (Kummer.baseChange (curveGaloisData k hτ))) →
-  ∀ σ : FFClosure X ≃ₐ[K₀ k (coordT τ)] FFClosure X,
-  ∀ hσ : IsGeomAut (curveGaloisData k hτ) σ, σ ∉ (curveGaloisData k hτ).H →
-  ∃ (P : Divisor (kbar k (FFClosure X)) (F (Kummer.baseChange (curveGaloisData k hτ))))
-    (f : FFClosure X) (hf : IsArithRep (curveGaloisData k hτ) n P f) (s : ℤ),
-    (∀ h : (curveGaloisData k hτ).H, divMap (autF _ h) P = P) ∧ 0 < P.deg ∧
-    (s = 1 ∨ s = -1) ∧
+`π_σ = piSigma (sigmaPi σ) : Π_X → Δ_X^{ab} ⋊ G_k`, `θ_{e^s} = thetaE hW s` the theta class of the
+Weil form (`e^s = halfForm (e^{2s})`, whose commutator pairing `e^{2s}` is that of `c(L)`;
+`WeilForm.thetaE_eq_halfForm`). -/
+def ThetaPullbackG [Finite (JT D n)]
+    (hW : Function.Bijective (weilDual (κ := kbar k Ω) (K := F (Kummer.baseChange D)) (n := n))) :
+    Prop :=
+  Odd n → 2 ≤ genus (kbar k Ω) (F (Kummer.baseChange D)) →
+  ∀ σ : Ω ≃ₐ[K₀ k t] Ω, ∀ hσ : IsGeomAut D σ, σ ∉ D.H →
+  ∃ (P : Divisor (kbar k Ω) (F (Kummer.baseChange D))) (f : Ω) (hf : IsArithRep D n P f)
+    (s : ℤ),
+    (∀ h : D.H, divMap (autF _ h) P = P) ∧ 0 < P.deg ∧ (s = 1 ∨ s = -1) ∧
     hf.chern = ContH2.map (piSigma (sigmaPi hσ)) (continuous_piSigma _) (MonoidHom.id _)
-      (fun _ _ => rfl) (thetaE hτ n s)
+      (fun _ _ => rfl) (thetaE hW s)
 
-/-- **(P6) The Weil pairing is `±` the cup product** (JAC D-d; debt of MR7's T′; Milne, *LEC*,
-Example 14.8): there is a sign `s = ±1` such that for every `G_k`-invariant divisor `E` of
-`X_{k̄}` with representative `f`, every `δ ∈ Δ_X` and every locally constant character
-`ψ : Δ_X → ℤ/n`,
+variable (D n) in
+/-- **(P6) The Weil pairing is `±` the cup product, for a Galois model `D`** (JAC D-d; debt of
+MR7's T′; Milne, *LEC*, Example 14.8): there is a sign `s = ±1` such that for every
+`G_k`-invariant divisor `E` of `X_{k̄}` with representative `f`, every `δ ∈ Δ_X` and every
+locally constant character `ψ : Δ_X → ℤ/n`,
 
   `(χ_δ ∪ ψ)^{deg E} = (res_{Δ_X} c^{ar}(E))^{s ψ(δ)}`   in `H²(Δ_X, μ_n)`,
 
 `χ_δ = e(δ, ·)` (`chiDelta`). Since `res_{Δ_X} c^{ar}(E) = c₁(pt)^{deg E}`, this says
 `χ_δ ∪ ψ = c₁(pt)^{s ψ(δ)}` when `deg E` is prime to `n`. -/
-def WeilCup (n : ℕ) [NeZero n] : Prop :=
-  1 ≤ genus (kbar k (FFClosure X)) (F (Kummer.baseChange (curveGaloisData k hτ))) →
+def WeilCupG [Finite (JT D n)]
+    (hW : Function.Bijective (weilDual (κ := kbar k Ω) (K := F (Kummer.baseChange D)) (n := n))) :
+    Prop :=
+  1 ≤ genus (kbar k Ω) (F (Kummer.baseChange D)) →
   ∃ s : ℤ, (s = 1 ∨ s = -1) ∧
-  ∀ (E : Divisor (kbar k (FFClosure X)) (F (Kummer.baseChange (curveGaloisData k hτ))))
-    (f : FFClosure X) (hf : IsArithRep (curveGaloisData k hτ) n E f),
-    (∀ h : (curveGaloisData k hτ).H, divMap (autF _ h) E = E) →
-    ∀ (δ : DeltaX (curveGaloisData k hτ))
-      (ψ : DeltaX (curveGaloisData k hτ) →* Multiplicative (ZMod n)) (hψ : IsLocallyConstant ψ),
-    cupClass (chiDelta hτ n δ) (isLocallyConstant_chiDelta hτ n δ) ψ hψ ^ E.deg =
-      resDelta (D := curveGaloisData k hτ) (n := n) hf.chern ^
-        (s * ((Multiplicative.toAdd (ψ δ)).val : ℤ))
+  ∀ (E : Divisor (kbar k Ω) (F (Kummer.baseChange D))) (f : Ω) (hf : IsArithRep D n E f),
+    (∀ h : D.H, divMap (autF _ h) E = E) →
+    ∀ (δ : DeltaX D) (ψ : DeltaX D →* Multiplicative (ZMod n)) (hψ : IsLocallyConstant ψ),
+    cupClass (chiDelta hW δ) (isLocallyConstant_chiDelta hW δ) ψ hψ ^ E.deg =
+      resDelta (D := D) (n := n) hf.chern ^ (s * ((Multiplicative.toAdd (ψ δ)).val : ℤ))
 
 end Statements
+
+/-! ### The Galois model of a curve -/
+
+section Curve
+
+variable {k : Type u} [Field k] [CharZero k] {X : Scheme.{u}} [X.Over (Spec (.of k))]
+  [IsCurveOver k X] [IsIntegral X] {τ : X.functionField} (hτ : Transcendental k τ)
+  [IsGalois (K₀ k (coordT τ)) (FFClosure X)]
+
+/-- **(★)** for the Galois model `curveGaloisData k hτ` of a curve (`ThetaPullbackG`). -/
+def ThetaPullback (n : ℕ) [NeZero n] : Prop :=
+  ThetaPullbackG (curveGaloisData k hτ) n (weilDual_bijective_baseChange k hτ)
+
+/-- **(P6)** for the Galois model `curveGaloisData k hτ` of a curve (`WeilCupG`). -/
+def WeilCup (n : ℕ) [NeZero n] : Prop :=
+  WeilCupG (curveGaloisData k hτ) n (weilDual_bijective_baseChange k hτ)
+
+end Curve
 
 end CurvesJacobian.LocAn.JacInput
