@@ -38,6 +38,7 @@ import CurvesJacobian.Cusp.CompletionCongr
 import CurvesJacobian.Cusp.CompletionSubgroup
 import CurvesJacobian.Cusp.ConjInducedCusps
 import CurvesJacobian.Cusp.Cor34Elliptic
+import CurvesJacobian.Cusp.Cor34EllipticN
 import CurvesJacobian.Cusp.Cor37b
 import CurvesJacobian.Cusp.Cor37bBelyi
 import CurvesJacobian.Cusp.Cor37c
@@ -190,6 +191,7 @@ import CurvesJacobian.Cusp.TorsionFree
 import CurvesJacobian.Cusp.TwistDGC
 import CurvesJacobian.Cusp.TwistGalois
 import CurvesJacobian.Cusp.WeierAutVE
+import CurvesJacobian.Cusp.WeierAutVNE
 import CurvesJacobian.CuspChar.Arith
 import CurvesJacobian.CuspChar.Assembly
 import CurvesJacobian.CuspChar.Centraliser
