@@ -99,6 +99,34 @@ theorem lam_cocycle (hper : ∀ j, g (j + n) = g j) (hβ : β ^ n = rho g n) (h�
     field_simp
 
 include hg hact in
+/-- `lam_cocycle` for an arbitrary multiplier: if `τ β = c τ · β`, the coboundary of `λ` is
+`(τ, τ') ↦ (c τ)^{m τ'}`. -/
+theorem lam_cocycle_of (hper : ∀ j, g (j + n) = g j) (hβ : β ^ n = rho g n) (hβ0 : β ≠ 0)
+    {c : G → Ω} (hβτ : ∀ τ : G, τ • β = c τ * β)
+    (hm : ∀ τ τ' : G, m τ + m τ' = m (τ * τ') ∨ m τ + m τ' = m (τ * τ') + n) (τ τ' : G) :
+    lam g m β τ * τ • lam g m β τ' / lam g m β (τ * τ') = c τ ^ m τ' := by
+  have hρ := rho_ne_zero hg
+  have hsβ : τ • β ^ m τ' = c τ ^ m τ' * β ^ m τ' := by
+    rw [smul_pow', hβτ, mul_pow]
+  have key : lam g m β τ * τ • lam g m β τ' =
+      c τ ^ m τ' * (β ^ (m τ + m τ') / rho g (m τ + m τ')) := by
+    simp only [lam]
+    rw [smul_div₀', hsβ, smul_rho hg hact, pow_add]
+    have := hρ (m τ)
+    have := hρ (m τ + m τ')
+    field_simp
+  have hl : lam g m β (τ * τ') ≠ 0 := div_ne_zero (pow_ne_zero _ hβ0) (hρ _)
+  rw [key, div_eq_iff hl]
+  congr 1
+  simp only [lam]
+  rcases hm τ τ' with h | h
+  · rw [h]
+  · rw [h, rho_add_n hper, pow_add, hβ]
+    have := hρ n
+    have := hρ (m (τ * τ'))
+    field_simp
+
+include hg hact in
 /-- **`τ F = F · λ_τ^n`**: `F` is a Kummer representative with roots `λ_τ`. -/
 theorem smul_normF (hper : ∀ j, g (j + n) = g j) (hβ : β ^ n = rho g n) (τ : G) :
     τ • normF n g = normF n g * lam g m β τ ^ n := by

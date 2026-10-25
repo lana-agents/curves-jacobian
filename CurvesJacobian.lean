@@ -225,6 +225,8 @@ import CurvesJacobian.Etale.KummerCohomology
 import CurvesJacobian.Etale.KummerCover
 import CurvesJacobian.FunctionField.CechGenus
 import CurvesJacobian.FunctionField.DivisorEval
+import CurvesJacobian.FunctionField.KummerCover
+import CurvesJacobian.FunctionField.KummerCoverEval
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
 import CurvesJacobian.FunctionField.OfSmooth
@@ -321,6 +323,9 @@ import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.ArithChern
 import CurvesJacobian.LocAn.ArithChernCurve
+import CurvesJacobian.LocAn.CupKummer
+import CurvesJacobian.LocAn.CupKummerCore
+import CurvesJacobian.LocAn.CupKummerLoc
 import CurvesJacobian.LocAn.DeltaXEquiv
 import CurvesJacobian.LocAn.DescentBase
 import CurvesJacobian.LocAn.DiffMap
