@@ -48,15 +48,6 @@ noncomputable section
 
 namespace CurvesJacobian.LocAn
 
-/-! ### `fundamentalGroupMap` as a base point change -/
-
-lemma fundamentalGroupMap_eq_fiberIsoMap_self {X Y : Scheme.{u}} {Ω : Type u} [Field Ω]
-    [IsSepClosed Ω] (f : Y ⟶ X) {q : Spec (.of Ω) ⟶ Y} {η : Spec (.of Ω) ⟶ X} (h : q ≫ f = η)
-    (σ : π₁ᵉᵗ(q)) : (fundamentalGroupMap f h σ : fiber η ≅ fiber η) = fiberIsoMap f h h σ := by
-  refine Iso.ext (NatTrans.ext (funext fun A ↦ FintypeCat.hom_ext _ _ fun z ↦ ?_))
-  rw [fundamentalGroupMap_apply, fiberAutMap_hom_app_apply]
-  rfl
-
 /-! ### The base-changed curve -/
 
 section BaseChange
@@ -141,7 +132,7 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
     intro σ
     have e : σ = γ.symm ≪≫ fiberIsoMap h.1.hom rfl rfl σ ≪≫ γ := by
       have := hγ σ
-      rw [Iso.conjAut_apply, fundamentalGroupMap_eq_fiberIsoMap_self] at this
+      rw [Iso.conjAut_apply, fundamentalGroupMap_eq_fiberIsoMap] at this
       exact this
     conv_rhs => rw [e]
     simp
@@ -156,7 +147,7 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
   let β : fiber (pt'.x ≫ h'.1.hom) ≅ fiber pt'.x := β₀ ≪≫ (τ₀ : fiber pt'.x ≅ fiber pt'.x).symm
   have hβ : fiberIsoMap (C.bcExt K').toSpec o1 pt'.over β = Iso.refl _ := by
     rw [fiberIsoMap_trans _ o1 pt'.over pt'.over, fiberIsoMap_symm,
-      ← fundamentalGroupMap_eq_fiberIsoMap_self, hτ₀, Iso.self_symm_id]
+      ← fundamentalGroupMap_eq_fiberIsoMap, hτ₀, Iso.self_symm_id]
   -- its image `c` in `π₁ᵉᵗ(U, pt)`
   have e1 : (pt'.x ≫ h'.1.hom) ≫ pr = pt.x ≫ h.1.hom := by
     rw [Category.assoc, hcomm, ← Category.assoc, hpt]
@@ -174,7 +165,7 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
       fiberIsoMap_refl]
   have hc : fundamentalGroupMap C.toSpec pt.over c = 1 := by
     change (fundamentalGroupMap C.toSpec pt.over c : _ ≅ _) = Iso.refl _
-    rw [fundamentalGroupMap_eq_fiberIsoMap_self, fiberIsoMap_trans _ pt.over
+    rw [fundamentalGroupMap_eq_fiberIsoMap, fiberIsoMap_trans _ pt.over
       (comp_over_of_kHom pt h.2) pt.over, fiberIsoMap_symm, hp, hP]
     simp
   -- `c` lies in `π₁ᵉᵗ(U')`
@@ -189,7 +180,7 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
     exact Subgroup.one_mem _
   obtain ⟨d, hd⟩ := hmem
   have hd' : fiberIsoMap pr hpt hpt d = c := by
-    rw [← fundamentalGroupMap_eq_fiberIsoMap_self]
+    rw [← fundamentalGroupMap_eq_fiberIsoMap]
     exact congrArg (fun g : π₁ᵉᵗ(pt.x) ↦ (g : fiber pt.x ≅ fiber pt.x)) hd
   -- `β`-conjugation after `h'_*` is conjugation by `d`
   have hinj := fundamentalGroupMap_injective_of_isFiniteEtale' pr pt'.x hpt
@@ -197,7 +188,7 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
       (β.symm ≪≫ fiberIsoMap h'.1.hom rfl rfl τ ≪≫ β : π₁ᵉᵗ(pt'.x)) = d.symm ≪≫ τ ≪≫ d := by
     intro τ
     apply hinj
-    rw [fundamentalGroupMap_eq_fiberIsoMap_self, fundamentalGroupMap_eq_fiberIsoMap_self,
+    rw [fundamentalGroupMap_eq_fiberIsoMap, fundamentalGroupMap_eq_fiberIsoMap,
       fiberIsoMap_trans _ hpt e1 hpt, fiberIsoMap_trans _ e1 e1 hpt, fiberIsoMap_symm,
       fiberIsoMap_trans _ hpt hpt hpt, fiberIsoMap_trans _ hpt hpt hpt, fiberIsoMap_symm, hd']
     have e2 : fiberIsoMap pr e1 e1 (fiberIsoMap h'.1.hom rfl rfl τ) =
@@ -220,21 +211,21 @@ theorem inducedBy_bcExt {C : HypCurve K} {pt : GeomPt Ω C} {pt' : GeomPt Ω (C.
       rw [map_one]
       change (fundamentalGroupMap (specAlgebraMap K K') hsK
         (fundamentalGroupMap (C.bcExt K').toSpec pt'.over d) : _ ≅ _) = Iso.refl _
-      rw [fundamentalGroupMap_eq_fiberIsoMap_self, fundamentalGroupMap_eq_fiberIsoMap_self,
+      rw [fundamentalGroupMap_eq_fiberIsoMap, fundamentalGroupMap_eq_fiberIsoMap,
         fiberIsoMap_fiberIsoMap (C.bcExt K').toSpec (specAlgebraMap K K') pt'.over pt'.over hsK hsK
           (by rw [← Category.assoc, pt'.over, hsK]) (by rw [← Category.assoc, pt'.over, hsK]),
         ← fiberIsoMap_congr (bcExtPr_toSpec K' C) (by rw [← Category.assoc, hpt, pt.over])
           (by rw [← Category.assoc, hpt, pt.over]),
         ← fiberIsoMap_fiberIsoMap pr C.toSpec hpt hpt pt.over pt.over, hd',
-        ← fundamentalGroupMap_eq_fiberIsoMap_self, hc]
+        ← fundamentalGroupMap_eq_fiberIsoMap, hc]
       rfl
     have : (fundamentalGroupMap (C.bcExt K').toSpec pt'.over d : _ ≅ _) = Iso.refl _ := by
       rw [hd1]
       rfl
-    rw [fundamentalGroupMap_eq_fiberIsoMap_self] at this
+    rw [fundamentalGroupMap_eq_fiberIsoMap] at this
     rw [this, Iso.refl_symm]
   · change τ = _
-    rw [Iso.conjAut_apply, fundamentalGroupMap_eq_fiberIsoMap_self]
+    rw [Iso.conjAut_apply, fundamentalGroupMap_eq_fiberIsoMap]
     have := key τ
     calc τ = (d : fiber pt'.x ≅ fiber pt'.x) ≪≫ (d.symm ≪≫ τ ≪≫ d) ≪≫ d.symm := by simp
       _ = _ := by

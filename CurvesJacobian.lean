@@ -351,6 +351,7 @@ import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.EqOfClosedPoints
 import CurvesJacobian.LocAn.ExistsAssembly
+import CurvesJacobian.LocAn.FiberIsoMapAPI
 import CurvesJacobian.LocAn.FixedPlaceOrder
 import CurvesJacobian.LocAn.GenusBaseChange
 import CurvesJacobian.LocAn.HypCurveBcExt
@@ -362,6 +363,7 @@ import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.ResDeltaGeneric
 import CurvesJacobian.LocAn.SectionBridge
 import CurvesJacobian.LocAn.SectionBridgeAut
+import CurvesJacobian.LocAn.SectionBridgeCusp
 import CurvesJacobian.LocAn.SectionBridgeDelta
 import CurvesJacobian.LocAn.SectionBridgePlace
 import CurvesJacobian.LocAn.SectionBridgeSpec

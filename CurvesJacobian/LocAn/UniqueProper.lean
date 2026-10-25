@@ -6,6 +6,7 @@ Authors: LANA Project
 import CurvesJacobian.Cusp.DGCArith
 import CurvesJacobian.LocAn.PadicSlim
 import CurvesJacobian.LocAn.ExistsAssembly
+import CurvesJacobian.LocAn.FiberIsoMapAPI
 
 /-!
 # Uniqueness in the rel-isom-DGC for proper curves: the formal reduction (MR7, S8 step R0)
@@ -26,10 +27,8 @@ over `K`)").
   `RelIsomDGC.Unique.uniqueProper`;
 * `HypCurve.KIso.refl`, `KIso.comp`, `KIso.symm` and `KIso.ext`;
 * paths: `isPathOverBase_iff` (`γ` lies over the base iff its image in the fibre functor of
-  `Spec k` is the identity), `FiniteEtale.fiberIsoMap_trans`, `fiberIsoMap_symm`,
-  `fiberIsoMap_refl`, `fiberIsoMap_congr`, `fiberIsoMap_fiberIsoMap` (base point changes along
-  a composite, via `pullbackFiberIso_comp` and `PreGaloisCategory.transportIso_transportIso`,
-  `transportIso_isoWhiskerRight`);
+  `Spec k` is the identity); the `fiberIsoMap` API (`fiberIsoMap_trans`, `fiberIsoMap_symm`,
+  `fiberIsoMap_fiberIsoMap`, …) is in `LocAn/FiberIsoMapAPI.lean`;
 * `InducedByHom.isConjInduced`, `InducedBy.isConjInduced`: forget the over-base condition;
 * **`InducedByHom.comp`**, `InducedBy.comp`: composition, with the composite path over the base;
   **`InducedBy.symm`**: the inverse of an isomorphism induced by `f` is induced by `f⁻¹`, with
@@ -55,119 +54,6 @@ open CategoryTheory Limits AlgebraicGeometry AlgebraicGeometry.FiniteEtale PreGa
   Belyi Belyi.Anabelian
 
 noncomputable section
-
-/-! ### Base point changes along compositions -/
-
-namespace CategoryTheory.PreGaloisCategory
-
-variable {C : Type*} [Category C] {D : Type*} [Category D] {E : Type*} [Category E]
-  {F F' : C ⥤ FintypeCat.{w}} {G G' : D ⥤ FintypeCat.{w}} {K K' : E ⥤ FintypeCat.{w}}
-
-set_option backward.isDefEq.respectTransparency false in
-/-- `transportIso` is unchanged when the functor `H` is replaced by an isomorphic one. -/
-lemma transportIso_isoWhiskerRight {H H' : D ⥤ C} (c : H' ≅ H) (e : H ⋙ F ≅ G)
-    (e' : H ⋙ F' ≅ G') (α : F ≅ F') :
-    transportIso (Functor.isoWhiskerRight c F ≪≫ e) (Functor.isoWhiskerRight c F' ≪≫ e') α =
-      transportIso e e' α := by
-  refine Iso.ext (NatTrans.ext (funext fun X ↦ ?_))
-  simp only [transportIso, Iso.trans_hom, Iso.symm_hom, Iso.trans_inv, NatTrans.comp_app,
-    Functor.isoWhiskerRight_inv, Functor.isoWhiskerRight_hom, Functor.whiskerRight_app,
-    Functor.isoWhiskerLeft_hom, Functor.whiskerLeft_app, Category.assoc]
-  rw [α.hom.naturality_assoc, ← F'.map_comp_assoc, Iso.inv_hom_id_app, F'.map_id,
-    Category.id_comp]
-
-/-- Transporting twice is transporting along the composite functor. -/
-lemma transportIso_transportIso (H₁ : D ⥤ C) (H₂ : E ⥤ D) (e : H₁ ⋙ F ≅ G)
-    (e' : H₁ ⋙ F' ≅ G') (d : H₂ ⋙ G ≅ K) (d' : H₂ ⋙ G' ≅ K') (α : F ≅ F') :
-    transportIso d d' (transportIso e e' α) =
-      transportIso (Functor.associator H₂ H₁ F ≪≫ Functor.isoWhiskerLeft H₂ e ≪≫ d)
-        (Functor.associator H₂ H₁ F' ≪≫ Functor.isoWhiskerLeft H₂ e' ≪≫ d') α := by
-  ext X
-  simp [transportIso]
-
-end CategoryTheory.PreGaloisCategory
-
-namespace AlgebraicGeometry.FiniteEtale
-
-variable {X Y W : Scheme.{u}} {Ω : Type u} [Field Ω]
-
-set_option backward.isDefEq.respectTransparency false in
-set_option backward.defeqAttrib.useBackward true in
-/-- `pullbackFiberIso` of a composite, componentwise. -/
-lemma pullbackFiberIso_comp_hom_app (f : Y ⟶ X) (g : X ⟶ W) {ξ₀ : Spec (.of Ω) ⟶ Y}
-    {η : Spec (.of Ω) ⟶ X} {ζ : Spec (.of Ω) ⟶ W} (h₁ : ξ₀ ≫ f = η) (h₂ : η ≫ g = ζ)
-    (h : ξ₀ ≫ f ≫ g = ζ) (A : FiniteEtale W) :
-    (fiber ξ₀).map ((MorphismProperty.Over.pullbackComp f g).hom.app A) ≫
-      (pullbackFiberIso f h₁).hom.app ((pullback g).obj A) ≫ (pullbackFiberIso g h₂).hom.app A =
-    (pullbackFiberIso (f ≫ g) h).hom.app A := by
-  have key : (pullback ξ₀).map ((MorphismProperty.Over.pullbackComp f g).hom.app A) ≫
-        (MorphismProperty.Over.pullbackComp ξ₀ f η h₁.symm).inv.app ((pullback g).obj A) ≫
-        (MorphismProperty.Over.pullbackComp η g ζ h₂.symm).inv.app A =
-      (MorphismProperty.Over.pullbackComp ξ₀ (f ≫ g) ζ h.symm).inv.app A := by
-    apply MorphismProperty.Over.Hom.ext
-    apply pullback.hom_ext <;> simp [FiniteEtale]
-  rw [pullbackFiberIso_hom_app (f ≫ g), ← key, pullbackFiberIso_hom_app f,
-    pullbackFiberIso_hom_app g]
-  simp only [fiber, Functor.comp_map, Functor.map_comp]
-
-set_option backward.isDefEq.respectTransparency false in
-/-- **`pullbackFiberIso` of a composite.** -/
-lemma pullbackFiberIso_comp (f : Y ⟶ X) (g : X ⟶ W) {ξ₀ : Spec (.of Ω) ⟶ Y}
-    {η : Spec (.of Ω) ⟶ X} {ζ : Spec (.of Ω) ⟶ W} (h₁ : ξ₀ ≫ f = η) (h₂ : η ≫ g = ζ)
-    (h : ξ₀ ≫ f ≫ g = ζ) :
-    pullbackFiberIso (f ≫ g) h =
-      Functor.isoWhiskerRight (MorphismProperty.Over.pullbackComp f g) (fiber ξ₀) ≪≫
-        Functor.associator _ _ _ ≪≫ Functor.isoWhiskerLeft (pullback g) (pullbackFiberIso f h₁) ≪≫
-        pullbackFiberIso g h₂ := by
-  refine Iso.ext (NatTrans.ext (funext fun A ↦ ?_))
-  rw [← pullbackFiberIso_comp_hom_app f g h₁ h₂ h A]
-  simp only [Iso.trans_hom, NatTrans.comp_app, Functor.isoWhiskerRight_hom,
-    Functor.whiskerRight_app, Functor.associator_hom_app, Functor.isoWhiskerLeft_hom,
-    Functor.whiskerLeft_app]
-  rfl
-
-/-- Base point changes compose. -/
-lemma fiberIsoMap_trans (f : Y ⟶ X) {x x' x'' : Spec (.of Ω) ⟶ Y}
-    {η η' η'' : Spec (.of Ω) ⟶ X} (h : x ≫ f = η) (h' : x' ≫ f = η') (h'' : x'' ≫ f = η'')
-    (α : fiber x ≅ fiber x') (β : fiber x' ≅ fiber x'') :
-    fiberIsoMap f h h'' (α ≪≫ β) = fiberIsoMap f h h' α ≪≫ fiberIsoMap f h' h'' β := by
-  ext : 2
-  simp [fiberIsoMap, transportIso]
-
-/-- Base point changes commute with inverses. -/
-lemma fiberIsoMap_symm (f : Y ⟶ X) {x x' : Spec (.of Ω) ⟶ Y} {η η' : Spec (.of Ω) ⟶ X}
-    (h : x ≫ f = η) (h' : x' ≫ f = η') (α : fiber x ≅ fiber x') :
-    fiberIsoMap f h' h α.symm = (fiberIsoMap f h h' α).symm := by
-  ext : 2
-  simp [fiberIsoMap, transportIso]
-
-/-- The trivial base point change maps to the trivial one. -/
-lemma fiberIsoMap_refl (f : Y ⟶ X) {x : Spec (.of Ω) ⟶ Y} {η : Spec (.of Ω) ⟶ X}
-    (h : x ≫ f = η) : fiberIsoMap f h h (Iso.refl (fiber x)) = Iso.refl _ := by
-  ext : 2
-  simp [fiberIsoMap, transportIso]
-
-/-- `fiberIsoMap` only depends on the morphism, not on the proofs of the base point equations. -/
-lemma fiberIsoMap_congr {f f' : Y ⟶ X} (e : f = f') {x x' : Spec (.of Ω) ⟶ Y}
-    {η η' : Spec (.of Ω) ⟶ X} (h : x ≫ f = η) (h' : x' ≫ f = η') (k : x ≫ f' = η)
-    (k' : x' ≫ f' = η') (α : fiber x ≅ fiber x') :
-    fiberIsoMap f h h' α = fiberIsoMap f' k k' α := by
-  subst e
-  rfl
-
-set_option backward.isDefEq.respectTransparency false in
-/-- **Base point changes along a composite**: pushing forward along `f` and then along `g` is
-pushing forward along `f ≫ g`. -/
-lemma fiberIsoMap_fiberIsoMap (f : Y ⟶ X) (g : X ⟶ W) {x x' : Spec (.of Ω) ⟶ Y}
-    {ξ₀ ξ₀' : Spec (.of Ω) ⟶ X} {η η' : Spec (.of Ω) ⟶ W} (h : x ≫ f = ξ₀) (h' : x' ≫ f = ξ₀')
-    (k : ξ₀ ≫ g = η) (k' : ξ₀' ≫ g = η') (hk : x ≫ f ≫ g = η) (hk' : x' ≫ f ≫ g = η')
-    (α : fiber x ≅ fiber x') :
-    fiberIsoMap g k k' (fiberIsoMap f h h' α) = fiberIsoMap (f ≫ g) hk hk' α := by
-  simp only [fiberIsoMap]
-  rw [pullbackFiberIso_comp f g h k hk, pullbackFiberIso_comp f g h' k' hk',
-    transportIso_isoWhiskerRight, transportIso_transportIso]
-
-end AlgebraicGeometry.FiniteEtale
 
 /-! ### `k`-isomorphisms and paths over the base -/
 

@@ -87,8 +87,8 @@ theorem conjData_of_iso_fiber [ConnectedSpace X] {φ : X ⟶ X} {sX : X ⟶ S} (
   refine ⟨D.symm ≪≫ γ ≪≫ δ, fun σ' ↦ ?_, ?_⟩
   · have hφσ : ((fundamentalGroupMap φ rfl (δ ≪≫ σ' ≪≫ δ.symm : π₁ᵉᵗ(ξ₀))) : _ ≅ _) =
         D ≪≫ fiberIsoMap φ rfl rfl σ' ≪≫ D.symm := by
-      rw [fundamentalGroupMap_eq_fiberIsoMap, fiberIsoMap_trans' φ rfl rfl rfl,
-        fiberIsoMap_trans' φ rfl rfl rfl, fiberIsoMap_symm' φ rfl rfl]
+      rw [fundamentalGroupMap_eq_fiberIsoMap, fiberIsoMap_trans φ rfl rfl rfl,
+        fiberIsoMap_trans φ rfl rfl rfl, fiberIsoMap_symm φ rfl rfl]
     have e : γ.symm ≪≫ (D ≪≫ fiberIsoMap φ rfl rfl σ' ≪≫ D.symm) ≪≫ γ =
         δ ≪≫ σ' ≪≫ δ.symm := by
       have := hγ (δ ≪≫ σ' ≪≫ δ.symm : π₁ᵉᵗ(ξ₀))
@@ -102,9 +102,9 @@ theorem conjData_of_iso_fiber [ConnectedSpace X] {φ : X ⟶ X} {sX : X ⟶ S} (
       _ = _ := by simp only [Iso.trans_symm, Iso.symm_symm_eq, Iso.trans_assoc]
   · have c1 : ξ₀ ≫ φ ≫ sX = ζ := by rw [hφ]; exact h₂
     have c2 : η ≫ φ ≫ sX = η ≫ sX := by rw [hφ]
-    rw [fiberIsoMap_trans' sX k₁ h₁ rfl, fiberIsoMap_trans' sX h₁ h₂ rfl, hγb, Iso.refl_trans,
-      fiberIsoMap_symm' sX h₁ k₁, hD, fiberIsoMap_fiberIsoMap' φ sX rfl rfl h₁ k₁ c1 c2,
-      fiberIsoMap_congr' hφ c1 c2 h₂ rfl, Iso.symm_self_id]
+    rw [fiberIsoMap_trans sX k₁ h₁ rfl, fiberIsoMap_trans sX h₁ h₂ rfl, hγb, Iso.refl_trans,
+      fiberIsoMap_symm sX h₁ k₁, hD, fiberIsoMap_fiberIsoMap φ sX rfl rfl h₁ k₁ c1 c2,
+      fiberIsoMap_congr hφ c1 c2 h₂ rfl, Iso.symm_self_id]
 
 end Transport
 
