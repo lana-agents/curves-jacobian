@@ -134,6 +134,7 @@ import CurvesJacobian.Cusp.HemiArith
 import CurvesJacobian.Cusp.HemiConstExt
 import CurvesJacobian.Cusp.HemiConstRing
 import CurvesJacobian.Cusp.HemiInvolutionGen
+import CurvesJacobian.Cusp.HemiModelTwist
 import CurvesJacobian.Cusp.HemiPi1
 import CurvesJacobian.Cusp.HemiPuncturedConst
 import CurvesJacobian.Cusp.HemiPuncturedN
