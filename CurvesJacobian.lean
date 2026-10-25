@@ -362,6 +362,7 @@ import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.LocAn.ThmCUnitCoord
 import CurvesJacobian.LocAn.ThmCUnits
 import CurvesJacobian.LocAn.TransportH2
+import CurvesJacobian.LocAn.UniqueProper
 import CurvesJacobian.LocAn.UniqueReduction
 import CurvesJacobian.LocAn.WeilCupProof
 import CurvesJacobian.LocAn.WeilCupTransport
