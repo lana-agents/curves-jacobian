@@ -531,6 +531,7 @@ import CurvesJacobian.Picard.SmoothLift
 import CurvesJacobian.Picard.TangentAlg
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TensorSections
+import CurvesJacobian.Picard.ThetaFitting
 import CurvesJacobian.Picard.TranslateRep
 import CurvesJacobian.Picard.TranslateRestrict
 import CurvesJacobian.Picard.TwistCech
