@@ -350,6 +350,7 @@ import CurvesJacobian.LocAn.SemiAb
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.TPrimeAssembly
 import CurvesJacobian.LocAn.TPrimeCurve
+import CurvesJacobian.LocAn.TPrimeModels
 import CurvesJacobian.LocAn.ThetaClass
 import CurvesJacobian.LocAn.ThetaPullback
 import CurvesJacobian.LocAn.ThmC
