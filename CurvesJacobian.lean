@@ -330,6 +330,7 @@ import CurvesJacobian.LocAn.CupKummerCore
 import CurvesJacobian.LocAn.CupKummerLoc
 import CurvesJacobian.LocAn.DeltaXEquiv
 import CurvesJacobian.LocAn.DescentBase
+import CurvesJacobian.LocAn.DescentParts
 import CurvesJacobian.LocAn.DiffMap
 import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.EqOfClosedPoints
