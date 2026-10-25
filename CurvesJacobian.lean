@@ -406,6 +406,7 @@ import CurvesJacobian.Picard.ChartBaseChange
 import CurvesJacobian.Picard.ChartCoord
 import CurvesJacobian.Picard.ChartDescent
 import CurvesJacobian.Picard.ChartFibre
+import CurvesJacobian.Picard.ChartH1
 import CurvesJacobian.Picard.ChartMatrix
 import CurvesJacobian.Picard.ChartSheaf
 import CurvesJacobian.Picard.ChartTwist
@@ -425,6 +426,7 @@ import CurvesJacobian.Picard.EulerCharDivisor
 import CurvesJacobian.Picard.EulerCharTwist
 import CurvesJacobian.Picard.FibreFlat
 import CurvesJacobian.Picard.FinrankFibre
+import CurvesJacobian.Picard.FittingLocal
 import CurvesJacobian.Picard.FlatAlgebra
 import CurvesJacobian.Picard.GaloisPoints
 import CurvesJacobian.Picard.GroupEtale
@@ -452,6 +454,7 @@ import CurvesJacobian.Picard.JacobianDescentField
 import CurvesJacobian.Picard.JacobianField
 import CurvesJacobian.Picard.JacobianFinite
 import CurvesJacobian.Picard.JacobianGalois
+import CurvesJacobian.Picard.JacobianIntegral
 import CurvesJacobian.Picard.JacobianK
 import CurvesJacobian.Picard.JacobianKProps
 import CurvesJacobian.Picard.JacobianPoints
@@ -536,7 +539,10 @@ import CurvesJacobian.Picard.SmoothLift
 import CurvesJacobian.Picard.TangentAlg
 import CurvesJacobian.Picard.Tensor
 import CurvesJacobian.Picard.TensorSections
+import CurvesJacobian.Picard.ThetaFamily
 import CurvesJacobian.Picard.ThetaFitting
+import CurvesJacobian.Picard.ThetaGalois
+import CurvesJacobian.Picard.ThetaGoodPoint
 import CurvesJacobian.Picard.TranslateRep
 import CurvesJacobian.Picard.TranslateRestrict
 import CurvesJacobian.Picard.TwistCech
