@@ -105,7 +105,9 @@ theorem mem_iff_of_cuspInertia_conj [Fact (1 < n)] [Fintype (CuspPl D X eL hH U)
     refine (Subgroup.closure_le _).2 ?_
     rintro _ ⟨σ, hσ, rfl⟩
     refine mem_kerSub_iff.2 ⟨OpenSubgroup.mem_top _, ?_⟩
-    rw [he, ξv_kumMap, kc_eq_one_of_dvd D n hWP' hσ _ hdiv', map_one, toAdd_one]
+    rw [he]
+    change ξv _ (kumMap D X eL hk hH hτ n hU v).1 (qU D X eL hH σ) = 0
+    rw [ξv_kumMap, kc_eq_one_of_dvd D n hWP' hσ _ hdiv', map_one, toAdd_one]
   -- the tame generator at `c`
   obtain ⟨hWc, -⟩ := (exists_tame D n c.1).choose_spec
   have hspec := (exists_tame D n c.1).choose_spec.2.choose_spec.2.choose_spec
@@ -125,7 +127,8 @@ theorem mem_iff_of_cuspInertia_conj [Fact (1 < n)] [Fintype (CuspPl D X eL hH U)
     rw [hγ]
     exact ⟨y, hy, rfl⟩
   have h0 := (mem_kerSub_iff.1 (hker hy')).2
-  rw [ξv_conj_of_mem n _ _ (OpenSubgroup.mem_top γ) (OpenSubgroup.mem_top y)] at h0
+  replace h0 : ξv _ e.1 y = 0 := (ξv_conj_of_mem (G := PiU D X eL U) n _ e.1
+    (OpenSubgroup.mem_top γ) (OpenSubgroup.mem_top y)).symm.trans h0
   have h1 : ξv _ e.1 (qU D X eL hH (tameGen D X eL hH U n c)) = 1 := by
     have := congrFun hv c
     rw [← he] at this
@@ -133,8 +136,9 @@ theorem mem_iff_of_cuspInertia_conj [Fact (1 < n)] [Fintype (CuspPl D X eL hH U)
     rw [ha1] at this
     exact this
   rw [← hyx] at h1
-  change ξv _ e.1 (γ₁ * y * γ₁⁻¹) = 1 at h1
-  rw [ξv_conj_of_mem n _ _ (OpenSubgroup.mem_top γ₁) (OpenSubgroup.mem_top y), h0] at h1
+  replace h1 : ξv _ e.1 y = 1 := (ξv_conj_of_mem (G := PiU D X eL U) n _ e.1
+    (OpenSubgroup.mem_top γ₁) (OpenSubgroup.mem_top y)).symm.trans h1
+  rw [h0] at h1
   exact zero_ne_one h1
 
 section Count

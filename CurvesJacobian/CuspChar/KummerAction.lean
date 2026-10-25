@@ -119,8 +119,8 @@ lemma kc_conjH (v : (F D)ˣ) (σ : D.H) :
     (by rw [hconj]; exact galF_smul_mu D n _)]
   exact congrArg (fun z : Mu n Ω ↦ φ ((Mu.val z : Ωˣ) : Ω)) (evalTriv_congr' hconj _ _ _)
 
-variable (Ψ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
-    π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+variable (Ψ : PiU D X eL U ≃ₜ*
+    PiU D X eL U)
   (hΨ : ∀ σ, Ψ (qU D X eL hH σ) = qU D X eL hH (conjH D φ hφF' σ))
   (χ : (ZMod n)ˣ)
   (hχ : ∀ ζ : Mu n Ω, φ ((Mu.val ζ : Ωˣ) : Ω) = ((Mu.val ζ : Ωˣ) : Ω) ^ (χ : ZMod n).val)
@@ -163,7 +163,7 @@ def phiInvKum (v : kumU D X eL U n) : kumU D X eL U n :=
       ((mem_kumU D X eL U n).1 v.2))⟩
 
 lemma mapOpenSub_top' :
-    mapOpenSub Ψ (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) = ⊤ := by
+    mapOpenSub Ψ (⊤ : OpenSubgroup (PiU D X eL U)) = ⊤ := by
   ext y
   obtain ⟨x, rfl⟩ := Ψ.surjective y
   exact iff_of_true (mem_mapOpenSub.2 (OpenSubgroup.mem_top x)) (OpenSubgroup.mem_top _)
@@ -228,7 +228,7 @@ lemma ord_phiInv (c : CuspPl D X eL hH U) (x : F D) :
 include hk hτ hU hΨ hχ hcusp hφk in
 /-- **The residue map is `χ`-equivariant** when `φ` fixes the cusps. -/
 theorem resMap_pull
-    (a : charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))) :
+    (a : charSpace n (⊤ : OpenSubgroup (PiU D X eL U))) :
     resMap D X eL hH n (pullΨ D X eL n Ψ a) = (χ : ZMod n) • resMap D X eL hH n a := by
   revert a
   refine (kumMap_surjective D X eL hk hH hτ n hU).forall.2 fun v ↦ ?_

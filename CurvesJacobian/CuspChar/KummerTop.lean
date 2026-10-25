@@ -124,6 +124,29 @@ variable {k Ω : Type u} [Field k] [Field Ω] [Algebra k Ω] {t : Ω} (D : Galoi
   (hH : D.H ≤ D.HL) {τ : X.functionField} (hτ : ((eL τ : D.L) : Ω) = t)
   (U : X.Opens) [Nonempty U] (n : ℕ) [NeZero n]
 
+/-- `π₁ᵉᵗ(U)` at the geometric generic point `Spec Ω → U`, as a named type. Its group and
+topology instances are named constants, which keeps the instance terms in the types of the
+characters `Hom_cont(π₁ᵉᵗ(U), ℤ/n)` small (the unfolded instances of the automorphism group of
+the fibre functor are large, and olean serialization of the Kummer and weight files was slow). -/
+def PiU := π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)
+
+instance : Group (PiU D X eL U) := inferInstanceAs (Group π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
+instance : TopologicalSpace (PiU D X eL U) :=
+  inferInstanceAs (TopologicalSpace π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
+instance : IsTopologicalGroup (PiU D X eL U) :=
+  inferInstanceAs (IsTopologicalGroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
+instance : CompactSpace (PiU D X eL U) :=
+  inferInstanceAs (CompactSpace π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
+instance : T2Space (PiU D X eL U) :=
+  inferInstanceAs (T2Space π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
+instance : TotallyDisconnectedSpace (PiU D X eL U) :=
+  inferInstanceAs (TotallyDisconnectedSpace π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+
 attribute [local instance] isFunctionField_F
 
 /-- The Kummer character `H → μ_n` of `v ∈ F^×`: `σ ↦ σ(α)/α` for `αⁿ = v`. -/
@@ -197,7 +220,7 @@ lemma kernel_SU_le_ker_kc {v : (F D)ˣ} (hv : UnramU D X eL U n v) :
 variable {U} (hU : (U : Set X)ᶜ.Finite)
 
 /-- The Galois action `q : H → π₁ᵉᵗ(U)` at the geometric generic point. -/
-abbrev qU : D.H →* π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) :=
+abbrev qU : D.H →* PiU D X eL U :=
   D.chartHom hH (genericL D X eL U)
 
 include hk hτ hU in
@@ -211,7 +234,7 @@ lemma ker_qU : (qU D X eL hH (U := U)).ker = GaloisPi1.kernel D.H (SU D X eL U) 
 include hk hτ hU in
 /-- Characters of `π₁ᵉᵗ(U)` are determined by their values on the image of `H`. -/
 lemma charSpace_ext_qU
-    {e₁ e₂ : charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))}
+    {e₁ e₂ : charSpace n (⊤ : OpenSubgroup (PiU D X eL U))}
     (h : ∀ σ : D.H, ξv _ e₁.1 (qU D X eL hH σ) = ξv _ e₂.1 (qU D X eL hH σ)) : e₁ = e₂ := by
   apply charSpace_ext
   intro x
@@ -232,7 +255,7 @@ lemma unramU_of_ker {v : (F D)ˣ} (h : ∀ σ, qU D X eL hH (U := U) σ = 1 → 
 
 /-- The Kummer character of `v` unramified over `U`, as a character of `π₁ᵉᵗ(U)`. -/
 def kcU (v : (F D)ˣ) (hv : UnramU D X eL U n v) :
-    π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) →* Mu n Ω :=
+    PiU D X eL U →* Mu n Ω :=
   (QuotientGroup.lift (qU D X eL hH (U := U)).ker (kc D n v) (by
       rw [ker_qU D X eL hk hH hτ hU]
       exact kernel_SU_le_ker_kc D X eL U n hv)).comp
@@ -248,7 +271,7 @@ lemma kcU_qU (v : (F D)ˣ) (hv : UnramU D X eL U n v) (σ : D.H) :
 
 /-- The Kummer character of `v`, with values in `ℤ/n`. -/
 def kumChar (v : (F D)ˣ) (hv : UnramU D X eL U n v) :
-    π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) →* Multiplicative (ZMod n) :=
+    PiU D X eL U →* Multiplicative (ZMod n) :=
   (logMu n Ω).toMonoidHom.comp (kcU D X eL hk hH hτ n hU v hv)
 
 lemma kumChar_qU (v : (F D)ˣ) (hv : UnramU D X eL U n v) (σ : D.H) :
@@ -257,7 +280,7 @@ lemma kumChar_qU (v : (F D)ˣ) (hv : UnramU D X eL U n v) (σ : D.H) :
 
 lemma isOpen_ker_kumChar (v : (F D)ˣ) (hv : UnramU D X eL U n v) :
     IsOpen ((kumChar D X eL hk hH hτ n hU v hv).ker :
-      Set π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) := by
+      Set (PiU D X eL U)) := by
   haveI : CompactSpace D.H := GaloisPi1.compactSpace_of_isClosed _ D.isClosed_H
   have hker : (kumChar D X eL hk hH hτ n hU v hv).ker = (kc D n v).ker.map (qU D X eL hH) := by
     ext x
@@ -280,8 +303,8 @@ lemma isOpen_ker_kumChar (v : (F D)ˣ) (hv : UnramU D X eL U n v) :
 
 /-- The character `kumChar v` as an element of `Hom_cont(π₁ᵉᵗ(U), ℤ/n)`. -/
 def kumMapFun (v : (F D)ˣ) (hv : UnramU D X eL U n v) :
-    charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) :=
-  (charSpaceTopEquiv (D := π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) n).symm
+    charSpace n (⊤ : OpenSubgroup (PiU D X eL U)) :=
+  (charSpaceTopEquiv (D := (PiU D X eL U)) n).symm
     ⟨kumChar D X eL hk hH hτ n hU v hv, isOpen_ker_kumChar D X eL hk hH hτ n hU v hv⟩
 
 lemma ξv_kumMapFun (v : (F D)ˣ) (hv : UnramU D X eL U n v) (σ : D.H) :
@@ -291,7 +314,7 @@ lemma ξv_kumMapFun (v : (F D)ˣ) (hv : UnramU D X eL U n v) (σ : D.H) :
 
 /-- **The Kummer map** `{v ∈ F^× unramified over U} → Hom_cont(π₁ᵉᵗ(U), ℤ/n)`. -/
 def kumMap : kumU D X eL U n →+
-    charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) :=
+    charSpace n (⊤ : OpenSubgroup (PiU D X eL U)) :=
   AddMonoidHom.mk' (fun v ↦ kumMapFun D X eL hk hH hτ n hU (Additive.toMul v.1)
       ((mem_kumU D X eL U n).1 v.2)) fun v w ↦ by
     refine charSpace_ext_qU D X eL hk hH hτ n hU fun σ ↦ ?_
@@ -355,7 +378,7 @@ set_option maxHeartbeats 800000 in
 -- unifying the instance paths on the subfields `F D`, `K₀ k t` of the Galois model is slow
 /-- **The Kummer map is onto** (Kummer theory and Hilbert 90 for `Ω/F`). -/
 theorem kumMap_surjective : Function.Surjective (kumMap D X eL hk hH hτ n hU) := by
-  refine ((charSpaceTopEquiv (D := π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+  refine ((charSpaceTopEquiv (D := (PiU D X eL U))
     n).symm.surjective).forall.2 fun φ0 ↦ ?_
   haveI : CompactSpace D.H := GaloisPi1.compactSpace_of_isClosed _ D.isClosed_H
   obtain ⟨f, hfdef⟩ : ∃ f : D.H →* Mu n Ω,
@@ -390,7 +413,7 @@ theorem kumMap_eq_zero_iff (v : kumU D X eL U n) :
     have h1 := ξv_kumMap D X eL hk hH hτ n hU v σ
     have h0 : ξv _ (kumMap D X eL hk hH hτ n hU v).1 (qU D X eL hH σ) = 0 := by
       have e := congrArg (fun c : charSpace n
-        (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) ↦
+        (⊤ : OpenSubgroup (PiU D X eL U)) ↦
           ξv _ c.1 (qU D X eL hH σ)) h
       exact e.trans (ξv_zero' _ _)
     simp only [h0] at h1

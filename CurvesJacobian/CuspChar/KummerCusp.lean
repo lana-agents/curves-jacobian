@@ -257,7 +257,7 @@ variable (hU : (U : Set X)ᶜ.Finite)
 
 /-- **The residue map** `Hom_cont(π₁ᵉᵗ(U), ℤ/n) → (ℤ/n)^{cusps}`: evaluation at the tame
 generators of the cuspidal inertia groups. -/
-def resMap : charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) →ₗ[ZMod n]
+def resMap : charSpace n (⊤ : OpenSubgroup (PiU D X eL U)) →ₗ[ZMod n]
     (CuspPl D X eL hH U → ZMod n) where
   toFun e0 c := ξv _ e0.1 (qU D X eL hH (tameGen D X eL hH U n c))
   map_add' e0 η := by
@@ -328,7 +328,7 @@ theorem sum_ord_cusps_eq_zero (v : (F D)ˣ)
 include hk hτ hU in
 /-- The residues of a continuous character sum to zero. -/
 theorem resMap_mem_sumZero
-    (e0 : charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))) :
+    (e0 : charSpace n (⊤ : OpenSubgroup (PiU D X eL U))) :
     resMap D X eL hH n e0 ∈ sumZero D X eL hH n := by
   obtain ⟨v, rfl⟩ := kumMap_surjective D X eL hk hH hτ n hU e0
   change ∑ c, resMap D X eL hH n (kumMap D X eL hk hH hτ n hU v) c = 0

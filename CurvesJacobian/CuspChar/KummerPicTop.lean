@@ -53,7 +53,7 @@ lemma kummerClasses_le_kumU : kummerClasses k (F D) n ≤ kumU D X eL U n := by
 
 /-- The Kummer map on Kummer classes. -/
 def jHom : kummerClasses k (F D) n →+
-    charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) :=
+    charSpace n (⊤ : OpenSubgroup (PiU D X eL U)) :=
   (kumMap D X eL hk hH hτ n hU).comp
     (AddSubgroup.inclusion (kummerClasses_le_kumU D X eL hH n))
 
@@ -83,7 +83,7 @@ lemma kummerTrivial_le_ker_jHom :
 
 /-- **The Kummer characters of the `n`-torsion divisor classes.** -/
 def picChar : picTorsion k (F D) n →+
-    charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U)) :=
+    charSpace n (⊤ : OpenSubgroup (PiU D X eL U)) :=
   (QuotientAddGroup.lift _ (jHom D X eL hk hH hτ n hU)
     (kummerTrivial_le_ker_jHom D X eL hk hH hτ n hU)).comp
     (picTorsionEquiv (Nat.pos_of_ne_zero (NeZero.ne n))).symm.toAddMonoidHom
@@ -158,7 +158,7 @@ def picEquivKer : picTorsion k (F D) n ≃+ LinearMap.ker (resMap D X eL hH n (U
 lemma coe_picEquivKer (x : picTorsion k (F D) n) :
     ((picEquivKer D X eL hk hH hτ n hU x :
       LinearMap.ker (resMap D X eL hH n (U := U))) :
-        charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))) =
+        charSpace n (⊤ : OpenSubgroup (PiU D X eL U))) =
       picChar D X eL hk hH hτ n hU x :=
   rfl
 

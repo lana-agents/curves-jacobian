@@ -172,8 +172,8 @@ variable (φ : Ω ≃+* Ω) (hφF : ∀ x : F D, φ (x : Ω) ∈ F D)
   (hφF' : ∀ x : F D, φ.symm (x : Ω) ∈ F D)
   (hφk : ∀ c : k, φ (algebraMap k Ω c) ∈ Set.range (algebraMap k Ω) ∧
     φ.symm (algebraMap k Ω c) ∈ Set.range (algebraMap k Ω))
-  (Ψ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
-    π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+  (Ψ : PiU D X eL U ≃ₜ*
+    PiU D X eL U)
   (hΨ : ∀ σ, Ψ (qU D X eL hH σ) = qU D X eL hH (conjH D φ hφF' σ))
   (χ : (ZMod n)ˣ)
   (hχ : ∀ ζ : Mu n Ω, φ ((Mu.val ζ : Ωˣ) : Ω) = ((Mu.val ζ : Ωˣ) : Ω) ^ (χ : ZMod n).val)
@@ -193,7 +193,7 @@ lemma wlog_phiInv (x y : picTorsion k (F D) n) :
 
 /-- The module of characters. -/
 abbrev Mch (U' : X.Opens) [Nonempty U'] :=
-  charSpace n (⊤ : OpenSubgroup π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U'))
+  charSpace n (⊤ : OpenSubgroup (PiU D X eL U'))
 
 /-- The kernel of the residue map. -/
 abbrev Aker (U' : X.Opens) [Nonempty U'] : Submodule (ZMod n) (Mch D X eL n U') :=

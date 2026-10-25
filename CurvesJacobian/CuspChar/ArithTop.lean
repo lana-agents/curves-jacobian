@@ -189,7 +189,7 @@ lemma nonempty_cuspPl (hr : 0 < Nat.card ((U : Set X)ᶜ : Set X)) :
 
 include hhyp in
 /-- `Hom_cont(π₁ᵉᵗ(U), ℤ/n)` is free of rank `2g + r - 1`. -/
-lemma charSpace_facts (Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
+lemma charSpace_facts (Θ : PiU D X eL U ≃ₜ*
       Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat (Nat.card ((U : Set X)ᶜ : Set X)))
     (hr : 0 < Nat.card ((U : Set X)ᶜ : Set X)) [Fact (1 < n)] :
     Module.Free (ZMod n) (Mch D X eL n U) ∧ Module.Finite (ZMod n) (Mch D X eL n U) ∧
@@ -212,7 +212,7 @@ include hk hτ hU hhyp in
 /-- **`r(⊤)` is the number of punctures**: the cusp classes of `π₁ᵉᵗ(U)` are the cusps of `F`
 (`cuspCount_cusps_eq`, separation by `mem_iff_of_cuspInertia_conj_hyp`), and there are
 `|X ∖ U|` of them (`card_cuspPl_eq` at `n = 3`). -/
-theorem cuspCount_cusps_top (Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
+theorem cuspCount_cusps_top (Θ : PiU D X eL U ≃ₜ*
       Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat (Nat.card ((U : Set X)ᶜ : Set X)))
     (hr : 0 < Nat.card ((U : Set X)ᶜ : Set X)) :
     cuspCount (Cusp.cusps D X eL hH U) ⊤ = Nat.card ((U : Set X)ᶜ : Set X) := by
@@ -231,15 +231,15 @@ theorem cuspCount_cusps_top (Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X 
 include hk hτ hU hhyp in
 /-- **The weight identity on `π₁ᵉᵗ(U)`** in the form `det(Ψ^*)² = χ^{2g + 2(r − 1)}`, `r = |X ∖ U|`
 (`det_pull_sq` with the rank from `π₁ᵉᵗ(U) ≃ Π̂_{g,r}` and `#Pic(F)[n] = n^{2g}`). -/
-theorem det_pull_sq_of_equiv (Θ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
+theorem det_pull_sq_of_equiv (Θ : PiU D X eL U ≃ₜ*
       Pi1.ProfiniteSurfaceGroup (curveGenus k X).toNat (Nat.card ((U : Set X)ᶜ : Set X)))
     (hr : 0 < Nat.card ((U : Set X)ᶜ : Set X)) [Fact (1 < n)] (hl : IsLocalRing (ZMod n))
     (φ : Ω ≃+* Ω) (hφF : ∀ x : F D, φ (x : Ω) ∈ F D)
     (hφF' : ∀ x : F D, φ.symm (x : Ω) ∈ F D)
     (hφk : ∀ c : k, φ (algebraMap k Ω c) ∈ Set.range (algebraMap k Ω) ∧
       φ.symm (algebraMap k Ω c) ∈ Set.range (algebraMap k Ω))
-    (Ψ : π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U) ≃ₜ*
-      π₁ᵉᵗ(specPoint D.L Ω ≫ genericL D X eL U))
+    (Ψ : PiU D X eL U ≃ₜ*
+      PiU D X eL U)
     (hΨ : ∀ σ, Ψ (qU D X eL hH σ) = qU D X eL hH (conjH D φ hφF' σ))
     (χ : (ZMod n)ˣ)
     (hχ : ∀ ζ : Mu n Ω, φ ((Mu.val ζ : Ωˣ) : Ω) = ((Mu.val ζ : Ωˣ) : Ω) ^ (χ : ZMod n).val)
