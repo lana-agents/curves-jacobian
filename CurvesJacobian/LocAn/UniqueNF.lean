@@ -5,9 +5,10 @@ Authors: LANA Project
 -/
 import CurvesJacobian.LocAn.UniqueProperNF
 import CurvesJacobian.Cusp.FillAutUnique
+import CurvesJacobian.Cusp.ArithmeticPadic
 
 /-!
-# The uniqueness half of the rel-isom-DGC over number fields (MR7, S2 + S8)
+# The uniqueness half of the rel-isom-DGC over number fields and `p`-adic fields (MR7, S2 + S8)
 
 * `CurvesJacobian.LocAn.innerRigidProper_of_innerRigid`: inner rigidity of an affine hyperbolic
   curve in MR8's arithmetic model (`InnerRigid`, at `basePoint ≫ baseChangeSpec` of
@@ -18,7 +19,10 @@ import CurvesJacobian.Cusp.FillAutUnique
   number field is inner rigid (affine: `innerRigid`; proper: `innerRigidProper_numberField`);
 * **`CurvesJacobian.LocAn.relIsomDGC_unique_numberField`**: `RelIsomDGC.Unique K` for every
   number field `K`, in the whitelist form (`Belyi.Anabelian.RelIsomDGC.Unique`, [AbsTopI]
-  Def 4.6 (ii), uniqueness half of [LocAn] Theorem A), unconditionally.
+  Def 4.6 (ii), uniqueness half of [LocAn] Theorem A), unconditionally;
+* **`CurvesJacobian.LocAn.innerRigidProper_padic_all`**, **`relIsomDGC_unique_padic`**: the same
+  over every finite extension of `ℚ_p` (affine: `innerRigid` with `isSlimGk_padic`; proper:
+  `innerRigidProper_padic`, `LocAn/UniqueProperMLF.lean`).
 -/
 
 universe u
@@ -30,7 +34,7 @@ noncomputable section
 
 namespace CurvesJacobian.LocAn
 
-variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω]
 
 /-- **Inner rigidity in the arithmetic model gives inner rigidity at every geometric point**
@@ -62,16 +66,18 @@ theorem innerRigidProper_of_innerRigid (C : HypCurve K) (hc : (C.U : Set C.Xbar)
 
 variable [Algebra.IsAlgebraic K Ω]
 
+omit [CharZero K] in
 /-- **Every hyperbolic curve over a number field is inner rigid**: a `K`-automorphism of `U`
 inducing the identity of `π₁ᵉᵗ(U, ξ₀)` up to a change of base point is the identity. -/
-theorem innerRigidProper_numberField_all (C : HypCurve K) : InnerRigidProper Ω C := by
+theorem innerRigidProper_numberField_all [NumberField K] (C : HypCurve K) :
+    InnerRigidProper Ω C := by
   haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap K Ω).injective
   haveI : IsAlgClosure K Ω := ⟨inferInstance, inferInstance⟩
   rcases (C.U : Set C.Xbar)ᶜ.eq_empty_or_nonempty with hC | hc
   · exact innerRigidProper_numberField C hC
   · exact innerRigidProper_of_innerRigid C hc (innerRigid Ω C hc)
 
-omit [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] in
 /-- **The uniqueness half of the rel-isom-DGC over every number field**, in the whitelist form
 `Belyi.Anabelian.RelIsomDGC.Unique K` (affine and proper hyperbolic curves). -/
 theorem relIsomDGC_unique_numberField (K : Type u) [Field K] [NumberField K] :
@@ -81,5 +87,37 @@ theorem relIsomDGC_unique_numberField (K : Type u) [Field K] [NumberField K] :
   haveI : Algebra.IsAlgebraic K Ω := IsAlgClosure.isAlgebraic
   exact eq_of_isConjInduced_of_innerRigidProper (innerRigidProper_numberField_all C₁)
     φ.toMulEquiv H.isConjInduced H'.isConjInduced
+
+section Padic
+
+variable (p : ℕ) [Fact p.Prime]
+
+omit [CharZero K] in
+/-- **Every hyperbolic curve over a finite extension of `ℚ_p` is inner rigid**: a
+`K`-automorphism of `U` inducing the identity of `π₁ᵉᵗ(U, ξ₀)` up to a change of base point is the
+identity (affine and proper curves). -/
+theorem innerRigidProper_padic_all [Algebra ℚ_[p] K] [FiniteDimensional ℚ_[p] K]
+    (C : HypCurve K) : InnerRigidProper Ω C := by
+  haveI := charZero_padic p (K := K)
+  haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap K Ω).injective
+  haveI : IsAlgClosure K Ω := ⟨inferInstance, inferInstance⟩
+  haveI : IsGalois K Ω := ⟨⟩
+  rcases (C.U : Set C.Xbar)ᶜ.eq_empty_or_nonempty with hC | hc
+  · exact innerRigidProper_padic p C hC
+  · haveI := isSlimGk_padic p (K := K) Ω
+    exact innerRigidProper_of_innerRigid C hc (innerRigid Ω C hc)
+
+omit [CharZero K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] in
+/-- **The uniqueness half of the rel-isom-DGC over every finite extension of `ℚ_p`**, in the
+whitelist form `Belyi.Anabelian.RelIsomDGC.Unique L` (affine and proper hyperbolic curves), for
+every finite extension `L` of `ℚ_p`. -/
+theorem relIsomDGC_unique_padic : ForallMLF.{u} p fun L _ _ ↦ RelIsomDGC.Unique L := by
+  intro L _ _ _ Ω _ _ _ C₁ C₂ ξ₁ ξ₂ φ _ f f' H H'
+  haveI := IsAlgClosure.isAlgClosed (R := L) (K := Ω)
+  haveI : Algebra.IsAlgebraic L Ω := IsAlgClosure.isAlgebraic
+  exact eq_of_isConjInduced_of_innerRigidProper (innerRigidProper_padic_all p C₁)
+    φ.toMulEquiv H.isConjInduced H'.isConjInduced
+
+end Padic
 
 end CurvesJacobian.LocAn

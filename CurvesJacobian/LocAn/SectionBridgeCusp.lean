@@ -25,7 +25,8 @@ rational points is `LocAn/SectionBridgeThmC.lean`). It is stated in MR8's arithm
 `Π_U = π₁ᵉᵗ(Spec Γ(U))` for a hyperbolic curve `C = (X̄, U)` with a cusp
 (`CurvesJacobian.Cusp.arithInertia`, `arithDecomp`; `F = K(X̄_Ω)^alg ⊇ L₀ = ι(K(X̄))`, places `W`
 of `F` over cusps: `IsCuspPlace`). A place `W` lies over the closed point `x` of `X̄` if
-`ι⁻¹(W) = 𝒪_{X̄,x}`.
+`ι⁻¹(W) = 𝒪_{X̄,x}`. The base field `K` is any field of characteristic zero (number fields and
+finite extensions of `ℚ_p` in particular); no slimness of `G_K` is used.
 
 ## Main results
 
@@ -90,7 +91,7 @@ end Chart
 
 section Arith
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 

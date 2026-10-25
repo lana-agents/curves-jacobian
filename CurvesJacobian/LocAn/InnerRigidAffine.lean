@@ -9,11 +9,13 @@ import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.Cusp.DGCArith
 
 /-!
-# Inner rigidity of affine hyperbolic curves over number fields (MR7, step S2)
+# Inner rigidity of affine hyperbolic curves (MR7, step S2)
 
-**`CurvesJacobian.LocAn.innerRigid`**: for a hyperbolic curve `C = (X̄, U)` over a number field
-`K` with a cusp, every `K`-automorphism `F` of `U = Spec Γ(U)` inducing an inner automorphism of
-`Π_U = π₁ᵉᵗ(U)` is the identity. Consequently (`eq_of_isConjInduced`) two `K`-isomorphisms
+**`CurvesJacobian.LocAn.innerRigid`**: for a hyperbolic curve `C = (X̄, U)` with a cusp over a
+field `K` of characteristic zero whose absolute Galois group is slim (`IsSlimGk K Ω`: number
+fields, finite extensions of `ℚ_p` by `CurvesJacobian.Cusp.isSlimGk_padic`), every
+`K`-automorphism `F` of `U = Spec Γ(U)` inducing an inner automorphism of `Π_U = π₁ᵉᵗ(U)` is the
+identity. Consequently (`eq_of_isConjInduced`) two `K`-isomorphisms
 `Spec Γ(U₁) ≅ Spec Γ(U₂)` inducing the same isomorphism `Π_{U₁} ≃ Π_{U₂}` up to a change of base
 point are equal: **the uniqueness half of the rel-isom-DGC holds unconditionally** in MR8's
 arithmetic model (`[AbsTopI]` Definition 4.6 (ii), whitelist entry for [LocAn] Theorem A).
@@ -28,7 +30,8 @@ arithmetic Galois action.
    `A(s⁻¹ g s) = u⁻¹ A(g) u`. With `A(ρ) = u⁻¹`, `σ = s ∘ ρ` satisfies `A(σ⁻¹ g σ) = A(g)` for all
    `g ∈ G`.
 2. `ρ` fixes `Ω`: `σ⁻¹ g σ g⁻¹ ∈ ker A` fixes `Ω` (`arithKernel_fixes_Omega`), so the restriction
-   of `ρ` to `Ω` commutes with `Gal(Ω/K)` (`resOmega_surjective`), whose centre is trivial.
+   of `ρ` to `Ω` commutes with `Gal(Ω/K)` (`resOmega_surjective`), whose centre is trivial
+   (`center_galoisGroup_eq_bot`: `Gal(Ω/K) ≅ G_K` is slim).
 3. `σ` preserves `L = K(X̄_Ω)` and the sections `Ω ⊗ Γ(U)`, and conjugation by `σ` does not
    change the action of `H = Gal(M/L)` on `π₁ᵉᵗ(U_Ω)` (`geomToPi` is injective). By
    `eq_of_chartHom_conj` (`LocAn/InnerRigidGalois.lean`), `σ` is the identity on `L`; hence `α`
@@ -47,7 +50,7 @@ set_option backward.isDefEq.respectTransparency false
 
 namespace CurvesJacobian.LocAn
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
@@ -115,9 +118,23 @@ lemma mem_L_of_forall (τ : FFClosure (geomCurve Ω C) ≃+* FFClosure (geomCurv
       exact (geomData Ω C).L.algebraMap_mem
         ⟨algebraMap Ω _ c, IntermediateField.algebraMap_mem _ c⟩) hA z
 
+omit [CharZero Ω] in
+/-- **`Gal(Ω/K)` has trivial centre** if `G_K = π₁ᵉᵗ(Spec K) ≅ Gal(Ω/K)` is slim. -/
+lemma center_galoisGroup_eq_bot [IsSlimGk K Ω] : Subgroup.center (Ω ≃ₐ[K] Ω) = ⊥ := by
+  haveI : IsGalois K Ω := ⟨⟩
+  let e : (Ω ≃ₐ[K] Ω) ≃* π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
+    mulEquivAutFiber K Ω
+  refine eq_bot_iff.2 fun z hz ↦ ?_
+  have hez : e z ∈ Subgroup.center _ := Subgroup.mem_center_iff.2 fun y ↦ by
+    obtain ⟨g, rfl⟩ := e.surjective y
+    rw [← map_mul, ← map_mul, Subgroup.mem_center_iff.1 hz g]
+  rw [(IsSlimGk.isSlim (K := K) (Ω := Ω)).center_eq_bot, Subgroup.mem_bot] at hez
+  exact Subgroup.mem_bot.2 (e.injective (hez.trans (map_one e).symm))
+
 /-- **Inner rigidity**: a `K`-automorphism of `Spec Γ(U)` inducing an inner automorphism of `Π_U`
-is the identity (`C` hyperbolic over a number field, with a cusp). -/
-theorem innerRigid : InnerRigid Ω C hc := by
+is the identity (`C` hyperbolic with a cusp over a field of characteristic zero with slim
+`G_K`). -/
+theorem innerRigid [IsSlimGk K Ω] : InnerRigid Ω C hc := by
   intro F hF H
   haveI : IsFiniteEtale F.hom := {}
   set α := secAlgEquiv C F hF with hαdef
@@ -168,7 +185,7 @@ theorem innerRigid : InnerRigid Ω C hc := by
       Subgroup.mem_center_iff.2 fun ψ ↦ by
         obtain ⟨g, rfl⟩ := resOmega_surjective Ω C hc ψ
         exact (hcen g).symm
-    rw [(isSlim_galoisGroup_numberField K Ω).center_eq_bot] at hz
+    rw [center_galoisGroup_eq_bot] at hz
     exact hz
   have hρfixΩ : ∀ c : Ω, ρ (algebraMap Ω (FFClosure (geomCurve Ω C)) c) = algebraMap Ω _ c :=
     fun c ↦ by rw [← algebraMap_resOmega, hρΩ, AlgEquiv.one_apply]

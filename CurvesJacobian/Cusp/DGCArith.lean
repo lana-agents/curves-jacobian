@@ -24,15 +24,16 @@ cuspidalisation of curves-jacobian works with `Π_U = π₁ᵉᵗ(Spec Γ(U), x)
   over the trivial path of `Spec K` automatically (`G_K` has trivial centre); so `InducedBy` is
   `IsConjInduced` for isomorphisms over `G_K`.
 * **`exists_isConjInduced_of_relIsomDGC`** (the existence half of the DGC in the arithmetic
-  model): for hyperbolic curves `C₁, C₂` over a number field `K`, each with a cusp, every
+  model): for hyperbolic curves `C₁, C₂` over a field `K` of characteristic zero (number fields,
+  finite extensions of `ℚ_p`), each with a cusp, every
   continuous isomorphism `φ : Π_{U₁} ≃ₜ* Π_{U₂}` over `G_K` is `IsConjInduced` by a
   `K`-isomorphism `Spec Γ(U₁) ≅ Spec Γ(U₂)`.
 * `IsConjInduced.symm_of_iso`: the inverse of a map induced by an isomorphism `e` is induced by
   `e⁻¹`.
 
-The existence half enters only as the explicit hypothesis `hDGC : RelIsomDGC.Exists K` (`K` a
-number field, hence sub-`p`-adic, `Belyi.Anabelian.isSubPAdic_of_numberField`). The uniqueness
-half is a theorem (MR7: `CurvesJacobian.LocAn.innerRigid`); the uniqueness statements
+The existence half enters only as the explicit hypothesis `hDGC : RelIsomDGC.Exists K`. The
+uniqueness half is a theorem over number fields and finite extensions of `ℚ_p` (MR7:
+`CurvesJacobian.LocAn.innerRigid`); the uniqueness statements
 `eq_of_isConjInduced_of_relIsomDGC` and `eq_refl_of_isConjInduced_conj` are in
 `CurvesJacobian/LocAn/UniqueReduction.lean`, without DGC hypothesis.
 -/
@@ -270,7 +271,7 @@ section Arith
 
 open HypCurve
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω]
 
 /-- The structure morphism `Spec Γ(U) ⟶ Spec K`. -/

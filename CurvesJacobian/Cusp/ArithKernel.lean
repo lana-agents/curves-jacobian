@@ -8,9 +8,9 @@ import CurvesJacobian.Cusp.CoverCusps
 /-!
 # The kernel of the arithmetic Galois action: `Π_U ≅ Gal(M / K(X̄))`
 
-For a hyperbolic curve `C = (X̄, U)` over a number field `K` with a cusp (`U` affine) and
-`Ω = K̄`, `arithAction : Gal(K(X̄_Ω)^alg / K(X̄)) →* Π_U` (`NonRationalFill`) is the Galois action
-at the generic point followed by a change of base point; it is surjective
+For a hyperbolic curve `C = (X̄, U)` over a field `K` of characteristic zero with a cusp
+(`U` affine) and `Ω = K̄`, `arithAction : Gal(K(X̄_Ω)^alg / K(X̄)) →* Π_U` (`NonRationalFill`)
+is the Galois action at the generic point followed by a change of base point; it is surjective
 (`arithAction_surjective`, `CoverCusps`). Here we identify `Π_U` with the Galois group of the
 maximal extension `M` of `L₀ = K(X̄)` unramified over `U` (MR7 plan, "S2 route": the uniqueness
 argument works with `M` and `Δ = Gal(M / K̄(X̄))`):
@@ -83,7 +83,7 @@ namespace CurvesJacobian.Cusp
 
 open AlgebraicGeometry.FiniteEtale
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
