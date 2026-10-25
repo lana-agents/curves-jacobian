@@ -484,6 +484,7 @@ import CurvesJacobian.Picard.PicSpecEquiv
 import CurvesJacobian.Picard.PicTangentKer
 import CurvesJacobian.Picard.PicTangentSetup
 import CurvesJacobian.Picard.PicTangentTwist
+import CurvesJacobian.Picard.Poincare
 import CurvesJacobian.Picard.Pullback
 import CurvesJacobian.Picard.PushoutAlgebra
 import CurvesJacobian.Picard.QcohBaseChange
