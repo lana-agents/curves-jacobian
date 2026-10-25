@@ -102,6 +102,7 @@ import CurvesJacobian.Cusp.EllipticSound
 import CurvesJacobian.Cusp.EllipticTorsionCardN
 import CurvesJacobian.Cusp.EllipticTorsionCount
 import CurvesJacobian.Cusp.EnlargeKernel
+import CurvesJacobian.Cusp.EtLocTerminal
 import CurvesJacobian.Cusp.ExtensionIso
 import CurvesJacobian.Cusp.ExtensionMap
 import CurvesJacobian.Cusp.FieldChange
@@ -138,6 +139,7 @@ import CurvesJacobian.Cusp.HemiConstRing
 import CurvesJacobian.Cusp.HemiInvolutionGen
 import CurvesJacobian.Cusp.HemiModelTwist
 import CurvesJacobian.Cusp.HemiPi1
+import CurvesJacobian.Cusp.HemiPuncturedArith
 import CurvesJacobian.Cusp.HemiPuncturedConst
 import CurvesJacobian.Cusp.HemiPuncturedN
 import CurvesJacobian.Cusp.HemiSemiElliptic
