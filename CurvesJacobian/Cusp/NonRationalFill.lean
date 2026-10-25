@@ -57,9 +57,23 @@ noncomputable section
 
 namespace CurvesJacobian.Cusp
 
+/-- If `Ω/K₀` is algebraic and `f : Ω →+* B` agrees with `algebraMap Ω B` on `K₀`, then every
+`f c` is algebraic over `Ω` (it is a root of the image of a `K₀`-polynomial killing `c`). -/
+lemma isAlgebraic_apply_of_eq_on {K₀ Ω B : Type*} [Field K₀] [Field Ω] [CommRing B]
+    [Algebra K₀ Ω] [Algebra Ω B] [Algebra.IsAlgebraic K₀ Ω] (f : Ω →+* B)
+    (hf : ∀ a : K₀, f (algebraMap K₀ Ω a) = algebraMap Ω B (algebraMap K₀ Ω a)) (c : Ω) :
+    IsAlgebraic Ω (f c) := by
+  obtain ⟨p, hp0, hpc⟩ := Algebra.IsAlgebraic.isAlgebraic (R := K₀) c
+  refine ⟨p.map (algebraMap K₀ Ω),
+    (Polynomial.map_ne_zero_iff (algebraMap K₀ Ω).injective).2 hp0, ?_⟩
+  have hcomp : (algebraMap Ω B).comp (algebraMap K₀ Ω) = f.comp (algebraMap K₀ Ω) :=
+    RingHom.ext fun a ↦ (hf a).symm
+  rw [Polynomial.aeval_def, Polynomial.eval₂_map, hcomp, ← Polynomial.hom_eval₂,
+    ← Polynomial.aeval_def, hpc, map_zero]
+
 section Arith
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) {U' : C.Xbar.Opens} (h : C.U ≤ U')
   (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
@@ -208,12 +222,12 @@ abbrev genOpen (V : C.Xbar.Opens) [Nonempty (baseChangeOpen K Ω V)] :
 def tensorEmb : Ω ⊗[K] Γ(C.Xbar, V) →+* (geomData Ω C).L :=
   (Spec.preimage (genOpen Ω C V ≫ (specTensorIsoBaseChangeOpen K Ω hV).inv)).hom
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma specMap_tensorEmb : Spec.map (CommRingCat.ofHom (tensorEmb Ω C hV)) =
     genOpen Ω C V ≫ (specTensorIsoBaseChangeOpen K Ω hV).inv := by
   rw [tensorEmb, CommRingCat.ofHom_hom, Spec.map_preimage]
 
-omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
+omit [CharZero K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
   [Nonempty (baseChangeOpen K Ω V)] in
 include hV in
 lemma isAffineOpen_baseChangeOpen : IsAffineOpen (baseChangeOpen K Ω V) :=
@@ -224,7 +238,7 @@ def secToTensor : Γ(geomCurve Ω C, baseChangeOpen K Ω V) →+* Ω ⊗[K] Γ(C
   (Spec.preimage ((specTensorIsoBaseChangeOpen K Ω hV).hom ≫
     (isAffineOpen_baseChangeOpen Ω C hV).isoSpec.hom)).hom
 
-omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
+omit [CharZero K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
   [Nonempty (baseChangeOpen K Ω V)] in
 lemma secToTensor_surjective : Function.Surjective (secToTensor Ω C hV) := by
   intro t
@@ -237,7 +251,7 @@ lemma secToTensor_surjective : Function.Surjective (secToTensor Ω C hV) := by
     simp
   exact congrArg (fun f ↦ f.hom t) h1
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma tensorEmb_secToTensor (s : Γ(geomCurve Ω C, baseChangeOpen K Ω V)) :
     tensorEmb Ω C hV (secToTensor Ω C hV s) = curveEquivL Ω (transcendental_geomCoord Ω C)
       ((geomCurve Ω C).germToFunctionField (baseChangeOpen K Ω V) s) := by
@@ -255,7 +269,7 @@ lemma tensorEmb_secToTensor (s : Γ(geomCurve Ω C, baseChangeOpen K Ω V)) :
     rfl
   exact congrArg (fun f ↦ f.hom s) key
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma coe_tensorEmb_algebraMap (c : Ω) :
     ((tensorEmb Ω C hV (algebraMap Ω (Ω ⊗[K] Γ(C.Xbar, V)) c) : (geomData Ω C).L) :
       FFClosure (geomCurve Ω C)) = algebraMap Ω (FFClosure (geomCurve Ω C)) c := by
@@ -279,7 +293,7 @@ lemma coe_tensorEmb_algebraMap (c : Ω) :
   have := congrArg (fun f ↦ ((f.hom c : (geomData Ω C).L) : FFClosure (geomCurve Ω C))) key
   exact this.trans (curveEquivL_algebraMap Ω (transcendental_geomCoord Ω C) c)
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma tensorEmb_injective : Function.Injective (tensorEmb Ω C hV) := by
   intro a b hab
   obtain ⟨a, rfl⟩ := secToTensor_surjective Ω C hV a
@@ -292,17 +306,17 @@ def secEmb : Γ(C.Xbar, V) →+* FFClosure (geomCurve Ω C) :=
   (algebraMap (geomData Ω C).L (FFClosure (geomCurve Ω C))).comp ((tensorEmb Ω C hV).comp
     (Algebra.TensorProduct.includeRight : Γ(C.Xbar, V) →ₐ[K] Ω ⊗[K] Γ(C.Xbar, V)).toRingHom)
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma secEmb_apply (a : Γ(C.Xbar, V)) :
     secEmb Ω C hV a = (tensorEmb Ω C hV (1 ⊗ₜ a) : FFClosure (geomCurve Ω C)) := rfl
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma secEmb_injective : Function.Injective (secEmb Ω C hV) :=
   (algebraMap (geomData Ω C).L (FFClosure (geomCurve Ω C))).injective.comp
     ((tensorEmb_injective Ω C hV).comp
       (Algebra.TensorProduct.includeRight_injective (algebraMap K Ω).injective))
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma coe_tensorEmb_tmul (c : Ω) (a : Γ(C.Xbar, V)) :
     (tensorEmb Ω C hV (c ⊗ₜ a) : FFClosure (geomCurve Ω C)) =
       algebraMap Ω (FFClosure (geomCurve Ω C)) c * secEmb Ω C hV a := by
@@ -312,7 +326,7 @@ lemma coe_tensorEmb_tmul (c : Ω) (a : Γ(C.Xbar, V)) :
     rfl
   rw [this, map_mul, IntermediateField.coe_mul, coe_tensorEmb_algebraMap, secEmb_apply]
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 lemma secEmb_algebraMap (c : K) :
     secEmb Ω C hV (algebraMap K Γ(C.Xbar, V) c) =
       algebraMap Ω (FFClosure (geomCurve Ω C)) (algebraMap K Ω c) := by
@@ -377,10 +391,15 @@ instance charZero_arithFF : CharZero (arithFF Ω C hc) :=
 /-- Elements of `Ω` are algebraic over `L₀`. -/
 lemma isAlgebraic_algebraMap_Omega (c : Ω) :
     IsAlgebraic (arithFF Ω C hc) (algebraMap Ω (FFClosure (geomCurve Ω C)) c) := by
-  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
-  have h1 : IsAlgebraic ℚ (algebraMap Ω (FFClosure (geomCurve Ω C)) c) :=
-    (Algebra.IsAlgebraic.isAlgebraic c).algHom (algebraMap Ω _).toRatAlgHom
-  exact h1.tower_top (arithFF Ω C hc)
+  obtain ⟨p, hp0, hpc⟩ := Algebra.IsAlgebraic.isAlgebraic (R := K) c
+  set φ : K →+* arithFF Ω C hc :=
+    (ffEmb Ω C hc).rangeRestrictField.comp (algebraMap K C.Xbar.functionField)
+  refine ⟨p.map φ, (Polynomial.map_ne_zero_iff φ.injective).2 hp0, ?_⟩
+  have hcomp : (algebraMap (arithFF Ω C hc) (FFClosure (geomCurve Ω C))).comp φ =
+      (algebraMap Ω (FFClosure (geomCurve Ω C))).comp (algebraMap K Ω) :=
+    RingHom.ext fun a ↦ ffEmb_algebraMap Ω C hc a
+  rw [Polynomial.aeval_def, Polynomial.eval₂_map, hcomp, ← Polynomial.hom_eval₂,
+    ← Polynomial.aeval_def, hpc, map_zero]
 
 omit [Algebra.IsAlgebraic K Ω] in
 /-- A subfield containing `Ω` and `φ_U(Γ(U))` contains `θ_U(Ω ⊗ Γ(U))`. -/
@@ -538,11 +557,11 @@ lemma geomToPi_chartHom (σ : (geomData Ω C).H) :
 
 /-! ### Inertia over `K(X̄)` -/
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
-/-- Elements of `K(X̄_Ω)^alg` algebraic over `ℚ` lie in `Ω`. -/
-lemma exists_algebraMap_eq_of_isAlgebraic (z : FFClosure (geomCurve Ω C))
-    (hz : IsAlgebraic ℚ z) : ∃ c : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c = z := by
-  have hint : IsIntegral Ω z := (hz.tower_top Ω).isIntegral
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+/-- Elements of `K(X̄_Ω)^alg` algebraic over `Ω` lie in `Ω`. -/
+lemma exists_algebraMap_eq_of_isAlgebraic_Omega (z : FFClosure (geomCurve Ω C))
+    (hz : IsAlgebraic Ω z) : ∃ c : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c = z := by
+  have hint : IsIntegral Ω z := hz.isIntegral
   haveI := IntermediateField.adjoin.finiteDimensional hint
   haveI := Algebra.IsAlgebraic.of_finite Ω (IntermediateField.adjoin Ω {z})
   have hbot := IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic
@@ -550,6 +569,12 @@ lemma exists_algebraMap_eq_of_isAlgebraic (z : FFClosure (geomCurve Ω C))
   have : z ∈ (⊥ : IntermediateField Ω (FFClosure (geomCurve Ω C))) :=
     hbot ▸ IntermediateField.mem_adjoin_simple_self Ω z
   exact IntermediateField.mem_bot.1 this
+
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
+/-- Elements of `K(X̄_Ω)^alg` algebraic over `ℚ` lie in `Ω`. -/
+lemma exists_algebraMap_eq_of_isAlgebraic (z : FFClosure (geomCurve Ω C))
+    (hz : IsAlgebraic ℚ z) : ∃ c : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c = z :=
+  exists_algebraMap_eq_of_isAlgebraic_Omega Ω C z (hz.tower_top Ω)
 
 /-- **Inertia fixes the constants**: an inertia element over `L₀` of a place `W ⊇ Ω` fixes `Ω`
 (it maps `Ω` to itself, and `σ c - c ∈ Ω ∩ 𝔪_W = 0`). -/
@@ -559,12 +584,14 @@ lemma inertia_fixes_Omega {W : ValuationSubring (FFClosure (geomCurve Ω C))}
     (hσ : σ ∈ GaloisPi1.inertia W) (c : Ω) :
     σ (algebraMap Ω (FFClosure (geomCurve Ω C)) c) =
       algebraMap Ω (FFClosure (geomCurve Ω C)) c := by
-  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
-  obtain ⟨c', hc'⟩ := exists_algebraMap_eq_of_isAlgebraic Ω C
+  obtain ⟨c', hc'⟩ := exists_algebraMap_eq_of_isAlgebraic_Omega Ω C
     (σ (algebraMap Ω (FFClosure (geomCurve Ω C)) c))
-    ((Algebra.IsAlgebraic.isAlgebraic (R := ℚ) c).algHom
+    (isAlgebraic_apply_of_eq_on (K₀ := K)
       ((σ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C)).comp
-        (algebraMap Ω (FFClosure (geomCurve Ω C)))).toRatAlgHom)
+        (algebraMap Ω (FFClosure (geomCurve Ω C)))) (fun a ↦ by
+          change σ _ = _
+          rw [← ffEmb_algebraMap Ω C hc a]
+          exact σ.commutes ⟨_, _, rfl⟩) c)
   have hlt := hσ _ (hW c)
   rw [← hc', ← map_sub, valuation_lt_one_iff_mem] at hlt
   by_contra hne

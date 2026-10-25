@@ -459,6 +459,7 @@ noncomputable def lineQuotCurve :
   haveI := connectedSpace_lineQuot K t h hh hfin he ρ hinv htr
   coverCurve (lineCurve K h hh) (lineCurve_cusp K h hh) (lineQuotHom K t h hh hfin he ρ hinv)
 
+omit [NumberField K] in
 /-- The quotient curve has a cusp. -/
 theorem lineQuotCurve_cusp :
     ((lineQuotCurve K t h hh hfin he ρ hinv htr).U :

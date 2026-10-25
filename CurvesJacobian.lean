@@ -12,6 +12,7 @@ import CurvesJacobian.Cusp.ArithmeticCover
 import CurvesJacobian.Cusp.ArithmeticExt
 import CurvesJacobian.Cusp.ArithmeticFill
 import CurvesJacobian.Cusp.ArithmeticFillObj
+import CurvesJacobian.Cusp.ArithmeticPadic
 import CurvesJacobian.Cusp.ArithmeticPi1
 import CurvesJacobian.Cusp.ArithmeticSlim
 import CurvesJacobian.Cusp.BaseChange
@@ -214,9 +215,11 @@ import CurvesJacobian.CuspChar.Count
 import CurvesJacobian.CuspChar.CuspStab
 import CurvesJacobian.CuspChar.Cuspidal
 import CurvesJacobian.CuspChar.Cyclotomic
+import CurvesJacobian.CuspChar.CyclotomicPadic
 import CurvesJacobian.CuspChar.Delta
 import CurvesJacobian.CuspChar.DetAlgebra
 import CurvesJacobian.CuspChar.Final
+import CurvesJacobian.CuspChar.FinalPadic
 import CurvesJacobian.CuspChar.FinalW
 import CurvesJacobian.CuspChar.Hyperplane
 import CurvesJacobian.CuspChar.KummerAction

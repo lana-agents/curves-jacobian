@@ -219,8 +219,9 @@ lemma range_mk {M : Type u} [Field M] [NumberField M] [Algebra K M] [Algebra M �
     Set.range (GeomModel.mk M Y hY ι inj ho hn hg hc : GeomModel Ω CX hcX A).ι = Set.range ι :=
   rfl
 
-set_option maxHeartbeats 400000 in
--- the cover curve, its constant field and `Π_{Y'} ≃ O` are large terms
+set_option maxHeartbeats 1600000 in
+-- the cover curve, its constant field and `Π_{Y'} ≃ O` are large terms (raised from 400000 when
+-- the cover API got `IsSlimGk` instance arguments)
 /-- **The cover step** ([AbsTopI] Def 4.2 (iii)(a), Remark 4.2.1): for an open normal subgroup
 `O ⊆ Π_Y` whose image `ι(O)` is normalised by `Δ_A`, there is a model `D'` of `A` with
 `ι'(Π_{Y'}) = ι(O)`: `Y'` is the connected finite étale cover of `Y` attached to `O`, a hyperbolic

@@ -119,7 +119,7 @@ end EqToIso
 
 section Arith
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -223,7 +223,7 @@ end Arith
 
 section Fill
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) {U' : C.Xbar.Opens} (h : C.U ≤ U')
   (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
@@ -434,7 +434,7 @@ commensurator (the cuspidal decomposition group) under `Π_U ↠ Π_{U'}` is the
 `W` in `Π_{U'}`, up to one change of base point independent of `I`. -/
 theorem exists_map_fillMap_commensurator_cusps
     (α₀ : fiber (basePoint Ω (fillCurve C h hyp) hc') ≅ fiber (fillPoint Ω C hc h)) :
-    ∃ t, ∀ I ∈ (arithmeticExt Ω C hc).cusps, ∃ W, IsCuspPlace Ω C hc W ∧
+    ∃ t, ∀ I ∈ arithCusps Ω C hc, ∃ W, IsCuspPlace Ω C hc W ∧
       I = arithInertia Ω C hc W ∧
       (Subgroup.Commensurable.commensurator I).map (fillMap Ω C hc h).toMonoidHom =
         ((arithDecomp Ω (fillCurve C h hyp) hc' W).map (autContinuousMulEquivOfIso

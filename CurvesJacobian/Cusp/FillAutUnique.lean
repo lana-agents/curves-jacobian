@@ -259,6 +259,7 @@ end Ext
 
 /-! ### Trivial centre of `Π_{U'}` -/
 
+omit [CharZero Ω] in
 include hc' hyp in
 lemma eq_one_of_forall_commute_fill
     (z : π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U')))

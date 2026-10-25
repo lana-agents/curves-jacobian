@@ -507,7 +507,7 @@ open scoped Pointwise
 
 universe u
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -600,7 +600,7 @@ omit [Algebra.IsAlgebraic K Ω] in
 lemma isHyperbolic_genusU : IsHyperbolic (genusU Ω C) (cuspsU Ω C) :=
   isHyperbolic_baseChange Ω C
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
 include hc in
 lemma cuspsU_pos : 0 < cuspsU Ω C :=
   haveI := (compl_finite_baseChangeOpen K Ω C.nonempty).to_subtype
@@ -761,10 +761,10 @@ weight identities: an isomorphism `Π_U ≃ₜ* Π_{U'}` mapping `Δ_U` onto `Δ
 groups of `Δ_U` exactly onto those of `Δ_{U'}`. The centraliser property of the cusp groups of
 `Π̂_{g,r}` (`hcent`) and the cusp weight identities (`hW`, `hW'`, `hinf`) are explicit inputs. -/
 theorem mem_deltaCusps_iff_of_cuspWeightIdentity
-    {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
+    {K : Type u} [Field K] [CharZero K] {Ω : Type u} [Field Ω] [Algebra K Ω]
     [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] {C : HypCurve K}
     {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
-    {K' : Type u} [Field K'] [NumberField K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
+    {K' : Type u} [Field K'] [CharZero K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
     [IsAlgClosed Ω'] [Algebra.IsAlgebraic K' Ω'] [CharZero Ω'] {C' : HypCurve K'}
     {hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty}
     (hcent : ∀ (g r : ℕ), 0 < r → Pi1.SurfaceGroup.IsHyperbolic g r → ∀ (j : Fin r)

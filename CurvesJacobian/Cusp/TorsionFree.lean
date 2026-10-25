@@ -62,7 +62,7 @@ theorem eq_one_of_isOfFinOrder_surfaceCompletion {g r : ℕ} (hr : 0 < r)
     ((e.injective.isOfFinOrder_iff (f := e.toMonoidHom)).2 hz)
   exact e.injective (h.trans (map_one e).symm)
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -81,7 +81,8 @@ theorem Delta_eq_one_of_isOfFinOrder {δ : (projGk Ω C hc).toMonoidHom.ker}
 
 /-- **The `•` side condition for `Π₀ = Π_U`**: every subgroup of `Δ_U` lies in a normal open
 torsion-free subgroup of `Δ_U`. -/
-theorem arithmeticExt_inTorsionFreeNormalOpen {I : Subgroup (arithmeticExt Ω C hc).Pi}
+theorem arithmeticExt_inTorsionFreeNormalOpen [IsSlimGk K Ω]
+    {I : Subgroup (arithmeticExt Ω C hc).Pi}
     (hI : I ≤ (ChainObj.base (arithmeticExt Ω C hc)).Delta) :
     (ChainObj.base (arithmeticExt Ω C hc)).InTorsionFreeNormalOpen I := by
   refine ChainObj.inTorsionFreeNormalOpen_of _ (fun δ hδ hfin ↦ ?_) hI

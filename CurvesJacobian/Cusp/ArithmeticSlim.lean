@@ -104,7 +104,7 @@ def continuousSubgroupCongr {G : Type*} [Group G] [TopologicalSpace G] {H H' : S
 
 /-! ### The arithmetic fundamental group of an affine hyperbolic curve -/
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
 include hc in
@@ -183,19 +183,29 @@ theorem projGk_surjective : Function.Surjective (projGk Ω C hc) := by
 
 variable [Algebra.IsAlgebraic K Ω]
 
-omit [NumberField K] in
+omit [CharZero K] in
 /-- `Ω` is an algebraic closure of `K` (hence Galois over `K`, `char K = 0`). -/
 lemma isAlgClosure_of_isAlgebraic : IsAlgClosure K Ω := ⟨inferInstance, inferInstance⟩
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
+omit [CharZero K] in
 /-- **`G_K = π₁ᵉᵗ(Spec K) ≅ Gal(Ω/K)` is slim** for a number field `K`. -/
-theorem isSlim_Gk : IsSlim π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) := by
+theorem isSlim_Gk [NumberField K] : IsSlim π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) := by
   let e : (Ω ≃ₐ[K] Ω) ≃ₜ* π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
     { mulEquivAutFiber K Ω with
       continuous_toFun := (isHomeomorph_mulEquivAutFiber K Ω).continuous
       continuous_invFun := (isHomeomorph_mulEquivAutFiber K Ω).homeomorph.symm.continuous }
   exact (isSlim_galoisGroup_numberField K Ω).of_continuousMulEquiv e
+
+/-- **`G_K = π₁ᵉᵗ(Spec K, Spec Ω)` is slim** (as a class, so that the arithmetic `CuspidalExt`
+`CurvesJacobian.Cusp.arithmeticExt` is available over number fields, instance
+`CurvesJacobian.Cusp.isSlimGk_numberField`, and over `p`-adic fields). -/
+class IsSlimGk (K Ω : Type u) [Field K] [Field Ω] [Algebra K Ω] : Prop where
+  isSlim : IsSlim π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω)))
+
+omit [CharZero K] in
+instance isSlimGk_numberField [NumberField K] : IsSlimGk K Ω := ⟨isSlim_Gk Ω⟩
 
 /-- `ker(Π_U → G_K)` is the kernel of `toGaloisGroup`. -/
 lemma ker_projGk : (projGk Ω C hc).toMonoidHom.ker =
@@ -226,7 +236,6 @@ theorem nonempty_kerProjGk_equiv :
         (Nat.card ((baseChangeOpen K Ω C.U : Set (baseChange K Ω C.Xbar))ᶜ : Set _)))))) := by
   haveI := IsCurveOver.isIntegral Ω (baseChange K Ω C.Xbar)
   haveI : CharZero Ω := charZero_of_injective_algebraMap (algebraMap K Ω).injective
-  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
   have hne := nonempty_baseChangeOpen K Ω C.nonempty
   haveI : Nonempty (baseChangeOpen K Ω C.U) := hne.to_subtype
   obtain ⟨Φ⟩ := etaleFundamentalGroup_equiv_profiniteSurfaceGroup

@@ -30,9 +30,9 @@ noncomputable section
 
 namespace CurvesJacobian.Cusp
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
   [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
@@ -43,8 +43,8 @@ variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebr
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
-omit [NumberField K] [Field Ω] [Algebra K Ω] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω]
-  [CharZero Ω] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
+omit [CharZero K] [Field Ω] [Algebra K Ω] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω]
+  [CharZero Ω] [CharZero K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
   [Algebra.IsAlgebraic K' Ω] in
 /-- Elements of a subgroup commensurate it. -/
 lemma mem_commensurator_of_mem {G : Type*} [Group G] {H : Subgroup G} {g : G} (hg : g ∈ H) :
@@ -63,7 +63,7 @@ lemma mem_commensurator_of_mem {G : Type*} [Group G] {H : Subgroup G} {g : G} (h
 
 include hF in
 /-- `coverPiHom⁻¹(Δ_U) = Δ_{U'}`. -/
-lemma comap_coverPiHom_ker_projGk_le :
+lemma comap_coverPiHom_ker_projGk_le [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K'] :
     (projGk Ω C hc).toMonoidHom.ker.comap (coverPiHom Ω C hc C' hc' F).toMonoidHom ≤
       (projGk Ω C' hc').toMonoidHom.ker := by
   intro x hx
@@ -74,11 +74,13 @@ lemma comap_coverPiHom_ker_projGk_le :
 include hF in
 /-- **The preimage of a cuspidal inertia group of `Π_U` in `Π_{U'}` is a cuspidal inertia
 group.** -/
-theorem comap_coverPiHom_mem_arithCusps {I} (hI : I ∈ arithCusps Ω C hc) :
+theorem comap_coverPiHom_mem_arithCusps [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K'] {I}
+    (hI : I ∈ arithCusps Ω C hc) :
     I.comap (coverPiHom Ω C hc C' hc' F).toMonoidHom ∈ arithCusps Ω C' hc' := by
   set f := (coverPiHom Ω C hc C' hc' F).toMonoidHom
   have hinj : Function.Injective f := coverPiHom_injective Ω C hc C' hc' F
-  obtain ⟨J, hJ, hJI, hfin⟩ := exists_arithCusps_coverHom_le Ω C hc C' hc' F hI
+  obtain ⟨J, hJ, hJI, hfin⟩ := exists_arithCusps_coverHom_le' Ω C hc C' hc' F
+    (coverConst_of_tower Ω C hc C' hc' F hF) hI
   have hle : J ≤ I.comap f := Subgroup.map_le_iff_le_comap.1 hJI
   have hfin' : J.relIndex (I.comap f) ≠ 0 := by
     have h1 : J.map f ≤ f.range ⊓ I := le_inf (Subgroup.map_le_range f J) hJI
@@ -97,6 +99,8 @@ theorem comap_coverPiHom_mem_arithCusps {I} (hI : I ∈ arithCusps Ω C hc) :
       (comap_coverPiHom_ker_projGk_le Ω C hc C' hc' F hF))
 
 section CoverEquiv
+
+variable [IsSlimGk K Ω] [IsSlimGk K' Ω]
 
 variable {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
   (η : Spec (.of Ω) ⟶ V) (h : η ≫ f = basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
@@ -131,7 +135,7 @@ variable (he : e.hom ≫ f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xb
 include he in
 /-- **The preimage of a cuspidal inertia group of `Π_U` under `Π_{U'} ≃ π₁ᵉᵗ(V) ⊆ Π_U` is a
 cuspidal inertia group of `Π_{U'}`.** -/
-theorem comap_coverPiEquiv_mem_arithCusps {J} (hJ : J ∈ arithCusps Ω C hc) :
+theorem comap_coverPiEquiv_mem_arithCusps [Module.Finite K K'] {J} (hJ : J ∈ arithCusps Ω C hc) :
     J.comap ((coverPiIncl Ω C hc f η h).toMonoidHom.comp
       (coverPiEquiv Ω C hc f η h C' hc' e).toMulEquiv.toMonoidHom) ∈ arithCusps Ω C' hc' := by
   haveI : IsFiniteEtale e.hom := {}

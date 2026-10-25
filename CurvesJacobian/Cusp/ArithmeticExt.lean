@@ -64,7 +64,7 @@ lemma transcendental_geomCoord : Transcendental Ω (geomCoord Ω C) :=
 
 end Geom
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -122,14 +122,16 @@ lemma arithCusps_le {I} (hI : I ∈ arithCusps Ω C hc) : I ≤ (projGk Ω C hc)
   rintro _ ⟨_, ⟨w, -, rfl⟩, rfl⟩
   exact (MonoidHom.normal_ker _).conj_mem _ (geomToPi_mem_ker Ω C hc w) g
 
-/-- **The arithmetic `CuspidalExt` of an affine hyperbolic curve over a number field**:
-`Π_U ↠ G_K` with `G_K` and `Δ_U` slim, `Δ_U ≠ 1`, and the cuspidal inertia groups. -/
-def arithmeticExt : CuspidalExt.{u + 1} where
+/-- **The arithmetic `CuspidalExt` of an affine hyperbolic curve** over a field `K` of
+characteristic zero with slim `G_K` (`CurvesJacobian.Cusp.IsSlimGk`: number fields, finite
+extensions of `ℚ_p`): `Π_U ↠ G_K` with `G_K` and `Δ_U` slim, `Δ_U ≠ 1`, and the cuspidal inertia
+groups. -/
+def arithmeticExt [IsSlimGk K Ω] : CuspidalExt.{u + 1} where
   Pi := ProfiniteGrp.of π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
   G := ProfiniteGrp.of π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω)))
   pr := projGk Ω C hc
   pr_surjective := projGk_surjective Ω C hc
-  slim_G := isSlim_Gk Ω
+  slim_G := IsSlimGk.isSlim
   slim_delta := isSlim_Delta Ω C hc (isHyperbolic_baseChange Ω C)
   nontrivial_delta := Delta_ne_bot Ω C hc (isHyperbolic_baseChange Ω C)
   cusps := arithCusps Ω C hc

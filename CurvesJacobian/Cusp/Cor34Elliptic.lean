@@ -77,6 +77,8 @@ lemma dupC₃_injective : Function.Injective (dupC₃ Ω E hne) :=
   coverPiHom_injective Ω (hypCurveX E) (compl_XE_nonempty E) (hypCurveV E) (hcV_dup E)
     (coverXMorK E)
 
+set_option maxHeartbeats 2000000 in
+-- unifying `hypCurveV E` with `subCurve …` inside the cover/fill homomorphisms is slow
 /-- **Step G3 for one curve**: given the fill-side facts (killed cusps generate the kernel; the
 surviving cusps form one class; some cusp survives), `ker(fill)` is the closed normal closure of
 the cusps `J_g = c⁻¹(g I g⁻¹)`, `g ∉ g₀ · Π_U`. -/

@@ -279,6 +279,8 @@ lemma GeomModel.fillPiHom_bijective_self {A : ChainObj (arithmeticExt Ω CX hcX)
   have h2 := fillMap_bijective_of_eq Ω D.Y D.hY le_rfl rfl
   exact h1.comp h2
 
+set_option maxHeartbeats 1600000 in
+-- elaborating the fill chain objects (`IsSlimGk`/`CharZero` instance arguments) is slow
 /-- **A run of `•`'s from a full model is a filling**: for a full model `D` of `Π_i` and a run
 `Π_i ⇝ … ⇝ Π_{i+m}` of `•`'s whose targets have infinite cusp images there are a filling
 `U' ⊇ U_Y` and `ι' : Π_{(X̄_Y, U')} ≅ Π_{i+m}` such that `ι'⁻¹ ∘ run ∘ ι` is induced by

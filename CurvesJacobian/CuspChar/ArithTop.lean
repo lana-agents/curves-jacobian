@@ -257,7 +257,7 @@ end Generic
 
 /-! ### The arithmetic Galois action -/
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -364,7 +364,7 @@ lemma psiOf_qU (σ : (geomData Ω C).H) :
     geomToPi_chartHom, geomToPi_chartHom, toArithAut_conjH, map_mul, map_mul, map_inv]
 
 /-- **`τ` acts on `μ_{l^k}` by the cyclotomic character of `arithAction τ`.** -/
-lemma tau_mu (l k : ℕ) [NeZero l] [NeZero (l ^ k)]
+lemma tau_mu [IsSlimGk K Ω] (l k : ℕ) [NeZero l] [NeZero (l ^ k)]
     (ζ : Mu (l ^ k) (FFClosure (geomCurve Ω C))) :
     (τ : FFClosure (geomCurve Ω C) ≃+* FFClosure (geomCurve Ω C))
         ((Mu.val ζ : (FFClosure (geomCurve Ω C))ˣ) : FFClosure (geomCurve Ω C)) =
@@ -565,7 +565,8 @@ lemma tau_fixes_cusps
 /-- **The cusp weight identity of `U` for `H = Δ_U`** ([AbsTopI] Lemma 4.5 (v), case `H = ⊤`):
 on the open subgroup `P ⊆ Π_U` of elements fixing every cusp,
 `det(x | Hom(Δ_U, ℤ/3^k))² = χ_{3^k}(x)^{χ₀ + r}`. -/
-theorem weight_top : ∃ P : Subgroup π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)),
+theorem weight_top [IsSlimGk K Ω] :
+    ∃ P : Subgroup π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)),
     IsOpen (P : Set π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))) ∧
     ∀ x ∈ P, ∀ k : ℕ,
       charDet (p := 3 ^ k) (conjD (deltaU Ω C hc) x) ⊤ (mapOpenSub_top _) ^ 2 =

@@ -88,7 +88,7 @@ theorem isDomain_of_isFiniteProductOfNormalDomains {R : Type u} [CommRing R]
   haveI : Unique ι := ⟨⟨i₀⟩, fun _ ↦ Subsingleton.elim _ _⟩
   exact (e.trans (RingEquiv.piUnique D)).toMulEquiv.isDomain _
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
@@ -175,11 +175,18 @@ lemma coverToSpec_comp :
 instance : CharZero (coverField C hc f) :=
   charZero_of_injective_algebraMap (algebraMap K (coverField C hc f)).injective
 
-/-- **(i) The constant field of the cover is a number field.** -/
-instance : NumberField (coverField C hc f) :=
+/-- The constant field of the cover is finite over `K`. -/
+instance : FiniteDimensional K (coverField C hc f) :=
   haveI := isIntegral_cover C hc f
-  haveI : FiniteDimensional K (coverField C hc f) :=
-    finiteDimensional_constField_normalization (k := K) C.nonempty (coverMap C hc f)
+  finiteDimensional_constField_normalization (k := K) C.nonempty (coverMap C hc f)
+
+/-- `G_{k'}` is slim if `G_K` is (`k'/K` finite, `CurvesJacobian.Cusp.isSlimGk_of_finite`). -/
+instance isSlimGk_coverField [IsSlimGk K Ω] [Algebra (coverField C hc f) Ω]
+    [IsScalarTower K (coverField C hc f) Ω] : IsSlimGk (coverField C hc f) Ω :=
+  isSlimGk_of_finite K (coverField C hc f) Ω
+
+/-- **(i) The constant field of the cover is a number field** (for `K` a number field). -/
+instance [NumberField K] : NumberField (coverField C hc f) :=
   { to_finiteDimensional := Module.Finite.trans K (coverField C hc f) }
 
 /-- **The cover as a hyperbolic curve** over its constant field `k'`: the open `q⁻¹ U` of the
@@ -298,9 +305,10 @@ theorem coverIso_point :
 
 /-- **(v) `Π_{q⁻¹ U} ≃ₜ*` the group of the chain object of the cover `V`**
 (`CurvesJacobian.Cusp.coverPiEquiv` for the cover curve). -/
-def coverCurvePiEquiv :
+def coverCurvePiEquiv [IsSlimGk K Ω] :
     letI := coverAlgebra Ω C hc f η
     haveI := isAlgebraic_coverAlgebra Ω C hc f η h
+    haveI := isScalarTower_coverAlgebra Ω C hc f η h
     (arithmeticExt Ω (coverCurve C hc f) (coverCurve_cusp C hc f)).Pi ≃ₜ*
       (coverChainObj Ω C hc f η h).grp :=
   letI := coverAlgebra Ω C hc f η
@@ -309,7 +317,7 @@ def coverCurvePiEquiv :
   coverPiEquiv Ω C hc f η h (coverCurve C hc f) (coverCurve_cusp C hc f) (coverIso C hc f)
 
 /-- **Compatibility with the projections to `G_K`**: `toG (e γ) = g · ι (pr γ) · g⁻¹`. -/
-theorem toG_coverCurvePiEquiv :
+theorem toG_coverCurvePiEquiv [IsSlimGk K Ω] :
     letI := coverAlgebra Ω C hc f η
     haveI := isAlgebraic_coverAlgebra Ω C hc f η h
     haveI := isScalarTower_coverAlgebra Ω C hc f η h
@@ -328,9 +336,10 @@ theorem toG_coverCurvePiEquiv :
     (coverIso_spec C hc f)
 
 /-- **`Δ_{q⁻¹ U}` corresponds to `Δ` of the chain object** (`Π_{q⁻¹ U} ∩ Δ_U = Δ_{q⁻¹ U}`). -/
-theorem map_Delta_coverCurvePiEquiv :
+theorem map_Delta_coverCurvePiEquiv [IsSlimGk K Ω] :
     letI := coverAlgebra Ω C hc f η
     haveI := isAlgebraic_coverAlgebra Ω C hc f η h
+    haveI := isScalarTower_coverAlgebra Ω C hc f η h
     (arithmeticExt Ω (coverCurve C hc f) (coverCurve_cusp C hc f)).Delta.map
         (coverCurvePiEquiv Ω C hc f η h).toMulEquiv.toMonoidHom =
       (coverChainObj Ω C hc f η h).Delta :=
@@ -342,7 +351,7 @@ theorem map_Delta_coverCurvePiEquiv :
 
 /-- **The image of `π₁ᵉᵗ(V) ⊆ Π_U` in `G_K` is exactly `ι(G_{k'})`** for the embedding
 `k' ⊆ Ω` induced by `η`. -/
-theorem map_pr_coverSubgroup_eq_range :
+theorem map_pr_coverSubgroup_eq_range [IsSlimGk K Ω] :
     letI := coverAlgebra Ω C hc f η
     haveI := isScalarTower_coverAlgebra Ω C hc f η h
     (coverSubgroup f η h :

@@ -62,14 +62,14 @@ def continuousMulEquivSubgroupMap {G G' : Type*} [Group G] [TopologicalSpace G] 
       exact congrArg Subtype.val this
     exact this ▸ e.symm.continuous.comp continuous_subtype_val
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) {U' : C.Xbar.Opens} (h : C.U ≤ U')
   (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
-omit [NumberField K] in
+omit [CharZero K] in
 lemma germ_resAlg [IsIntegral C.Xbar] [Nonempty C.U] [Nonempty U'] (a : Γ(C.Xbar, U')) :
     C.Xbar.germToFunctionField C.U (resAlg K h a) = C.Xbar.germToFunctionField U' a := by
   change C.Xbar.presheaf.germ C.U _ _ ((Scheme.Hom.appLE (𝟙 C.Xbar) U' C.U h) a) =
@@ -112,6 +112,7 @@ def fillCurve (hyp : haveI := IsCurveOver.isIntegral K C.Xbar
 variable (hyp : haveI := IsCurveOver.isIntegral K C.Xbar
     2 < 2 * Anabelian.curveGenus K C.Xbar + cuspDegree K C.Xbar U')
 
+omit [CharZero Ω] in
 include hc' hyp in
 /-- **`Δ_{U'}` is slim** (at the base point `fillPoint`): transported from `Δ` of the arithmetic
 extension of `fillCurve` along an isomorphism of fibre functors. -/
@@ -126,9 +127,11 @@ theorem isSlim_ker_projGkFill : IsSlim (projGkFill Ω C hc h).toMonoidHom.ker :=
     (basePoint_spec₂ Ω (fillCurve C h hyp) hc') (fillPoint_spec₂ Ω C hc h) α
   change IsSlim (fundamentalGroupMap _ (fillPoint_spec₂ Ω C hc h)).toMonoidHom.ker
   rw [hker]
-  exact (arithmeticExt Ω (fillCurve C h hyp) hc').slim_delta.of_continuousMulEquiv
+  exact (isSlim_Delta Ω (fillCurve C h hyp) hc'
+    (isHyperbolic_baseChange Ω (fillCurve C h hyp))).of_continuousMulEquiv
     (continuousMulEquivSubgroupMap _ _)
 
+omit [CharZero Ω] in
 include hc' hyp in
 /-- **`Δ_{U'}` is nontrivial** (at the base point `fillPoint`). -/
 theorem ker_projGkFill_ne_bot : (projGkFill Ω C hc h).toMonoidHom.ker ≠ ⊥ := by
@@ -143,18 +146,19 @@ theorem ker_projGkFill_ne_bot : (projGkFill Ω C hc h).toMonoidHom.ker ≠ ⊥ :
   change (fundamentalGroupMap _ (fillPoint_spec₂ Ω C hc h)).toMonoidHom.ker ≠ ⊥
   rw [hker, Ne, Subgroup.map_eq_bot_iff_of_injective _
     (PreGaloisCategory.autContinuousMulEquivOfIso α).injective]
-  exact (arithmeticExt Ω (fillCurve C h hyp) hc').nontrivial_delta
+  exact Delta_ne_bot Ω (fillCurve C h hyp) hc' (isHyperbolic_baseChange Ω (fillCurve C h hyp))
 
 /-- `fillMap` restricted to the open subgroup `⊤` (the rigidifying homomorphism of
 `fillChainObj`). -/
-def fillRho : ((⊤ : OpenSubgroup (arithmeticExt Ω C hc).Pi) : Subgroup (arithmeticExt Ω C hc).Pi)
-    →ₜ* π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U')) :=
+def fillRho [IsSlimGk K Ω] :
+    ((⊤ : OpenSubgroup (arithmeticExt Ω C hc).Pi) : Subgroup (arithmeticExt Ω C hc).Pi) →ₜ*
+      π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U')) :=
   (fillMap Ω C hc h).comp
     ⟨(((⊤ : OpenSubgroup (arithmeticExt Ω C hc).Pi) : Subgroup (arithmeticExt Ω C hc).Pi).subtype :
       _ →* π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))), continuous_subtype_val⟩
 
 include hc' in
-lemma isOpen_range_fillRho : IsOpen (Set.range (fillRho Ω C hc h)) := by
+lemma isOpen_range_fillRho [IsSlimGk K Ω] : IsOpen (Set.range (fillRho Ω C hc h)) := by
   have : Set.range (fillRho Ω C hc h) = Set.univ :=
     Set.eq_univ_of_forall fun y ↦ by
       obtain ⟨x, rfl⟩ := fillMap_surjective Ω C hc h hc' y
@@ -175,7 +179,7 @@ lemma isOpen_range_projGkFill : IsOpen (Set.range (projGkFill Ω C hc h)) := by
 `Π_{U'} = π₁ᵉᵗ(Spec Γ(U'), fillPoint)` with rigidifying homomorphism `fillMap : Π_U ↠ Π_{U'}`
 (defined on all of `Π_U`) and projection `projGkFill` to `G_K` ([AbsTopI] Definition 4.2 (iii),
 conditions (1Π), (2Π)). -/
-def fillChainObj : ChainObj (arithmeticExt Ω C hc) where
+def fillChainObj [IsSlimGk K Ω] : ChainObj (arithmeticExt Ω C hc) where
   grp := ProfiniteGrp.of π₁ᵉᵗ(fillPoint Ω C hc h ≫ baseChangeSpec K Ω Γ(C.Xbar, U'))
   dom := ⊤
   rho := fillRho Ω C hc h
@@ -190,7 +194,7 @@ def fillChainObj : ChainObj (arithmeticExt Ω C hc) where
 
 /-- `fillMap : Π_U → Π_{U'}` is compatible with the rigidifying homomorphisms of the trivial chain
 object and of `fillChainObj` (as the operation homomorphism of an operation of type `•`). -/
-lemma fillMap_compat :
+lemma fillMap_compat [IsSlimGk K Ω] :
     ChainObj.Compat (ChainObj.base (arithmeticExt Ω C hc)) (fillChainObj Ω C hc h hc' hyp)
       (fillMap Ω C hc h) :=
   ⟨⊤, le_rfl, le_rfl, fun _ _ ↦ rfl⟩

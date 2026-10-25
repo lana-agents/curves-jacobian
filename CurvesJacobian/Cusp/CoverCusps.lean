@@ -127,7 +127,7 @@ end AutIso
 
 section Curve
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -164,13 +164,23 @@ lemma isCentredOn_geomOpen_iff (W : ValuationSubring (FFClosure (geomCurve Ω C)
     rw [tensorEmb_secToTensor] at this
     exact this
 
-/-- Automorphisms over `L₀` map `Ω` into `Ω`. -/
-lemma exists_algebraMap_eq_apply {M : Type u} [Field M] [Algebra Ω M]
-    (τ : M →+* FFClosure (geomCurve Ω C)) (c : Ω) :
-    ∃ c' : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c' = τ (algebraMap Ω M c) := by
-  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
-  exact exists_algebraMap_eq_of_isAlgebraic Ω C _
-    ((Algebra.IsAlgebraic.isAlgebraic (R := ℚ) c).algHom (τ.comp (algebraMap Ω M)).toRatAlgHom)
+/-- Ring homomorphisms fixing `K` map `Ω` into `Ω` (`Ω/K` is algebraic and `Ω` is algebraically
+closed in `K(X̄_Ω)^alg`). -/
+lemma exists_algebraMap_eq_apply {K₀ M : Type*} [Field K₀] [Field M] [Algebra K₀ Ω] [Algebra Ω M]
+    [Algebra.IsAlgebraic K₀ Ω] (τ : M →+* FFClosure (geomCurve Ω C))
+    (hτ : ∀ a : K₀, τ (algebraMap Ω M (algebraMap K₀ Ω a)) =
+      algebraMap Ω (FFClosure (geomCurve Ω C)) (algebraMap K₀ Ω a)) (c : Ω) :
+    ∃ c' : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c' = τ (algebraMap Ω M c) :=
+  exists_algebraMap_eq_of_isAlgebraic_Omega Ω C _
+    (isAlgebraic_apply_of_eq_on (K₀ := K₀) (τ.comp (algebraMap Ω M)) hτ c)
+
+/-- `Gal(K(X̄_Ω)^alg / L₀)` fixes `K ⊆ Ω`. -/
+lemma algEquiv_algebraMap_K
+    (τ : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc] FFClosure (geomCurve Ω C)) (a : K) :
+    τ (algebraMap Ω (FFClosure (geomCurve Ω C)) (algebraMap K Ω a)) =
+      algebraMap Ω (FFClosure (geomCurve Ω C)) (algebraMap K Ω a) := by
+  rw [← ffEmb_algebraMap Ω C hc a]
+  exact τ.commutes ⟨_, _, rfl⟩
 
 /-- Places over cusps are moved to places over cusps by `Gal(K(X̄_Ω)^alg / L₀)`. -/
 lemma isCuspPlace_comap
@@ -180,8 +190,9 @@ lemma isCuspPlace_comap
       (W.comap (τ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C))) := by
   refine ⟨fun c ↦ ?_, fun h ↦ hW.2 fun a ↦ ?_⟩
   · rw [ValuationSubring.mem_comap]
-    obtain ⟨c', hc'⟩ := exists_algebraMap_eq_apply Ω C
-      (τ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C)) c
+    obtain ⟨c', hc'⟩ := exists_algebraMap_eq_apply (K₀ := K) Ω C
+      (τ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C))
+      (algEquiv_algebraMap_K Ω C hc τ) c
     rw [← hc']
     exact hW.1 c'
   · have h1 := h a
@@ -337,9 +348,9 @@ lemma isTorsionFree_of_fields (F L : Type*) [Field F] [Field L] [Algebra F L] :
 
 section Cover
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U))
@@ -354,11 +365,12 @@ def coverFib : fiber ((basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, 
   (nonempty_iso_of_fiberFunctor _ _).some
 
 /-- **`Π_{U'} → Π_U`** induced by `F : U' ⟶ U` (followed by a change of base point). -/
-def coverPiHom : (arithmeticExt Ω C' hc').Pi →ₜ* (arithmeticExt Ω C hc).Pi :=
+def coverPiHom [IsSlimGk K Ω] [IsSlimGk K' Ω] :
+    (arithmeticExt Ω C' hc').Pi →ₜ* (arithmeticExt Ω C hc).Pi :=
   (ContinuousMonoidHom.toContinuousMonoidHom
     (autContinuousMulEquivOfIso (coverFib Ω C hc C' hc' F))).comp (fundamentalGroupMap F rfl)
 
-lemma coverPiHom_apply (γ : (arithmeticExt Ω C' hc').Pi) :
+lemma coverPiHom_apply [IsSlimGk K Ω] [IsSlimGk K' Ω] (γ : (arithmeticExt Ω C' hc').Pi) :
     coverPiHom Ω C hc C' hc' F γ =
       autContinuousMulEquivOfIso (coverFib Ω C hc C' hc' F) (fundamentalGroupMap F rfl γ) :=
   rfl
@@ -366,14 +378,16 @@ lemma coverPiHom_apply (γ : (arithmeticExt Ω C' hc').Pi) :
 variable [IsFiniteEtale F]
 
 /-- `Π_{U'} → Π_U` is injective. -/
-theorem coverPiHom_injective : Function.Injective (coverPiHom Ω C hc C' hc' F) := by
+theorem coverPiHom_injective [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    : Function.Injective (coverPiHom Ω C hc C' hc' F) := by
   haveI := isIntegral_specSections C' hc'
   exact (autContinuousMulEquivOfIso _).injective.comp
     (fundamentalGroupMap_injective_of_isFiniteEtale' F
       (basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) rfl)
 
 /-- `Π_{U'} → Π_U` has open image. -/
-theorem isOpen_range_coverPiHom : IsOpen (Set.range (coverPiHom Ω C hc C' hc' F)) := by
+theorem isOpen_range_coverPiHom [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    : IsOpen (Set.range (coverPiHom Ω C hc C' hc' F)) := by
   have h := isOpen_range_fundamentalGroupMap_of_isFiniteEtale F
     (basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) rfl
   have e : Set.range (coverPiHom Ω C hc C' hc' F) =
@@ -551,9 +565,30 @@ lemma coverσ_secEmb (a : Γ(C.Xbar, C.U)) :
   rw [coverFF_secToArithFF] at this
   exact this
 
+/-- **`σ` and `σ⁻¹` map the constants `Ω` into the constants `Ω`** (automatic if `Ω` is
+algebraic over `ℚ`, `coverConst_of_isAlgebraic`; for covers lying over a tower `K ⊆ K' ⊆ Ω`,
+`coverConst_of_tower`). -/
+def CoverConst : Prop :=
+  (∀ c : Ω, ∃ c' : Ω, algebraMap Ω (FFClosure (geomCurve Ω C')) c' =
+      coverσ Ω C hc C' hc' F (algebraMap Ω (FFClosure (geomCurve Ω C)) c)) ∧
+    ∀ c : Ω, ∃ c' : Ω, algebraMap Ω (FFClosure (geomCurve Ω C)) c' =
+      (coverσ Ω C hc C' hc' F).symm (algebraMap Ω (FFClosure (geomCurve Ω C')) c)
+
+/-- Over a field `Ω` algebraic over `ℚ` (e.g. `K` a number field), `CoverConst` is automatic:
+ring homomorphisms fix `ℚ`. -/
+theorem coverConst_of_isAlgebraic [Algebra.IsAlgebraic ℚ Ω] : CoverConst Ω C hc C' hc' F := by
+  refine ⟨fun c ↦ ?_, fun c ↦ ?_⟩
+  · exact exists_algebraMap_eq_apply (K₀ := ℚ) Ω C'
+      (coverσ Ω C hc C' hc' F : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C'))
+      (fun a ↦ by simp) c
+  · exact exists_algebraMap_eq_apply (K₀ := ℚ) Ω C
+      ((coverσ Ω C hc C' hc' F).symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C))
+      (fun a ↦ by simp) c
+
 /-- **Places over cusps correspond**: `W` lies over a cusp of `U'` iff `σ⁻¹(W)` lies over a cusp
-of `U`. -/
-theorem isCuspPlace_comap_coverσ (W : ValuationSubring (FFClosure (geomCurve Ω C'))) :
+of `U` (given `CoverConst`). -/
+theorem isCuspPlace_comap_coverσ' (hσ : CoverConst Ω C hc C' hc' F)
+    (W : ValuationSubring (FFClosure (geomCurve Ω C'))) :
     IsCuspPlace Ω C' hc' W ↔
       IsCuspPlace Ω C hc (W.comap (coverσ Ω C hc C' hc' F : _ →+* _)) := by
   set σ := coverσ Ω C hc C' hc' F
@@ -563,16 +598,19 @@ theorem isCuspPlace_comap_coverσ (W : ValuationSubring (FFClosure (geomCurve Ω
     constructor
     · intro h c
       rw [ValuationSubring.mem_comap]
-      obtain ⟨c', hc'⟩ := exists_algebraMap_eq_apply Ω C'
-        (σ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C')) c
-      rw [← hc']
+      obtain ⟨c', hc₁⟩ := hσ.1 c
+      change σ (algebraMap Ω (FFClosure (geomCurve Ω C)) c) ∈ W
+      rw [← hc₁]
       exact h c'
     · intro h c
-      obtain ⟨c', hc'⟩ := exists_algebraMap_eq_apply Ω C
-        (σ.symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C)) c
+      obtain ⟨c', hc₁⟩ := hσ.2 c
       have := h c'
-      rw [ValuationSubring.mem_comap, hc'] at this
-      simpa using this
+      rw [ValuationSubring.mem_comap, hc₁] at this
+      have h2 : (σ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C'))
+          ((coverσ Ω C hc C' hc' F).symm (algebraMap Ω (FFClosure (geomCurve Ω C')) c)) =
+          algebraMap Ω (FFClosure (geomCurve Ω C')) c :=
+        RingEquiv.apply_symm_apply _ _
+      exact h2 ▸ this
   have hsec : (∀ b : Γ(C'.Xbar, C'.U), secEmb Ω C' (isAffineOpen_U C' hc') b ∈ W) ↔
       ∀ a : Γ(C.Xbar, C.U), secEmb Ω C (isAffineOpen_U C hc) a ∈
         W.comap (σ : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C')) := by
@@ -600,6 +638,14 @@ theorem isCuspPlace_comap_coverσ (W : ValuationSubring (FFClosure (geomCurve Ω
       rw [← hy]
       exact y.2
   exact and_congr hval (not_congr hsec)
+
+/-- **Places over cusps correspond** (number fields). -/
+theorem isCuspPlace_comap_coverσ [NumberField K]
+    (W : ValuationSubring (FFClosure (geomCurve Ω C'))) :
+    IsCuspPlace Ω C' hc' W ↔
+      IsCuspPlace Ω C hc (W.comap (coverσ Ω C hc C' hc' F : _ →+* _)) :=
+  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
+  isCuspPlace_comap_coverσ' Ω C hc C' hc' F (coverConst_of_isAlgebraic Ω C hc C' hc' F) W
 
 /-- The point equation `x_{U'} ≫ F = Spec σ ≫ x_U` of the arithmetic generic points. -/
 lemma arithGenPt_comp_cover :
@@ -629,7 +675,7 @@ lemma arithPt_comp_cover :
     e1, Category.assoc]
 
 /-- `coverPiHom` on `cuspAt`, through `π₁ᵉᵗ(F)` at the arithmetic generic point. -/
-lemma map_cuspAt_coverPiHom (βV : fiber (arithPt Ω C' hc') ≅
+lemma map_cuspAt_coverPiHom [IsSlimGk K Ω] [IsSlimGk K' Ω] (βV : fiber (arithPt Ω C' hc') ≅
       fiber (basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)))
     (W : ValuationSubring (FFClosure (geomCurve Ω C'))) :
     (cuspAt Ω C' hc' βV W).map (coverPiHom Ω C hc C' hc' F).toMonoidHom =
@@ -649,7 +695,8 @@ lemma map_cuspAt_coverPiHom (βV : fiber (arithPt Ω C' hc') ≅
 /-- **The main comparison**: `coverPiHom` maps the inertia group of `W` in `Π_{U'}` into the
 inertia group of `σ⁻¹(W)` in `Π_U`, with finite index (for a suitable change of base point `β`
 of `U`, independent of `W`). -/
-theorem exists_map_cuspAt_coverHom_le (βV : fiber (arithPt Ω C' hc') ≅
+theorem exists_map_cuspAt_coverHom_le [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    (βV : fiber (arithPt Ω C' hc') ≅
       fiber (basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U))) :
     ∃ β : fiber (arithPt Ω C hc) ≅
         fiber (basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)),
@@ -702,17 +749,21 @@ theorem exists_map_cuspAt_coverHom_le (βV : fiber (arithPt Ω C' hc') ≅
 
 /-- **(b) Every cuspidal inertia group of `Π_{U'}` maps into a cuspidal inertia group of `Π_U`,
 with finite index.** -/
-theorem exists_arithCusps_map_coverPiHom {J} (hJ : J ∈ arithCusps Ω C' hc') :
+theorem exists_arithCusps_map_coverPiHom' [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    (hσ : CoverConst Ω C hc C' hc' F) {J}
+    (hJ : J ∈ arithCusps Ω C' hc') :
     ∃ I ∈ arithCusps Ω C hc, J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom ≤ I ∧
       (J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom).relIndex I ≠ 0 := by
   obtain ⟨β, hβ⟩ := exists_map_cuspAt_coverHom_le Ω C hc C' hc' F (arithIso Ω C' hc')
   obtain ⟨W, hW, rfl⟩ := exists_cuspAt_eq Ω C' hc' (arithIso Ω C' hc') hJ
-  exact ⟨_, cuspAt_mem_arithCusps Ω C hc β ((isCuspPlace_comap_coverσ Ω C hc C' hc' F W).1 hW),
+  exact ⟨_, cuspAt_mem_arithCusps Ω C hc β ((isCuspPlace_comap_coverσ' Ω C hc C' hc' F hσ W).1 hW),
     hβ W⟩
 
 /-- **(a) Every cuspidal inertia group of `Π_U` contains, with finite index, the image of a
 cuspidal inertia group of `Π_{U'}`.** -/
-theorem exists_arithCusps_coverHom_le {I} (hI : I ∈ arithCusps Ω C hc) :
+theorem exists_arithCusps_coverHom_le' [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    (hσ : CoverConst Ω C hc C' hc' F) {I}
+    (hI : I ∈ arithCusps Ω C hc) :
     ∃ J ∈ arithCusps Ω C' hc', J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom ≤ I ∧
       (J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom).relIndex I ≠ 0 := by
   obtain ⟨β, hβ⟩ := exists_map_cuspAt_coverHom_le Ω C hc C' hc' F (arithIso Ω C' hc')
@@ -724,12 +775,28 @@ theorem exists_arithCusps_coverHom_le {I} (hI : I ∈ arithCusps Ω C hc) :
     simp [ValuationSubring.mem_comap]
   have hW : IsCuspPlace Ω C' hc'
       (W'.comap (σ.symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C))) :=
-    (isCuspPlace_comap_coverσ Ω C hc C' hc' F _).2 (by rw [hWW]; exact hW')
+    (isCuspPlace_comap_coverσ' Ω C hc C' hc' F hσ _).2 (by rw [hWW]; exact hW')
   refine ⟨_, cuspAt_mem_arithCusps Ω C' hc' (arithIso Ω C' hc') hW, ?_⟩
   have := hβ (W'.comap (σ.symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C)))
   rwa [hWW] at this
 
-/-! #### Covers lying over an extension of number fields -/
+/-- **(b)** over number fields. -/
+theorem exists_arithCusps_map_coverPiHom [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    [NumberField K] {J} (hJ : J ∈ arithCusps Ω C' hc') :
+    ∃ I ∈ arithCusps Ω C hc, J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom ≤ I ∧
+      (J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom).relIndex I ≠ 0 :=
+  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
+  exists_arithCusps_map_coverPiHom' Ω C hc C' hc' F (coverConst_of_isAlgebraic Ω C hc C' hc' F) hJ
+
+/-- **(a)** over number fields. -/
+theorem exists_arithCusps_coverHom_le [IsSlimGk K Ω] [IsSlimGk K' Ω]
+    [NumberField K] {I} (hI : I ∈ arithCusps Ω C hc) :
+    ∃ J ∈ arithCusps Ω C' hc', J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom ≤ I ∧
+      (J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom).relIndex I ≠ 0 :=
+  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
+  exists_arithCusps_coverHom_le' Ω C hc C' hc' F (coverConst_of_isAlgebraic Ω C hc C' hc' F) hI
+
+/-! #### Covers lying over a finite extension of constant fields -/
 
 section Tower
 
@@ -752,12 +819,13 @@ def coverG : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
     (coverPiHom_base_spec Ω C C' hc' F hF) (basePoint_spec₂ Ω C hc) (coverFib Ω C hc C' hc' F)
 
 /-- **`ι : G_{K'} → G_K`** for `coverPiHom`: `galoisMap` followed by conjugation by `coverG`. -/
-def coverι : (arithmeticExt Ω C' hc').G →ₜ* (arithmeticExt Ω C hc).G :=
+def coverι [IsSlimGk K Ω] [IsSlimGk K' Ω] :
+    (arithmeticExt Ω C' hc').G →ₜ* (arithmeticExt Ω C hc).G :=
   (ContinuousMonoidHom.toContinuousMonoidHom
     (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF))).comp (galoisMap K K' Ω)
 
 /-- **Compatibility with the projections**: `pr ∘ coverPiHom = coverι ∘ pr'`. -/
-theorem pr_coverPiHom (γ : (arithmeticExt Ω C' hc').Pi) :
+theorem pr_coverPiHom [IsSlimGk K Ω] [IsSlimGk K' Ω] (γ : (arithmeticExt Ω C' hc').Pi) :
     (arithmeticExt Ω C hc).pr (coverPiHom Ω C hc C' hc' F γ) =
       coverι Ω C hc C' hc' F hF ((arithmeticExt Ω C' hc').pr γ) := by
   let sK := Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U)))
@@ -784,12 +852,14 @@ theorem pr_coverPiHom (γ : (arithmeticExt Ω C' hc').Pi) :
   rfl
 
 /-- `coverι` is injective. -/
-theorem coverι_injective : Function.Injective (coverι Ω C hc C' hc' F hF) :=
+theorem coverι_injective [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K'] :
+    Function.Injective (coverι Ω C hc C' hc' F hF) :=
   (autContinuousMulEquivOfIso _).injective.comp (galoisMap_injective K K' Ω)
 
 /-- `coverι` has open image. -/
-theorem isOpen_range_coverι : IsOpen (Set.range (coverι Ω C hc C' hc' F hF)) := by
-  haveI := isFiniteEtale_specMap_numberField (K := K) (K' := K')
+theorem isOpen_range_coverι [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K'] :
+    IsOpen (Set.range (coverι Ω C hc C' hc' F hF)) := by
+  haveI := isFiniteEtale_specMap_of_finite K K'
   have h := isOpen_range_fundamentalGroupMap_of_isFiniteEtale
     (Spec.map (CommRingCat.ofHom (algebraMap K K'))) (Spec.map (CommRingCat.ofHom
       (algebraMap K' Ω))) (specMap_algebraMap_tower K K' Ω)
@@ -800,6 +870,37 @@ theorem isOpen_range_coverι : IsOpen (Set.range (coverι Ω C hc C' hc' F hF)) 
     rfl
   rw [e]
   exact (autContinuousMulEquivOfIso (coverG Ω C hc C' hc' F hF)).toHomeomorph.isOpenMap _ h
+
+include hF in
+/-- `σ` fixes `K ⊆ Ω` for a cover lying over `K ⊆ K' ⊆ Ω`. -/
+lemma coverσ_algebraMap_K (a : K) :
+    coverσ Ω C hc C' hc' F (algebraMap Ω (FFClosure (geomCurve Ω C)) (algebraMap K Ω a)) =
+      algebraMap Ω (FFClosure (geomCurve Ω C')) (algebraMap K Ω a) := by
+  have hring : (coverRing C C' F).comp (algebraMap K Γ(C.Xbar, C.U)) =
+      (algebraMap K' Γ(C'.Xbar, C'.U)).comp (algebraMap K K') := by
+    have h1 : Spec.map (CommRingCat.ofHom ((coverRing C C' F).comp
+          (algebraMap K Γ(C.Xbar, C.U)))) =
+        Spec.map (CommRingCat.ofHom ((algebraMap K' Γ(C'.Xbar, C'.U)).comp (algebraMap K K'))) := by
+      rw [CommRingCat.ofHom_comp, CommRingCat.ofHom_comp, Spec.map_comp, Spec.map_comp,
+        specMap_coverRing, hF]
+    exact congrArg CommRingCat.Hom.hom (Spec.map_injective h1)
+  rw [← secEmb_algebraMap Ω C (isAffineOpen_U C hc), coverσ_secEmb,
+    show coverRing C C' F (algebraMap K Γ(C.Xbar, C.U) a) =
+      algebraMap K' Γ(C'.Xbar, C'.U) (algebraMap K K' a) from RingHom.congr_fun hring a,
+    secEmb_algebraMap Ω C' (isAffineOpen_U C' hc'), IsScalarTower.algebraMap_apply K K' Ω a]
+
+include hF in
+/-- **`CoverConst` for a cover lying over a tower `K ⊆ K' ⊆ Ω`**. -/
+theorem coverConst_of_tower : CoverConst Ω C hc C' hc' F := by
+  refine ⟨fun c ↦ ?_, fun c ↦ ?_⟩
+  · exact exists_algebraMap_eq_apply (K₀ := K) Ω C'
+      (coverσ Ω C hc C' hc' F : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C'))
+      (coverσ_algebraMap_K Ω C hc C' hc' F hF) c
+  · refine exists_algebraMap_eq_apply (K₀ := K) Ω C
+      ((coverσ Ω C hc C' hc' F).symm : FFClosure (geomCurve Ω C') →+* FFClosure (geomCurve Ω C))
+      (fun a ↦ ?_) c
+    change (coverσ Ω C hc C' hc' F).symm _ = _
+    rw [RingEquiv.symm_apply_eq, coverσ_algebraMap_K Ω C hc C' hc' F hF]
 
 end Tower
 

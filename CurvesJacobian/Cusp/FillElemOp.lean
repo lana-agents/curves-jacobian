@@ -166,7 +166,7 @@ lemma ChainObj.image_base {E : CuspidalExt.{u}} (I : Subgroup E.Pi) :
 
 section Arith
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -225,7 +225,7 @@ lemma geomCusps_commensurator {I₀} (hI₀ : I₀ ∈ geomCusps Ω C) :
   · exact Or.inl h3
   · exact Or.inr (by omega)
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] in
 /-- The cuspidal inertia groups of `π₁ᵉᵗ(U_Ω)` are nontrivial if `U_Ω` has at least two cusps. -/
 lemma geomCusps_ne_bot
     (h2 : 1 < Nat.card ((geomOpen Ω C : Set (geomCurve Ω C))ᶜ : Set (geomCurve Ω C)))
@@ -262,7 +262,7 @@ variable {U' : C.Xbar.Opens} (h : C.U ≤ U') (hc' : (U' : Set C.Xbar)ᶜ.Nonemp
   {x : C.Xbar} (hxU' : x ∈ U') (hxU : x ∉ C.U) (hx : (U' : Set C.Xbar) \ C.U ⊆ {x})
   (hxr : IsIso ((C.Xbar ↘ Spec (.of K)).residueFieldMap x))
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
 include h hc' hxU' hxU in
 /-- If `U ⊊ U'` and `U'` has a cusp, then `U_Ω` has at least two geometric cusps. -/
 lemma one_lt_card_geomOpen_compl :
@@ -299,7 +299,7 @@ include hc' hxU' hxU hx hxr in
 `U' = U ∪ {x}` with `x` a `K`-rational point, the kernel of `Π_U ↠ Π_{U'}` is topologically
 normally generated *in `Δ_U`* by a single cuspidal inertia group (the images in `Δ_U ≅ π₁(U_Ω)`
 of the inertia groups of the unique geometric point over `x`). -/
-lemma exists_fillCusp : ∃ I ∈ arithCusps Ω C hc, (fillMap Ω C hc h).toMonoidHom.ker =
+lemma exists_fillCusp [IsSlimGk K Ω] : ∃ I ∈ arithCusps Ω C hc, (fillMap Ω C hc h).toMonoidHom.ker =
     (ChainObj.base (arithmeticExt Ω C hc)).deltaNormalClosure I := by
   haveI : Nonempty (baseChangeOpen K Ω U') :=
     (nonempty_baseChangeOpen K Ω (C.nonempty.mono h)).to_subtype
@@ -325,20 +325,20 @@ lemma exists_fillCusp : ∃ I ∈ arithCusps Ω C hc, (fillMap Ω C hc h).toMono
 
 /-- **The cusp filled in by `U ⊆ U' = U ∪ {x}`** (`x` rational): a cuspidal inertia group
 `C ∈ arithCusps` topologically normally generating `ker(Π_U ↠ Π_{U'})` in `Δ_U`. -/
-def fillCusp : Subgroup (arithmeticExt Ω C hc).Pi :=
+def fillCusp [IsSlimGk K Ω] : Subgroup (arithmeticExt Ω C hc).Pi :=
   (exists_fillCusp Ω C hc h hc' hxU' hxU hx hxr).choose
 
-lemma fillCusp_mem : fillCusp Ω C hc h hc' hxU' hxU hx hxr ∈ arithCusps Ω C hc :=
+lemma fillCusp_mem [IsSlimGk K Ω] : fillCusp Ω C hc h hc' hxU' hxU hx hxr ∈ arithCusps Ω C hc :=
   (exists_fillCusp Ω C hc h hc' hxU' hxU hx hxr).choose_spec.1
 
-lemma ker_fillMap_eq_fillCusp : (fillMap Ω C hc h).toMonoidHom.ker =
+lemma ker_fillMap_eq_fillCusp [IsSlimGk K Ω] : (fillMap Ω C hc h).toMonoidHom.ker =
     (ChainObj.base (arithmeticExt Ω C hc)).deltaNormalClosure
       (fillCusp Ω C hc h hc' hxU' hxU hx hxr) :=
   (exists_fillCusp Ω C hc h hc' hxU' hxU hx hxr).choose_spec.2
 
 /-- `fillCusp` is a cuspidal decomposition group in `Δ_U` ([AbsTopI] Definition 4.2 (iii),
 (3Π)). -/
-lemma isCuspidal_fillCusp :
+lemma isCuspidal_fillCusp [IsSlimGk K Ω] :
     (ChainObj.base (arithmeticExt Ω C hc)).IsCuspidal
       (fillCusp Ω C hc h hc' hxU' hxU hx hxr) := by
   refine ⟨fillCusp Ω C hc h hc' hxU' hxU hx hxr, fillCusp_mem Ω C hc h hc' hxU' hxU hx hxr, ?_, ?_⟩
@@ -350,7 +350,7 @@ lemma isCuspidal_fillCusp :
       (fillCusp_mem Ω C hc h hc' hxU' hxU hx hxr)).symm
 
 /-- `fillCusp` lies in a normal open torsion-free subgroup of `Δ_U`. -/
-lemma inTorsionFreeNormalOpen_fillCusp :
+lemma inTorsionFreeNormalOpen_fillCusp [IsSlimGk K Ω] :
     (ChainObj.base (arithmeticExt Ω C hc)).InTorsionFreeNormalOpen
       (fillCusp Ω C hc h hc' hxU' hxU hx hxr) :=
   arithmeticExt_inTorsionFreeNormalOpen Ω C hc
@@ -359,14 +359,15 @@ lemma inTorsionFreeNormalOpen_fillCusp :
 /-- **Filling in a cusp is an elementary operation of type `•`** ([AbsTopI] Definition 4.2 (iii)
 (c)): for `U' = U ∪ {x}` (`x` a closed point of `X̄`) with `(X̄, U')` hyperbolic with a cusp,
 `fillMap : Π_U ↠ Π_{U'}` with the cuspidal decomposition group `fillCusp`. -/
-def fillElemOp :
+def fillElemOp [IsSlimGk K Ω] :
     ElemOp (ChainObj.base (arithmeticExt Ω C hc)) (fillChainObj Ω C hc h hc' hyp) :=
   .decusp (fillMap Ω C hc h) (fillMap_surjective Ω C hc h hc')
     (fillCusp Ω C hc h hc' hxU' hxU hx hxr) (isCuspidal_fillCusp Ω C hc h hc' hxU' hxU hx hxr)
     (inTorsionFreeNormalOpen_fillCusp Ω C hc h hc' hxU' hxU hx hxr)
     (ker_fillMap_eq_fillCusp Ω C hc h hc' hxU' hxU hx hxr) (fillMap_compat Ω C hc h hc' hyp)
 
-lemma fillElemOp_kind : (fillElemOp Ω C hc h hc' hyp hxU' hxU hx hxr).kind = .decusp := rfl
+lemma fillElemOp_kind [IsSlimGk K Ω] :
+    (fillElemOp Ω C hc h hc' hyp hxU' hxU hx hxr).kind = .decusp := rfl
 
 end Arith
 

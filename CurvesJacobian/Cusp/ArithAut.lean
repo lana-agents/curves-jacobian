@@ -62,7 +62,7 @@ namespace CurvesJacobian.Cusp
 
 section Curve
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -176,16 +176,17 @@ theorem exists_arithAut_restrict (ψ : Ω ≃ₐ[K] Ω) :
 /-- The restriction to `Ω` of `g ∈ Gal(K(X̄_Ω)^alg / K(X̄))` (`g` maps `Ω` onto `Ω`). -/
 def resOmegaFun
     (g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc] FFClosure (geomCurve Ω C)) (c : Ω) : Ω :=
-  (exists_algebraMap_eq_apply Ω C ((g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc]
-    FFClosure (geomCurve Ω C)) : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C)) c).choose
+  (exists_algebraMap_eq_apply (K₀ := K) Ω C ((g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc]
+    FFClosure (geomCurve Ω C)) : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C))
+    (algEquiv_algebraMap_K Ω C hc g) c).choose
 
 lemma algebraMap_resOmegaFun
     (g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc] FFClosure (geomCurve Ω C)) (c : Ω) :
     algebraMap Ω (FFClosure (geomCurve Ω C)) (resOmegaFun Ω C hc g c) =
       g (algebraMap Ω (FFClosure (geomCurve Ω C)) c) :=
-  (exists_algebraMap_eq_apply Ω C ((g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc]
+  (exists_algebraMap_eq_apply (K₀ := K) Ω C ((g : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc]
     FFClosure (geomCurve Ω C)) : FFClosure (geomCurve Ω C) →+* FFClosure (geomCurve Ω C))
-      c).choose_spec
+    (algEquiv_algebraMap_K Ω C hc g) c).choose_spec
 
 /-- **The restriction `Gal(K(X̄_Ω)^alg / K(X̄)) → Gal(Ω / K)`** (surjective:
 `resOmega_surjective`). -/
@@ -233,9 +234,9 @@ end Curve
 
 section Cover
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale F]
@@ -290,7 +291,7 @@ set_option maxHeartbeats 800000 in
 /-- **Element-wise functoriality of the arithmetic Galois action**: for every `L₀`-isomorphism
 `s : K(X̄_Ω)^alg ≅ K(X̄'_Ω)^alg` over `ℓ` there is `t₀ ∈ Π_U` with
 `coverPiHom (arithAction g) = t₀ · arithAction (s⁻¹ g s) · t₀⁻¹`. -/
-theorem exists_coverPiHom_arithAction :
+theorem exists_coverPiHom_arithAction [IsSlimGk K Ω] [IsSlimGk K' Ω] :
     ∃ t₀ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)),
       ∀ g : FFClosure (geomCurve Ω C') ≃ₐ[arithFF Ω C' hc'] FFClosure (geomCurve Ω C'),
         coverPiHom Ω C hc C' hc' F (arithAction Ω C' hc' g) =

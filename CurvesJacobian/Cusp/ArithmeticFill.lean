@@ -145,7 +145,7 @@ lemma coe_continuousSubgroupCongr_symm {G : Type*} [Group G] [TopologicalSpace G
 
 section Arith
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) {U' : C.Xbar.Opens} (h : C.U ≤ U')
   (hc' : (U' : Set C.Xbar)ᶜ.Nonempty)
@@ -188,7 +188,7 @@ def fillMap : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C
   fundamentalGroupMap (Spec.map (CommRingCat.ofHom (resAlg K h).toRingHom)) (fillPoint_spec Ω C hc
       h)
 
-omit [NumberField K] in
+omit [CharZero K] in
 lemma specMap_resAlg_structure :
     Spec.map (CommRingCat.ofHom (resAlg K h).toRingHom) ≫
         Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, U'))) =
@@ -220,7 +220,7 @@ lemma projGkFill_fillMap (γ) : projGkFill Ω C hc h (fillMap Ω C hc h γ) = pr
     (by rw [specMap_resAlg_structure]; exact basePoint_spec₂ Ω C hc)]
   exact congrArg (· γ) (fundamentalGroupMap_congr (specMap_resAlg_structure C h) _ _)
 
-omit [NumberField K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
+omit [CharZero K] [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] in
 include h in
 lemma nonempty_fillOpen : Nonempty (baseChangeOpen K Ω U') :=
   (nonempty_baseChangeOpen K Ω (C.nonempty.mono h)).to_subtype

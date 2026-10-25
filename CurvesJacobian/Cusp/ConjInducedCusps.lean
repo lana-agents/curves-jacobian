@@ -55,12 +55,12 @@ namespace CurvesJacobian.Cusp
 
 section Cover
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
   (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
-  (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U))
+  (F : Spec Γ(C'.Xbar, C'.U) ⟶ Spec Γ(C.Xbar, C.U)) [IsSlimGk K Ω] [IsSlimGk K' Ω]
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
@@ -78,13 +78,13 @@ variable [IsFiniteEtale F]
 
 /-- **(K1 a) Every cuspidal inertia group of `Π_{U'}` maps, with finite index, into a cuspidal
 inertia group of `Π_U`**, under any map induced by `F`. -/
-theorem exists_arithCusps_map_le_of_conjInduced
+theorem exists_arithCusps_map_le_of_conjInduced' (hσ : CoverConst Ω C hc C' hc' F)
     (φ : π₁ᵉᵗ(basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) →*
       π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))) (H : IsConjInduced F φ)
     {J} (hJ : J ∈ arithCusps Ω C' hc') :
     ∃ I ∈ arithCusps Ω C hc, J.map φ ≤ I ∧ (J.map φ).relIndex I ≠ 0 := by
   obtain ⟨t, ht⟩ := exists_eq_conj_coverPiHom Ω C hc C' hc' F H
-  obtain ⟨I, hI, hle, hfin⟩ := exists_arithCusps_map_coverPiHom Ω C hc C' hc' F hJ
+  obtain ⟨I, hI, hle, hfin⟩ := exists_arithCusps_map_coverPiHom' Ω C hc C' hc' F hσ hJ
   have e : J.map φ = (J.map (coverPiHom Ω C hc C' hc' F).toMonoidHom).map
       (MulAut.conj t).toMonoidHom := by
     rw [Subgroup.map_map]
@@ -95,10 +95,20 @@ theorem exists_arithCusps_map_le_of_conjInduced
   · rw [e, Subgroup.relIndex_map_map_of_injective _ _ (MulAut.conj t).injective]
     exact hfin
 
+/-- **(K1 a)** over number fields. -/
+theorem exists_arithCusps_map_le_of_conjInduced [NumberField K]
+    (φ : π₁ᵉᵗ(basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) →*
+      π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))) (H : IsConjInduced F φ)
+    {J} (hJ : J ∈ arithCusps Ω C' hc') :
+    ∃ I ∈ arithCusps Ω C hc, J.map φ ≤ I ∧ (J.map φ).relIndex I ≠ 0 :=
+  haveI : Algebra.IsAlgebraic ℚ Ω := Algebra.IsAlgebraic.trans ℚ K Ω
+  exists_arithCusps_map_le_of_conjInduced' Ω C hc C' hc' F
+    (coverConst_of_isAlgebraic Ω C hc C' hc' F) φ H hJ
+
 variable [Algebra K K'] [IsScalarTower K K' Ω] in
 /-- **(K1 b) Preimages of cuspidal inertia groups of `Π_U` under a map induced by `F` (lying
 over `Spec K' ⟶ Spec K`) are cuspidal inertia groups of `Π_{U'}`.** -/
-theorem comap_mem_arithCusps_of_conjInduced
+theorem comap_mem_arithCusps_of_conjInduced [Module.Finite K K']
     (hF : F ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
       Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
         Spec.map (CommRingCat.ofHom (algebraMap K K')))
@@ -166,9 +176,9 @@ end Cover
 section Proj
 
 variable (Ω : Type u) [Field Ω] [IsAlgClosed Ω] {K : Type u} [Field K] [Algebra K Ω]
-  {K₁ : Type u} [Field K₁] [NumberField K₁] [Algebra K K₁] [Algebra K₁ Ω]
+  {K₁ : Type u} [Field K₁] [CharZero K₁] [Algebra K K₁] [Algebra K₁ Ω]
   [IsScalarTower K K₁ Ω]
-  {K₂ : Type u} [Field K₂] [NumberField K₂] [Algebra K K₂] [Algebra K₂ Ω]
+  {K₂ : Type u} [Field K₂] [CharZero K₂] [Algebra K K₂] [Algebra K₂ Ω]
   [IsScalarTower K K₂ Ω]
   {C₁ : HypCurve K₁} (hc₁ : (C₁.U : Set C₁.Xbar)ᶜ.Nonempty)
   {C₂ : HypCurve K₂} (hc₂ : (C₂.U : Set C₂.Xbar)ᶜ.Nonempty)

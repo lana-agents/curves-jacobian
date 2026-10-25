@@ -339,7 +339,6 @@ def gkEquivG₃ : (arithmeticExt Ω' W hW).G ≃ₜ*
   (autContinuousMulEquivOfIso (gkFiberIsoG₃ D M W hW e he Ω')).trans
     (genConstGalEquiv₃ M (ConstField₂ k Ω) Ω).symm
 
-omit [CharZero k] in
 lemma fundamentalGroupMap_piXEquivG₃
     (γ : (arithmeticExt Ω' W hW).Pi) :
     fundamentalGroupMap (Spec.map (CommRingCat.ofHom (constRG₃ D M W e)))

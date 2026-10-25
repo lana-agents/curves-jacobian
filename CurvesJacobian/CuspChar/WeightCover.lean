@@ -309,7 +309,7 @@ section Arith
 open CategoryTheory AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
   CurvesJacobian.Cusp
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
@@ -365,7 +365,7 @@ theorem eq_of_inf_eq_deltaCusps (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Non
 /-- **(B2) for an injective `ι : Π_{U'} → Π_U` with `ι⁻¹(Δ_U) ⊆ Δ_{U'}`**: a cusp group `J` of
 `Π_{U'}` mapping into a cusp group `I` of `Π_U` with finite index is `ι⁻¹(I)`. -/
 theorem eq_comap_of_map_le (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
-    {K' : Type u} [Field K'] [NumberField K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
+    {K' : Type u} [Field K'] [CharZero K'] [Algebra K' Ω] [Algebra.IsAlgebraic K' Ω]
     (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
     (ι : π₁ᵉᵗ(basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)) →*
       π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)))
@@ -388,7 +388,7 @@ theorem eq_comap_of_map_le (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty
     (fun g hg ↦ hker g (arithCusps_le Ω C hc hI (Subgroup.mem_comap.1 hg)))
 
 /-- `G_{K'} → G_K` is the inclusion `Gal(Ω/K') ⊆ Gal(Ω/K)`. -/
-lemma gkEquivGal_galoisMap {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω]
+lemma gkEquivGal_galoisMap {K' : Type u} [Field K'] [CharZero K'] [Algebra K K'] [Algebra K' Ω]
     [IsScalarTower K K' Ω] [Algebra.IsAlgebraic K' Ω]
     (s : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K' Ω)))) :
     gkEquivGal (K := K) Ω (galoisMap K K' Ω s) = (gkEquivGal (K := K') Ω s).restrictScalars K := by
@@ -407,17 +407,18 @@ section Cover
 open CategoryTheory AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
   CurvesJacobian.Cusp
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
   (η : Spec (.of Ω) ⟶ V) (h : η ≫ f = basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
   [Algebra.IsAlgebraic K' Ω] (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (e : Spec Γ(C'.Xbar, C'.U) ≅ V)
   (he : e.hom ≫ f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
     Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
       Spec.map (CommRingCat.ofHom (algebraMap K K')))
+  [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K']
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
@@ -619,8 +620,14 @@ lemma cuspCount_cover :
     haveI : IsFiniteEtale e.hom := {}
     haveI : IsFiniteEtale (e.hom ≫ f) :=
       MorphismProperty.comp_mem _ _ _ (inferInstanceAs (IsFiniteEtale e.hom)) ‹_›
-    obtain ⟨I, hI, hJI, hfin⟩ := exists_arithCusps_map_le_of_conjInduced Ω C hc C' hc'
-      (e.hom ≫ f) (coverIncl Ω C hc f η h C' hc' e)
+    have hF : (e.hom ≫ f) ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
+        Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
+          Spec.map (CommRingCat.ofHom (algebraMap K K')) := by
+      rw [Category.assoc]
+      exact he
+    obtain ⟨I, hI, hJI, hfin⟩ := exists_arithCusps_map_le_of_conjInduced' Ω C hc C' hc'
+      (e.hom ≫ f) (coverConst_of_tower Ω C hc C' hc' (e.hom ≫ f) hF)
+      (coverIncl Ω C hc f η h C' hc' e)
       ((isConjInduced_coverPiEquiv Ω C hc C' hc' f η h e).congr_fun fun _ ↦ rfl)
       (J := J'.map (deltaU Ω C' hc').subtype) hJ'
     have hJeq := eq_comap_of_map_le Ω C hc C' hc' (coverIncl Ω C hc f η h C' hc' e)
@@ -677,7 +684,7 @@ section Main
 open CategoryTheory AlgebraicGeometry AlgebraicGeometry.FiniteEtale Belyi Belyi.Anabelian
   CurvesJacobian.Cusp
 
-variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
@@ -688,8 +695,10 @@ which `det(x | Hom(Δ_{U'}, ℤ/3^k))² = χ_k(x)^{χ₀(U') + r(U')}` (`hTop`),
 the cusp weight identity at `l = 3` for every open `H ⊆ Δ_U` (realise `H` as `Δ_{U'}` of a
 finite étale cover `U' → U`). -/
 theorem cuspWeightIdentity_of_top
-    (hTop : ∀ (K' : Type u) [Field K'] [NumberField K'] [Algebra K' Ω]
-      [Algebra.IsAlgebraic K' Ω] (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty),
+    [IsSlimGk K Ω]
+    (hTop : ∀ (K' : Type u) [Field K'] [CharZero K'] [Algebra K' Ω]
+      [Algebra.IsAlgebraic K' Ω] [IsSlimGk K' Ω] (C' : HypCurve K')
+      (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty),
       ∃ P : Subgroup π₁ᵉᵗ(basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U)),
         IsOpen (P : Set π₁ᵉᵗ(basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U))) ∧
         ∀ x ∈ P, ∀ k : ℕ,

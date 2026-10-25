@@ -8,13 +8,15 @@ import CurvesJacobian.CuspChar.Cyclotomic
 import CurvesJacobian.Cusp.ArithmeticExt
 
 /-!
-# The cyclotomic character of `Π_U` for an affine hyperbolic curve over a number field
+# The cyclotomic character of `Π_U` for an affine hyperbolic curve
 
 For the arithmetic extension `Π_U ↠ G_K` of `CurvesJacobian.Cusp.arithmeticExt`
-(`G_K = π₁ᵉᵗ(Spec K) ≅ Gal(Ω/K)`), `CurvesJacobian.CuspChar.arithCycChar Ω C hc l k` is the
-mod-`l^k` cyclotomic character composed with `Π_U ↠ G_K`. Main result
-(`CurvesJacobian.CuspChar.arithCycChar_noExponent`): for an odd prime `l` it has no nontrivial
-exponent on any open subgroup of `Π_U` — the hypothesis `hinf` of
+(`G_K = π₁ᵉᵗ(Spec K) ≅ Gal(Ω/K)`, `K` of characteristic zero with slim `G_K`),
+`CurvesJacobian.CuspChar.arithCycChar Ω C hc l k` is the mod-`l^k` cyclotomic character composed
+with `Π_U ↠ G_K`. Main result (`CurvesJacobian.CuspChar.arithCycChar_noExponent`): if the
+cyclotomic character of `G_K` has no finite exponent on open subgroups
+(`CurvesJacobian.CuspChar.CycNoExponent`: number fields and `p`-adic fields at `l = 3`), then
+neither has that of `Π_U` — the hypothesis `hinf` of
 `CurvesJacobian.CuspChar.isNumCusp_of_cuspWeightIdentity` (step B3 of [AbsTopI] Lemma 4.5 (v)).
 -/
 
@@ -27,13 +29,13 @@ noncomputable section
 
 namespace CurvesJacobian.CuspChar
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
-omit [NumberField K] [CharZero Ω] in
+omit [CharZero K] [CharZero Ω] in
 /-- `G_K = π₁ᵉᵗ(Spec K) ≃ₜ* Gal(Ω/K)`. -/
 def gkEquivGal : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) ≃ₜ* (Ω ≃ₐ[K] Ω) :=
   ContinuousMulEquiv.symm
@@ -42,18 +44,19 @@ def gkEquivGal : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) ≃
       continuous_invFun := (isHomeomorph_mulEquivAutFiber K Ω).homeomorph.symm.continuous }
 
 /-- The composite `Π_U ↠ G_K ≅ Gal(Ω/K)`. -/
-def piToGal : (arithmeticExt Ω C hc).Pi →ₜ* (Ω ≃ₐ[K] Ω) :=
+def piToGal [IsSlimGk K Ω] : (arithmeticExt Ω C hc).Pi →ₜ* (Ω ≃ₐ[K] Ω) :=
   ContinuousMonoidHom.comp
     { toMonoidHom := (gkEquivGal Ω).toMulEquiv.toMonoidHom
       continuous_toFun := (gkEquivGal Ω).continuous } (projGk Ω C hc)
 
 /-- The **mod-`l^k` cyclotomic character of `Π_U`**. -/
-def arithCycChar (l k : ℕ) [NeZero l] : (arithmeticExt Ω C hc).Pi →* (ZMod (l ^ k))ˣ :=
+def arithCycChar [IsSlimGk K Ω] (l k : ℕ) [NeZero l] :
+    (arithmeticExt Ω C hc).Pi →* (ZMod (l ^ k))ˣ :=
   (cycChar K Ω l k).comp (piToGal Ω C hc).toMonoidHom
 
-/-- **The cyclotomic character of `Π_U` has no finite exponent on open subgroups** (`l` an odd
-prime). -/
-theorem arithCycChar_noExponent {l : ℕ} [Fact l.Prime] (hl2 : l ≠ 2)
+/-- **The cyclotomic character of `Π_U` has no finite exponent on open subgroups** (given the
+same for `G_K`, `CurvesJacobian.CuspChar.CycNoExponent`). -/
+theorem arithCycChar_noExponent [IsSlimGk K Ω] {l : ℕ} [NeZero l] [CycNoExponent K Ω l]
     (A B : Subgroup (arithmeticExt Ω C hc).Pi) (hA : IsOpen (A : Set (arithmeticExt Ω C hc).Pi))
     (hB : IsOpen (B : Set (arithmeticExt Ω C hc).Pi)) (N : ℕ)
     (hN : ∀ σ ∈ A ⊓ B, ∀ k, arithCycChar Ω C hc l k σ ^ N = 1) : N = 0 := by
@@ -81,8 +84,7 @@ theorem arithCycChar_noExponent {l : ℕ} [Fact l.Prime] (hl2 : l ≠ 2)
   have hUo : IsOpen (U : Set (Ω ≃ₐ[K] Ω)) := Subgroup.isOpen_of_isClosed_of_finiteIndex U hUcl
   obtain ⟨E, hE, hEU⟩ := (krullTopology_mem_nhds_one_iff K Ω (U : Set (Ω ≃ₐ[K] Ω))).1
     (hUo.mem_nhds U.one_mem)
-  obtain ⟨k, σ, hσ, hne⟩ := exists_cycChar_pow_ne_one (K := K) (Ω := Ω) hl2 E
-    (Nat.pos_of_ne_zero hN0)
+  obtain ⟨k, σ, hσ, hne⟩ := CycNoExponent.exists_ne (l := l) E (Nat.pos_of_ne_zero hN0)
   obtain ⟨x, hx, rfl⟩ := Subgroup.mem_map.1 (hEU hσ)
   exact hne (hN x hx k)
 

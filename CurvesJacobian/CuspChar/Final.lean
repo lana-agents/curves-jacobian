@@ -38,16 +38,16 @@ noncomputable section
 
 namespace CurvesJacobian.CuspChar
 
-variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] {C : HypCurve K}
   {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
-  {K' : Type u} [Field K'] [NumberField K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
+  {K' : Type u} [Field K'] [CharZero K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
   [IsAlgClosed Ω'] [Algebra.IsAlgebraic K' Ω'] [CharZero Ω'] {C' : HypCurve K'}
   {hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty}
 
 variable (Ω C hc) in
 /-- The mod-`3^k` cyclotomic characters of `Π_U`, typed on `π₁ᵉᵗ(U)`. -/
-abbrev cyc3 (k : ℕ) :
+abbrev cyc3 [IsSlimGk K Ω] (k : ℕ) :
     π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) →* (ZMod (3 ^ k))ˣ :=
   arithCycChar Ω C hc 3 k
 
@@ -74,7 +74,7 @@ lemma map_deltaU_eq (Φ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω 
 /-- **[AbsTopI] Lemma 4.5 (v)** for affine hyperbolic curves over number fields: isomorphisms
 `Π_U ≃ₜ* Π_{U'}` over `G_K ≃ₜ* G_{K'}` preserve the cuspidal inertia groups (debt: the cusp
 weight identities `hW`, `hW'`). -/
-theorem mem_arithCusps_iff_map_mem
+theorem mem_arithCusps_iff_map_mem [IsSlimGk K Ω] [IsSlimGk K' Ω'] [CycNoExponent K Ω 3]
     (Φ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω' C' hc' ≫ baseChangeSpec K' Ω' Γ(C'.Xbar, C'.U)))
     (ψ : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) ≃ₜ*
@@ -92,7 +92,7 @@ theorem mem_arithCusps_iff_map_mem
         z * x = x * z → z ∈ Pi1.SurfaceGroup.inertia (g := g) j :=
     fun _ _ hr h j _ _ hx hx1 hz ↦ mem_inertia_of_commute hr h j hx hx1 hz
   have key := mem_deltaCusps_iff_of_cuspWeightIdentity hcent Φ hD hW hW'
-    (fun A B hA hB N hN ↦ arithCycChar_noExponent Ω C hc (l := 3) (by norm_num) A B hA hB N hN)
+    (fun A B hA hB N hN ↦ arithCycChar_noExponent Ω C hc (l := 3) A B hA hB N hN)
   by_cases hI : I ≤ deltaU Ω C hc
   · have hI' : I.map Φ.toMulEquiv.toMonoidHom ≤ deltaU Ω' C' hc' := by
       rw [← hD]
@@ -125,7 +125,8 @@ theorem mem_arithCusps_iff_map_mem
 
 /-- **[AbsTopI] Lemma 4.5 (v), packaged**: compatible isomorphisms `Π_U ≃ₜ* Π_{U'}`,
 `G_K ≃ₜ* G_{K'}` form an isomorphism of cuspidal extensions (debt: `hW`, `hW'`). -/
-def arithmeticExtIso (Φ : (arithmeticExt Ω C hc).Pi ≃ₜ* (arithmeticExt Ω' C' hc').Pi)
+def arithmeticExtIso [IsSlimGk K Ω] [IsSlimGk K' Ω'] [CycNoExponent K Ω 3]
+    (Φ : (arithmeticExt Ω C hc).Pi ≃ₜ* (arithmeticExt Ω' C' hc').Pi)
     (ψ : (arithmeticExt Ω C hc).G ≃ₜ* (arithmeticExt Ω' C' hc').G)
     (hpr : ∀ x, (arithmeticExt Ω' C' hc').pr (Φ x) = ψ ((arithmeticExt Ω C hc).pr x))
     (hW : CuspWeightIdentity (deltaU Ω C hc) (deltaCusps Ω C hc) 3 (eulerU Ω C)

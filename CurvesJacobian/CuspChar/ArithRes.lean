@@ -41,7 +41,7 @@ noncomputable section
 
 namespace CurvesJacobian.CuspChar
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
 
@@ -124,7 +124,7 @@ theorem exists_gkEquivGal_projGk_arithAction :
 
 /-- **The cyclotomic character of `Π_U` on the arithmetic Galois action** is the cyclotomic
 character of the restriction to `Ω`. -/
-theorem arithCycChar_arithAction (l k : ℕ) [NeZero l]
+theorem arithCycChar_arithAction [IsSlimGk K Ω] (l k : ℕ) [NeZero l]
     (τ : FFClosure (geomCurve Ω C) ≃ₐ[arithFF Ω C hc] FFClosure (geomCurve Ω C)) :
     arithCycChar Ω C hc l k (arithAction Ω C hc τ) = cycChar K Ω l k (resOmega Ω C hc τ) := by
   obtain ⟨c, hc'⟩ := exists_gkEquivGal_projGk_arithAction Ω C hc

@@ -51,7 +51,7 @@ end Belyi.Anabelian.ElemOp
 
 namespace CurvesJacobian.Cusp
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω] (C : HypCurve K)
   (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
@@ -59,17 +59,18 @@ variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebr
 
 /-- **The chain object of a connected finite étale cover** `f : V ⟶ U`: the open subgroup
 `π₁ᵉᵗ(V) ⊆ Π_U` (the stabiliser of `η` in the fibre of `V`), as an object of `Chain(Π_U)`. -/
-def coverChainObj : ChainObj (arithmeticExt Ω C hc) :=
+def coverChainObj [IsSlimGk K Ω] : ChainObj (arithmeticExt Ω C hc) :=
   ChainObj.ofOpenSubgroup (arithmeticExt Ω C hc) (coverSubgroup f η h)
 
 /-- The group of `coverChainObj` is `π₁ᵉᵗ(V, η)` (via the map induced by `f`,
 `AlgebraicGeometry.FiniteEtale.coe_coverEquiv_apply`). -/
-def coverChainObjEquiv : π₁ᵉᵗ(η) ≃ₜ* (coverChainObj Ω C hc f η h).grp :=
+def coverChainObjEquiv [IsSlimGk K Ω] : π₁ᵉᵗ(η) ≃ₜ* (coverChainObj Ω C hc f η h).grp :=
   coverEquiv f η h
 
 /-- **The operation `Π_U ⇝ π₁ᵉᵗ(V)` of type `⋏`** of a connected finite étale cover `V → U`
 ([AbsTopI] Definition 4.2 (iii)(a), Remark 4.2.1). -/
-def coverElemOp : ElemOp (ChainObj.base (arithmeticExt Ω C hc)) (coverChainObj Ω C hc f η h) :=
+def coverElemOp [IsSlimGk K Ω] :
+    ElemOp (ChainObj.base (arithmeticExt Ω C hc)) (coverChainObj Ω C hc f η h) :=
   ElemOp.ofOpenSubgroup (arithmeticExt Ω C hc) (coverSubgroup f η h)
 
 end CurvesJacobian.Cusp

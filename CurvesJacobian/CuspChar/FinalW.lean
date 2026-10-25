@@ -7,9 +7,10 @@ import CurvesJacobian.CuspChar.ArithTop
 import CurvesJacobian.CuspChar.WeightCover
 
 /-!
-# [AbsTopI] Lemma 4.5 (v) over number fields, unconditionally
+# [AbsTopI] Lemma 4.5 (v) over number fields and `p`-adic fields, unconditionally
 
-The cusp weight identity of an affine hyperbolic curve over a number field
+The cusp weight identity of an affine hyperbolic curve over a field `K` of characteristic zero
+with slim `G_K` (`CurvesJacobian.Cusp.IsSlimGk`: number fields, finite extensions of `ℚ_p`)
 (`CurvesJacobian.CuspChar.cuspWeightIdentity`): for every open `H ⊆ Δ_U` there is an open
 `P ⊆ Π_U` normalising `H` with `det(x | Hom(H, ℤ/3^k))² = χ_{3^k}(x)^{[Δ:H](2g-2+r) + r_H}`.
 It is the case `H = ⊤` (`CurvesJacobian.CuspChar.weight_top`: Kummer theory of `U_Ω`, Weil
@@ -32,22 +33,27 @@ noncomputable section
 
 namespace CurvesJacobian.CuspChar
 
-variable {K : Type u} [Field K] [NumberField K] {Ω : Type u} [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] {Ω : Type u} [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
-  {K' : Type u} [Field K'] [NumberField K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
+  {K' : Type u} [Field K'] [CharZero K'] {Ω' : Type u} [Field Ω'] [Algebra K' Ω']
   [IsAlgClosed Ω'] [Algebra.IsAlgebraic K' Ω'] [CharZero Ω']
 
 attribute [local instance] isAlgClosure_of_isAlgebraic
 
 variable (Ω) in
-/-- **The cusp weight identity** of an affine hyperbolic curve over a number field. -/
-theorem cuspWeightIdentity (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) :
+/-- **The cusp weight identity** of an affine hyperbolic curve over a field of characteristic
+zero with slim `G_K` (number fields, `p`-adic fields). -/
+theorem cuspWeightIdentity [IsSlimGk K Ω] (C : HypCurve K)
+    (hc : (C.U : Set C.Xbar)ᶜ.Nonempty) :
     CuspWeightIdentity (deltaU Ω C hc) (deltaCusps Ω C hc) 3 (eulerU Ω C) (cyc3 Ω C hc) :=
-  cuspWeightIdentity_of_top (fun _ _ _ _ _ C' hc' ↦ weight_top Ω C' hc') C hc
+  cuspWeightIdentity_of_top (fun _ _ _ _ _ _ C' hc' ↦ weight_top Ω C' hc') C hc
 
-/-- **[AbsTopI] Lemma 4.5 (v)** for affine hyperbolic curves over number fields:
+/-- **[AbsTopI] Lemma 4.5 (v)** for affine hyperbolic curves over fields of characteristic zero
+with slim absolute Galois groups on whose open subgroups the cyclotomic character has no finite
+exponent (number fields by instances; `p`-adic fields: `mem_arithCusps_iff_map_mem_padic`):
 isomorphisms `Π_U ≃ₜ* Π_{U'}` over `G_K ≃ₜ* G_{K'}` preserve the cuspidal inertia groups. -/
-theorem mem_arithCusps_iff_map_mem' {C : HypCurve K} {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
+theorem mem_arithCusps_iff_map_mem' [IsSlimGk K Ω] [IsSlimGk K' Ω'] [CycNoExponent K Ω 3]
+    {C : HypCurve K} {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
     {C' : HypCurve K'} {hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty}
     (Φ : π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U)) ≃ₜ*
       π₁ᵉᵗ(basePoint Ω' C' hc' ≫ baseChangeSpec K' Ω' Γ(C'.Xbar, C'.U)))
@@ -61,7 +67,8 @@ theorem mem_arithCusps_iff_map_mem' {C : HypCurve K} {hc : (C.U : Set C.Xbar)ᶜ
 
 /-- **[AbsTopI] Lemma 4.5 (v), packaged**: compatible isomorphisms `Π_U ≃ₜ* Π_{U'}`,
 `G_K ≃ₜ* G_{K'}` form an isomorphism of cuspidal extensions. -/
-def arithmeticExtIso' {C : HypCurve K} {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
+def arithmeticExtIso' [IsSlimGk K Ω] [IsSlimGk K' Ω'] [CycNoExponent K Ω 3]
+    {C : HypCurve K} {hc : (C.U : Set C.Xbar)ᶜ.Nonempty}
     {C' : HypCurve K'} {hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty}
     (Φ : (arithmeticExt Ω C hc).Pi ≃ₜ* (arithmeticExt Ω' C' hc').Pi)
     (ψ : (arithmeticExt Ω C hc).G ≃ₜ* (arithmeticExt Ω' C' hc').G)

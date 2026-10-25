@@ -65,10 +65,9 @@ def galoisMap : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K' Ω))) →
     (specMap_algebraMap_tower K K' Ω)
 
 omit [Algebra K' Ω] [Algebra K Ω] [IsScalarTower K K' Ω] [IsSepClosed Ω] in
-/-- `Spec K' ⟶ Spec K` is finite étale for an extension of number fields. -/
-lemma isFiniteEtale_specMap_numberField [NumberField K] [NumberField K'] :
+/-- `Spec K' ⟶ Spec K` is finite étale for a finite extension in characteristic zero. -/
+lemma isFiniteEtale_specMap_of_finite [CharZero K] [Module.Finite K K'] :
     IsFiniteEtale (Spec.map (CommRingCat.ofHom (algebraMap K K'))) := by
-  haveI : Module.Finite K K' := Module.Finite.of_restrictScalars_finite ℚ K K'
   haveI : Algebra.IsSeparable K K' := inferInstance
   haveI : Algebra.FormallyEtale K K' := Algebra.FormallyEtale.of_isSeparable K K'
   haveI : Algebra.FinitePresentation K K' :=
@@ -77,11 +76,47 @@ lemma isFiniteEtale_specMap_numberField [NumberField K] [NumberField K'] :
   rw [IsFiniteEtale.SpecMap_iff, CommRingCat.hom_ofHom, RingHom.finiteEtale_algebraMap_iff]
   exact ⟨⟩
 
+/-- An extension of number fields is finite. -/
+instance (priority := 100) finite_of_numberField {k k' : Type*} [Field k] [Field k']
+    [NumberField k] [NumberField k'] [Algebra k k'] : Module.Finite k k' :=
+  Module.Finite.of_restrictScalars_finite ℚ k k'
+
+omit [Algebra K' Ω] [Algebra K Ω] [IsScalarTower K K' Ω] [IsSepClosed Ω] in
+/-- `Spec K' ⟶ Spec K` is finite étale for an extension of number fields. -/
+lemma isFiniteEtale_specMap_numberField [NumberField K] [NumberField K'] :
+    IsFiniteEtale (Spec.map (CommRingCat.ofHom (algebraMap K K'))) :=
+  isFiniteEtale_specMap_of_finite K K'
+
 /-- **`ι : G_{K'} → G_K` is injective** (`Gal(Ω/K') ⊆ Gal(Ω/K)`). -/
-theorem galoisMap_injective [NumberField K] [NumberField K'] :
+theorem galoisMap_injective [CharZero K] [Module.Finite K K'] :
     Function.Injective (galoisMap K K' Ω) := by
-  haveI := isFiniteEtale_specMap_numberField K K'
+  haveI := isFiniteEtale_specMap_of_finite K K'
   exact fundamentalGroupMap_injective_of_isFiniteEtale' _ _ (specMap_algebraMap_tower K K' Ω)
+
+/-- **`ι : G_{K'} → G_K` has open image** for `K'/K` finite. -/
+theorem isOpen_range_galoisMap [CharZero K] [Module.Finite K K'] :
+    IsOpen (Set.range (galoisMap K K' Ω)) := by
+  haveI := isFiniteEtale_specMap_of_finite K K'
+  exact isOpen_range_fundamentalGroupMap_of_isFiniteEtale _ _ (specMap_algebraMap_tower K K' Ω)
+
+/-- **Slimness passes to finite extensions**: if `G_K` is slim and `K'/K` is finite, then
+`G_{K'}` (an open subgroup of `G_K` via `ι`) is slim. -/
+theorem isSlimGk_of_finite [CharZero K] [Module.Finite K K'] [IsSlimGk K Ω] : IsSlimGk K' Ω := by
+  refine ⟨fun V z hz ↦ ?_⟩
+  have hinj := galoisMap_injective K K' Ω
+  set ι := galoisMap K K' Ω
+  -- `ι` is a closed embedding (compact to Hausdorff) with open range, hence an open map
+  have hce : Topology.IsClosedEmbedding ι :=
+    Continuous.isClosedEmbedding ι.continuous hinj
+  have hopen : IsOpenMap ι := hce.isInducing.isOpenMap (isOpen_range_galoisMap K K' Ω)
+  let V' : OpenSubgroup π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
+    ⟨(V : Subgroup _).map ι.toMonoidHom, by
+      exact hopen _ V.isOpen⟩
+  have h1 : ι z = 1 := IsSlimGk.isSlim (K := K) (Ω := Ω) V' (ι z) fun u hu ↦ by
+    obtain ⟨v, hv, rfl⟩ := Subgroup.mem_map.1 hu
+    change ι z * ι v = ι v * ι z
+    rw [← map_mul, ← map_mul, hz v hv]
+  exact hinj (h1.trans (map_one ι).symm)
 
 end Galois
 
@@ -92,7 +127,7 @@ lemma autContinuousMulEquivOfIso_self {C : Type*} [Category C] {F : C ⥤ Fintyp
   rw [Iso.conjAut_apply]
   rfl
 
-variable {K : Type u} [Field K] [NumberField K] (Ω : Type u) [Field Ω] [Algebra K Ω]
+variable {K : Type u} [Field K] [CharZero K] (Ω : Type u) [Field Ω] [Algebra K Ω]
   [IsAlgClosed Ω] [Algebra.IsAlgebraic K Ω] [CharZero Ω]
 
 section Surj
@@ -121,14 +156,14 @@ end Surj
 variable (C : HypCurve K) (hc : (C.U : Set C.Xbar)ᶜ.Nonempty)
   {V : Scheme.{u}} (f : V ⟶ Spec Γ(C.Xbar, C.U)) [IsFiniteEtale f] [ConnectedSpace V]
   (η : Spec (.of Ω) ⟶ V) (h : η ≫ f = basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))
-  {K' : Type u} [Field K'] [NumberField K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
+  {K' : Type u} [Field K'] [CharZero K'] [Algebra K K'] [Algebra K' Ω] [IsScalarTower K K' Ω]
   [Algebra.IsAlgebraic K' Ω] (C' : HypCurve K') (hc' : (C'.U : Set C'.Xbar)ᶜ.Nonempty)
   (e : Spec Γ(C'.Xbar, C'.U) ≅ V)
   (he : e.hom ≫ f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))) =
     Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) ≫
       Spec.map (CommRingCat.ofHom (algebraMap K K')))
 
-omit [NumberField K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] [IsFiniteEtale f] [ConnectedSpace V]
+omit [CharZero K] [Algebra.IsAlgebraic K Ω] [CharZero Ω] [IsFiniteEtale f] [ConnectedSpace V]
   [Algebra.IsAlgebraic K' Ω] in
 include he in
 lemma coverBase_spec :
@@ -154,7 +189,8 @@ def coverFiberIso :
 
 /-- **`Π_{U'} ≃ₜ*` the group of the chain object of the cover `V ≅ U'`**: `π₁ᵉᵗ(U', x') ≃ₜ*
 `π₁ᵉᵗ(V, x' ≫ e) ≃ₜ* π₁ᵉᵗ(V, η) ≃ₜ* coverSubgroup`. -/
-def coverPiEquiv : (arithmeticExt Ω C' hc').Pi ≃ₜ* (coverChainObj Ω C hc f η h).grp :=
+def coverPiEquiv [IsSlimGk K Ω] [IsSlimGk K' Ω] :
+    (arithmeticExt Ω C' hc').Pi ≃ₜ* (coverChainObj Ω C hc f η h).grp :=
   ((fundamentalGroupEquivOfIso e (basePoint Ω C' hc' ≫ baseChangeSpec K' Ω Γ(C'.Xbar, C'.U))).trans
     (autContinuousMulEquivOfIso (coverFiberIso Ω η C' hc' e))).trans
     (coverChainObjEquiv Ω C hc f η h)
@@ -165,7 +201,7 @@ def coverConj : π₁ᵉᵗ(Spec.map (CommRingCat.ofHom (algebraMap K Ω))) :=
   fiberIsoMap (f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))))
     (coverBase_spec Ω C f C' hc' e he) (coverPt_spec Ω C hc f η h) (coverFiberIso Ω η C' hc' e)
 
-lemma toG_coverChainObjEquiv (y : π₁ᵉᵗ(η)) :
+lemma toG_coverChainObjEquiv [IsSlimGk K Ω] (y : π₁ᵉᵗ(η)) :
     (coverChainObj Ω C hc f η h).toG (coverChainObjEquiv Ω C hc f η h y) =
       fundamentalGroupMap (f ≫ Spec.map (CommRingCat.ofHom (algebraMap K Γ(C.Xbar, C.U))))
         (coverPt_spec Ω C hc f η h) y := by
@@ -175,7 +211,7 @@ lemma toG_coverChainObjEquiv (y : π₁ᵉᵗ(η)) :
 /-- **Compatibility of `coverPiEquiv` with the projections to `G_K`**: for `γ ∈ Π_{U'}`,
 `toG (coverPiEquiv γ) = g · ι (pr' γ) · g⁻¹` with `g = coverConj` (the inner automorphism comes
 from the change of base point). -/
-theorem toG_coverPiEquiv (γ : (arithmeticExt Ω C' hc').Pi) :
+theorem toG_coverPiEquiv [IsSlimGk K Ω] [IsSlimGk K' Ω] (γ : (arithmeticExt Ω C' hc').Pi) :
     (coverChainObj Ω C hc f η h).toG (coverPiEquiv Ω C hc f η h C' hc' e γ) =
       coverConj Ω C hc f η h C' hc' e he *
         galoisMap K K' Ω ((arithmeticExt Ω C' hc').pr γ) *
@@ -210,7 +246,8 @@ theorem toG_coverPiEquiv (γ : (arithmeticExt Ω C' hc').Pi) :
 
 include he in
 /-- `coverPiEquiv γ ∈ Δ` of the chain object iff `γ ∈ Δ_{U'}`. -/
-theorem coverPiEquiv_mem_Delta_iff (γ : (arithmeticExt Ω C' hc').Pi) :
+theorem coverPiEquiv_mem_Delta_iff [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K']
+    (γ : (arithmeticExt Ω C' hc').Pi) :
     coverPiEquiv Ω C hc f η h C' hc' e γ ∈ (coverChainObj Ω C hc f η h).Delta ↔
       γ ∈ (arithmeticExt Ω C' hc').Delta := by
   change (coverChainObj Ω C hc f η h).toG (coverPiEquiv Ω C hc f η h C' hc' e γ) = 1 ↔
@@ -220,7 +257,7 @@ theorem coverPiEquiv_mem_Delta_iff (γ : (arithmeticExt Ω C' hc').Pi) :
 
 include he in
 /-- **`Π_{U'} ∩ Δ_U = Δ_{U'}`**: `coverPiEquiv` maps `Δ_{U'}` onto `Δ` of the chain object. -/
-theorem map_Delta_coverPiEquiv :
+theorem map_Delta_coverPiEquiv [IsSlimGk K Ω] [IsSlimGk K' Ω] [Module.Finite K K'] :
     (arithmeticExt Ω C' hc').Delta.map
         (coverPiEquiv Ω C hc f η h C' hc' e).toMulEquiv.toMonoidHom =
       (coverChainObj Ω C hc f η h).Delta := by
@@ -230,7 +267,7 @@ theorem map_Delta_coverPiEquiv :
     ((coverPiEquiv Ω C hc f η h C' hc' e).apply_symm_apply z))
 
 /-- **The image of `π₁ᵉᵗ(V) ⊆ Π_U` in `G_K` is `g · ι(G_{K'}) · g⁻¹`** (`g = coverConj`). -/
-theorem map_pr_coverSubgroup :
+theorem map_pr_coverSubgroup [IsSlimGk K Ω] [IsSlimGk K' Ω] :
     (coverSubgroup f η h :
         Subgroup π₁ᵉᵗ(basePoint Ω C hc ≫ baseChangeSpec K Ω Γ(C.Xbar, C.U))).map
         (projGk Ω C hc).toMonoidHom =
@@ -254,7 +291,7 @@ omit [Algebra.IsAlgebraic K' Ω] in
 include hc he hc' in
 /-- **The image of `π₁ᵉᵗ(V) ⊆ Π_U` in `G_K` is `ι(G_{K'})`** when `η` induces the given
 embedding `K' ⊆ Ω`. -/
-theorem map_pr_coverSubgroup_of_comp
+theorem map_pr_coverSubgroup_of_comp [IsSlimGk K Ω]
     (hη : η ≫ e.inv ≫ Spec.map (CommRingCat.ofHom (algebraMap K' Γ(C'.Xbar, C'.U))) =
       Spec.map (CommRingCat.ofHom (algebraMap K' Ω))) :
     (coverSubgroup f η h :

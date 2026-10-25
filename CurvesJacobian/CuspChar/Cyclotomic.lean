@@ -162,6 +162,19 @@ theorem exists_cycChar_pow_ne_one [NumberField K] {l : ℕ} [hl : Fact l.Prime] 
   rw [htot] at hle
   nlinarith
 
+/-- **The mod-`l^k` cyclotomic characters have no finite exponent on open subgroups of
+`Gal(Ω/K)`** (B3 of [AbsTopI] Lemma 4.5 (v)), as a class: an instance for number fields at
+`l = 3` (`CurvesJacobian.CuspChar.cycNoExponent_numberField`), and a theorem for `p`-adic fields
+(`CurvesJacobian.CuspChar.cycNoExponent_padic`). -/
+class CycNoExponent (K Ω : Type*) [Field K] [Field Ω] [Algebra K Ω] [IsAlgClosed Ω]
+    [CharZero Ω] (l : ℕ) [NeZero l] : Prop where
+  exists_ne : ∀ (L : IntermediateField K Ω) [FiniteDimensional K L] {N : ℕ}, 0 < N →
+    ∃ k, ∃ σ ∈ L.fixingSubgroup, cycChar K Ω l k σ ^ N ≠ 1
+
+instance cycNoExponent_numberField [NumberField K] : CycNoExponent K Ω 3 :=
+  haveI : Fact (Nat.Prime 3) := ⟨Nat.prime_three⟩
+  ⟨fun L _ _ hN ↦ exists_cycChar_pow_ne_one (by norm_num) L hN⟩
+
 end Exponent
 
 end CurvesJacobian.CuspChar
