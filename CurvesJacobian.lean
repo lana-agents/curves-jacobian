@@ -328,6 +328,7 @@ import CurvesJacobian.LocAn.EigenH2
 import CurvesJacobian.LocAn.EqOfClosedPoints
 import CurvesJacobian.LocAn.ExistsAssembly
 import CurvesJacobian.LocAn.FixedPlaceOrder
+import CurvesJacobian.LocAn.GenusBaseChange
 import CurvesJacobian.LocAn.HypCurveBcExt
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois

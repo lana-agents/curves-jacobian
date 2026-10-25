@@ -6,6 +6,7 @@ Authors: LANA Project
 import CurvesJacobian.LocAn.SectionBridgeDelta
 import CurvesJacobian.LocAn.ThmCMLF
 import CurvesJacobian.Scheme.CurvePlaces
+import CurvesJacobian.LocAn.GenusBaseChange
 
 /-!
 # [LocAn] Theorem C for `π₁ᵉᵗ`: rational points with `Δ_X`-conjugate sections are equal
@@ -26,7 +27,9 @@ to the geometric generic point `η̄` along the specialisation paths of
   extensions of `ℚ_p` and over number fields, for the curve's own Galois model
   `curveGaloisData` (`H_L = H` holds by `rfl`). Proof: `etalePi1EquivPiX'_schSection` and
   `mem_DeltaX_of_fundamentalGroupMap_eq_one` turn the hypothesis into `Δ_X`-conjugacy of the
-  Galois-model sections `xSectionGk`, then `placeOfF_eq_of_xSectionGk_conj_{padic,numberField}`.
+  Galois-model sections `xSectionGk`, then `placeOfF_eq_of_xSectionGk_conj_{padic,numberField}`;
+* `eq_of_schSection_conj_padic'`, `eq_of_schSection_conj_numberField'`: the same with the genus
+  hypothesis `g(X) ≠ 0` (`genus_baseChange_ne_zero_of_curveGenus`).
 -/
 
 open CategoryTheory TopologicalSpace AlgebraicGeometry Belyi IsLocalRing Pi1.Orbifold
@@ -167,6 +170,31 @@ theorem eq_of_schSection_conj_numberField [NumberField k]
     (mem_DeltaX_of_fundamentalGroupMap_eq_one _ _ (curveEquivL_algebraMap k hτ) rfl
       (curveEquivL_τ k hτ) γ hγ)
     (xSectionGk_conj_of_schSection_conj k hτ hx hy γ h))
+
+set_option synthInstance.maxHeartbeats 400000 in
+-- `Inv` on the quotient groups `Π_X`, `Π_U` is found slowly
+/-- `eq_of_schSection_conj_padic` with the genus hypothesis `g(X) ≠ 0`. -/
+theorem eq_of_schSection_conj_padic' (p : ℕ) [Fact p.Prime] [Algebra ℚ_[p] k]
+    [FiniteDimensional ℚ_[p] k] (hg : curveGenus k X ≠ 0)
+    {x y : Spec (.of k) ⟶ X} (hx : x ≫ (X ↘ Spec (.of k)) = 𝟙 _)
+    (hy : y ≫ (X ↘ Spec (.of k)) = 𝟙 _)
+    (γ : π₁ᵉᵗ(geometricGenericPoint (curveGaloisData k hτ) X (curveEquivL k hτ)))
+    (hγ : fundamentalGroupMap (X ↘ Spec (.of k)) rfl γ = 1)
+    (h : ∀ g, curveSchSection k hτ y hy g = γ * curveSchSection k hτ x hx g * γ⁻¹) : x = y :=
+  eq_of_schSection_conj_padic k hτ p (Kummer.genus_baseChange_ne_zero_of_curveGenus k hτ hg)
+    hx hy γ hγ h
+
+set_option synthInstance.maxHeartbeats 400000 in
+-- `Inv` on the quotient groups `Π_X`, `Π_U` is found slowly
+/-- `eq_of_schSection_conj_numberField` with the genus hypothesis `g(X) ≠ 0`. -/
+theorem eq_of_schSection_conj_numberField' [NumberField k] (hg : curveGenus k X ≠ 0)
+    {x y : Spec (.of k) ⟶ X} (hx : x ≫ (X ↘ Spec (.of k)) = 𝟙 _)
+    (hy : y ≫ (X ↘ Spec (.of k)) = 𝟙 _)
+    (γ : π₁ᵉᵗ(geometricGenericPoint (curveGaloisData k hτ) X (curveEquivL k hτ)))
+    (hγ : fundamentalGroupMap (X ↘ Spec (.of k)) rfl γ = 1)
+    (h : ∀ g, curveSchSection k hτ y hy g = γ * curveSchSection k hτ x hx g * γ⁻¹) : x = y :=
+  eq_of_schSection_conj_numberField k hτ (Kummer.genus_baseChange_ne_zero_of_curveGenus k hτ hg)
+    hx hy γ hγ h
 
 end Curve
 
