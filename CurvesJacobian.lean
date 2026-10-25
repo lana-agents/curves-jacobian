@@ -330,8 +330,14 @@ import CurvesJacobian.LocAn.HypCurveBcExt
 import CurvesJacobian.LocAn.InnerRigidAffine
 import CurvesJacobian.LocAn.InnerRigidGalois
 import CurvesJacobian.LocAn.NormCocycle
+import CurvesJacobian.LocAn.PadicSlim
 import CurvesJacobian.LocAn.PlaceAut
 import CurvesJacobian.LocAn.ResDeltaGeneric
+import CurvesJacobian.LocAn.SectionBridge
+import CurvesJacobian.LocAn.SectionBridgeDelta
+import CurvesJacobian.LocAn.SectionBridgePlace
+import CurvesJacobian.LocAn.SectionBridgeSpec
+import CurvesJacobian.LocAn.SectionBridgeThmC
 import CurvesJacobian.LocAn.SemiAb
 import CurvesJacobian.LocAn.Stabilizer
 import CurvesJacobian.LocAn.TPrimeAssembly
