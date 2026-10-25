@@ -93,6 +93,12 @@ section Hemi
 
 variable {K : Type u} [Field K] [CharZero K] (E : WeierstrassCurve K) [E.IsElliptic]
 
+/-- `Ē` is integral, as a named instance. The unfolded instance (integrality of the
+normalisation of `ℙ¹` in `E ∖ E[2]`) is a large term, and it is repeated in every occurrence of
+`Ω = K(Ē)^alg` in the types of the hemi files; naming it keeps these types small (olean
+serialization of the hemi files was slow). -/
+instance (priority := high) isIntegral_curveE : IsIntegral (curveE E) := inferInstance
+
 /-! ### `K(Ē) ≃ K(E)` and the transcendence of `x` -/
 
 /-- **`K(Ē) ≃ K(E)`**: the fraction fields of `Γ(E ∖ {O}) ≃ K[E]`. -/
