@@ -244,6 +244,7 @@ import CurvesJacobian.FunctionField.KummerCover
 import CurvesJacobian.FunctionField.KummerCoverEval
 import CurvesJacobian.FunctionField.KummerInertia
 import CurvesJacobian.FunctionField.KummerPic
+import CurvesJacobian.FunctionField.NonSpecialDivisor
 import CurvesJacobian.FunctionField.OfSmooth
 import CurvesJacobian.FunctionField.WeilPairing
 import CurvesJacobian.FunctionField.WeilPairingNondeg
