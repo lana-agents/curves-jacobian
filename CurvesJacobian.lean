@@ -323,6 +323,7 @@ import CurvesJacobian.Kummer.WeilKummer
 import CurvesJacobian.Kummer.WeilPairingGalois
 import CurvesJacobian.LocAn.ArithChern
 import CurvesJacobian.LocAn.ArithChernCurve
+import CurvesJacobian.LocAn.BcInner
 import CurvesJacobian.LocAn.CupKummer
 import CurvesJacobian.LocAn.CupKummerCore
 import CurvesJacobian.LocAn.CupKummerLoc
