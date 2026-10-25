@@ -364,6 +364,7 @@ import CurvesJacobian.LocAn.ResDeltaGeneric
 import CurvesJacobian.LocAn.SectionBridge
 import CurvesJacobian.LocAn.SectionBridgeAut
 import CurvesJacobian.LocAn.SectionBridgeCusp
+import CurvesJacobian.LocAn.SectionBridgeDecomp
 import CurvesJacobian.LocAn.SectionBridgeDelta
 import CurvesJacobian.LocAn.SectionBridgePlace
 import CurvesJacobian.LocAn.SectionBridgeSpec
