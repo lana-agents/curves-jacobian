@@ -306,6 +306,8 @@ import CurvesJacobian.Kummer.CuspChern
 import CurvesJacobian.Kummer.CuspExtClass
 import CurvesJacobian.Kummer.CuspFill
 import CurvesJacobian.Kummer.CuspInertiaZHat
+import CurvesJacobian.Kummer.CuspRigidity
+import CurvesJacobian.Kummer.CuspRigidityFill
 import CurvesJacobian.Kummer.DeltaAbDuality
 import CurvesJacobian.Kummer.DeltaAbKummer
 import CurvesJacobian.Kummer.H2Map
