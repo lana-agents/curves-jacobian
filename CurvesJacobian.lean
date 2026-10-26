@@ -7,6 +7,7 @@ import CurvesJacobian.CommAlg.SerreCriterion
 import CurvesJacobian.CommAlg.SerreS2
 import CurvesJacobian.Cusp.ArithAut
 import CurvesJacobian.Cusp.ArithDecomp
+import CurvesJacobian.Cusp.ArithDecompPi
 import CurvesJacobian.Cusp.ArithKernel
 import CurvesJacobian.Cusp.ArithmeticCover
 import CurvesJacobian.Cusp.ArithmeticExt
