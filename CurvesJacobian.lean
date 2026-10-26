@@ -230,6 +230,7 @@ import CurvesJacobian.CuspChar.KummerTop
 import CurvesJacobian.CuspChar.Line
 import CurvesJacobian.CuspChar.Main
 import CurvesJacobian.CuspChar.Ratio
+import CurvesJacobian.CuspChar.RigidityPadic
 import CurvesJacobian.CuspChar.SchreierRank
 import CurvesJacobian.CuspChar.TwoCusps
 import CurvesJacobian.CuspChar.WeightCover
