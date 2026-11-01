@@ -193,6 +193,7 @@ import CurvesJacobian.Cusp.P1Curve
 import CurvesJacobian.Cusp.PBranch
 import CurvesJacobian.Cusp.PBranchLift
 import CurvesJacobian.Cusp.PlaceTransitivity
+import CurvesJacobian.Cusp.ProSigmaInertia
 import CurvesJacobian.Cusp.PullbackCover
 import CurvesJacobian.Cusp.QuotConj
 import CurvesJacobian.Cusp.QuotientCurve
