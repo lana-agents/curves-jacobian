@@ -33,7 +33,7 @@ rev = "007793ba8b839f1746d9477e643a075e66a220c6"
 [[require]]
 name = "pi1"
 git = "https://github.com/lana-agents/pi1"
-rev = "3fb0593bfc17719d90b3352d8a9fa8326c681d25"
+rev = "ed24c6c773ab38ef87583d0b706519d3b4c9a4c7"
 
 # Kummer theory `Kˣ/(Kˣ)ⁿ ≃ H¹_cont(G_K, μₙ)`.
 [[require]]
